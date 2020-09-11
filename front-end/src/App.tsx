@@ -6,6 +6,9 @@ const AppBackground = styled.div`
   background-color: #282c34;
   min-height: 100vh;
   color: white;
+  text-align: center;
+  width: 100%;
+  padding: 0;
 `;
 
 function App() {
