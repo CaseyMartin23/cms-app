@@ -1,5 +1,8 @@
 import React from "react";
-import LoginPage from "./pages/loginPage";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import HomePage from "./pages/homePage";
+import SignInPage from "./pages/signInPage";
+import SignUpPage from "./pages/signUpPage";
 import styled from "styled-components";
 
 const AppBackground = styled.div`
@@ -13,9 +16,21 @@ const AppBackground = styled.div`
 
 function App() {
   return (
-    <AppBackground id="App">
-      <LoginPage />
-    </AppBackground>
+    <Router>
+      <AppBackground id="App">
+        <Switch>
+          <Route exact path="/">
+            <HomePage />
+          </Route>
+          <Route path="/signIn">
+            <SignInPage />
+          </Route>
+          <Route path="/signUp">
+            <SignUpPage />
+          </Route>
+        </Switch>
+      </AppBackground>
+    </Router>
   );
 }
 
