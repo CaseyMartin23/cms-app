@@ -55,7 +55,6 @@ const SignInPage: React.FC<SignInPageProps> = () => {
       }).then((res: any) => {
         window.location = res.url;
       });
-      console.log("values->>", values);
     } catch (err) {
       console.log(err);
     }
