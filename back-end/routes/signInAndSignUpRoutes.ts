@@ -1,5 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 const router = express.Router();
 
 type UsersType = {
@@ -18,12 +20,11 @@ router.post("/signIn", async (req: any, res: any) => {
     if (user == null) return res.status(400).send("Can't find user");
 
     if (await bcrypt.compare(req.body.password, user.password)) {
+      // res.redirect("/");
       console.log("Access Granted");
     } else {
       console.log("Access Denied");
     }
-
-    // res.redirect("/");
   } catch (err) {
     res.status(500).send();
     console.log(err);
