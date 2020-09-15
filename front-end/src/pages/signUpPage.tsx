@@ -102,7 +102,7 @@ const SignUpPage = () => {
                       Remember me?
                     </CheckboxWrapper>
                     <Button type="submit" variant="contained" color="primary">
-                      Sign In
+                      Sign Up
                     </Button>
                   </div>
                 </form>
