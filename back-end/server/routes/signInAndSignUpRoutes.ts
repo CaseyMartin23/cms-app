@@ -1,29 +1,19 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { queries } = require("../../db/queries");
 
 const router = express.Router();
 
-type UsersType = {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  remember_me?: boolean;
-};
-
-const users: UsersType[] = [];
-
 router.post("/signIn", async (req: any, res: any) => {
   try {
-    const user = users.find((user) => user.email === req.body.email);
+    const [user] = await queries.users.getByEmail(req.body.email);
     if (user == null) return res.status(400).send("Can't find user");
 
     if (await bcrypt.compare(req.body.password, user.password)) {
-      // res.redirect("/");
-      console.log("Access Granted");
+      res.redirect("/");
     } else {
-      console.log("Access Denied");
+      console.log("Access Denied (Added an Error here!)");
     }
   } catch (err) {
     res.status(500).send();
@@ -34,8 +24,9 @@ router.post("/signIn", async (req: any, res: any) => {
 router.post("/signUp", async (req: any, res: any) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    users.push({ ...req.body, password: hashedPassword });
-    console.log("users->>", users);
+    queries.users
+      .create({ ...req.body, password: hashedPassword })
+      .then((users: any) => console.log("created-user->>", users[0]));
   } catch (err) {
     console.log(err);
   }
