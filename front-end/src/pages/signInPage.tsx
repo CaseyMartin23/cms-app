@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-// import Paper from "@material-ui/core/Paper";
 
 import { Form, Field } from "react-final-form";
 
@@ -22,7 +21,7 @@ type SignInPageProps = {};
 const SignInPage: React.FC<SignInPageProps> = () => {
   const onSubmit = async (values: any) => {
     try {
-      await fetch("/signIn", {
+      await fetch("/sign-in", {
         method: "POST",
         redirect: "follow",
         headers: {

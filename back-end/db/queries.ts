@@ -32,11 +32,18 @@ const users: UserQueriesType = {
   async getByEmail(userEmail) {
     return await knex("users").where("email", userEmail);
   },
-  create(user) {
-    return knex("users").insert(
-      { ...user, created_at: new Date().toISOString() },
-      "*"
-    );
+  async create(user) {
+    const emailAlreadyExists = await knex("users").where({ email: user.email });
+
+    if (emailAlreadyExists.length < 1) {
+      const createdUser = await knex("users").insert(
+        { ...user, created_at: new Date().toISOString() },
+        "*"
+      );
+      return createdUser[0];
+    } else {
+      throw new Error("Email Already Exists");
+    }
   },
   update(user) {},
   delete() {},

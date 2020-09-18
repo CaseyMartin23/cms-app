@@ -19,16 +19,16 @@ import {
 const SignUpPage = () => {
   const onSubmit = async (values: any) => {
     try {
-      await fetch("/signUp", {
+      await fetch("/sign-up", {
         method: "POST",
         redirect: "follow",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
-      }).then((res: any) => {
-        window.location = res.url;
-      });
+      })
+        .then((res: any) => res.json())
+        .then((data: any) => console.log("response-data->>", data));
     } catch (err) {
       console.log(err);
     }
