@@ -19,7 +19,7 @@ import {
 const SignUpPage = () => {
   const onSubmit = async (values: any) => {
     try {
-      await fetch("/sign-up", {
+      await fetch("/signup", {
         method: "POST",
         redirect: "follow",
         headers: {

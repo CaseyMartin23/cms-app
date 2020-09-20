@@ -16,7 +16,8 @@ type BasicQueriesType = {
 };
 
 interface UserQueriesType extends BasicQueriesType {
-  getByEmail(email: string): any;
+  getUserByEmail(email: string): any;
+  getUserById(id: string): any;
 }
 
 type QueriesType = {
@@ -29,8 +30,11 @@ const users: UserQueriesType = {
   getAll() {
     return knex("users");
   },
-  async getByEmail(userEmail) {
-    return await knex("users").where("email", userEmail);
+  async getUserByEmail(email) {
+    return await knex("users").where("email", email).first();
+  },
+  async getUserById(id) {
+    return await knex("users").where("id", id).first();
   },
   async create(user) {
     const emailAlreadyExists = await knex("users").where({ email: user.email });

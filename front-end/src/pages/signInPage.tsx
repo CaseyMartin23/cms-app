@@ -21,7 +21,7 @@ type SignInPageProps = {};
 const SignInPage: React.FC<SignInPageProps> = () => {
   const onSubmit = async (values: any) => {
     try {
-      await fetch("/sign-in", {
+      await fetch("/signin", {
         method: "POST",
         redirect: "follow",
         headers: {
