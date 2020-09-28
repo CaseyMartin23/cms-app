@@ -29,7 +29,7 @@ const SignInPage: React.FC<SignInPageProps> = () => {
         },
         body: JSON.stringify(values),
       }).then((res: any) => {
-        // I dont like this it looks hackie :(
+        // I dont like how this it looks hackie :(
         if (res.url) {
           window.location = res.url;
         }

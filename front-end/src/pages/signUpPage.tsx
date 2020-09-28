@@ -26,9 +26,12 @@ const SignUpPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
-      })
-        .then((res: any) => res.json())
-        .then((data: any) => console.log("response-data->>", data));
+      }).then((res: any) => {
+        // I dont like how this it looks hackie :(
+        if (res.url) {
+          window.location = res.url;
+        }
+      });
     } catch (err) {
       console.log(err);
     }
