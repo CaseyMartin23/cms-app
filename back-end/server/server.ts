@@ -5,7 +5,6 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const express = require("express");
-const path = require("path");
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
@@ -38,7 +37,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("/../../front-end/build"));
+  app.use(express.static("../../../front-end/build"));
 }
 
 app.post(
