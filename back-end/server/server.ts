@@ -38,7 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.resovle(__dirname, "/../../front-end/build")));
+  app.use(express.static("/../../front-end/build"));
 }
 
 app.post(
