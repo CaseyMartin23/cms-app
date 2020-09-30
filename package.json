@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node back-end/server.ts",
-    "dev-start": "concurrently  \"nodemon back-end/server/server.ts\" \"cd front-end && npm start\""
+    "dev-start": "concurrently -n 'server, client' -c 'purple, green' \"nodemon back-end/server/server.ts\" \"cd front-end && npm start\""
   },
   "keywords": [],
   "author": "",

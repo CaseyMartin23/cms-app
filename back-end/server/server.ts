@@ -16,6 +16,7 @@ const port = process.env.PORT || 5000;
 
 const { queries } = require("../db/queries");
 
+// Initialize Passport.js
 const { initializePassport } = require("./passport-config");
 initializePassport(
   passport,
@@ -23,9 +24,8 @@ initializePassport(
   (id: number) => queries.users.getUserById(id)
 );
 
-// app.use(express.static(path.join(__dirname, "/../../front-end/build")));
-app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(flash());
 app.use(
   session({
@@ -37,9 +37,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.get("*", (req: any, res: any) =>
-//   res.sendFile(path.resolve(__dirname + "/../../front-end/build/index.html"))
-// );
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.resovle(__dirname, "/../../front-end/build")));
+}
 
 app.post(
   "/signin",
@@ -65,20 +65,6 @@ app.post("/signup", async (req: Request, res: Response) => {
     console.log("\n***Error***:\n\t", err.message);
     res.status(409).send(JSON.stringify(err.message));
   }
-});
-
-// app.get("/test", (req: any, res: any) => {
-//   console.log("TeSTinG....\nIt works!!!");
-//   res.send("");
-// });
-
-app.get("/isUserAuthed", async (req: Request, res: Response) => {
-  const isAuthed = (await req.isAuthenticated())
-    ? await req.isAuthenticated()
-    : false;
-
-  res.send(JSON.stringify(isAuthed));
-  res.end();
 });
 
 app.listen(port, () => console.log(`Server is Listening on port: ${port}...`));
