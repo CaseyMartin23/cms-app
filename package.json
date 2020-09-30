@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node back-end/server/server.ts",
-    "dev-start": "concurrently -n 'server, client' -c 'purple, green' \"nodemon back-end/server/server.ts\" \"cd front-end && npm start\"",
+    "start": "node back-end/server/server.js",
+    "dev-start": "concurrently -n 'server,client' -c 'magenta,blue' \"nodemon back-end/server/server.js\" \"cd front-end && npm start\"",
     "heroku-postbuild": "cd front-end && npm install && npm run build"
   },
   "keywords": [],

@@ -1,32 +1,6 @@
 const knex = require("./knex");
 
-type UserType = {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  remember_me?: boolean;
-};
-
-type BasicQueriesType = {
-  getAll(): any;
-  create(newUser: UserType): any;
-  update(updatedUser: UserType): any;
-  delete(id: number): any;
-};
-
-interface UserQueriesType extends BasicQueriesType {
-  getUserByEmail(email: string): any;
-  getUserById(id: string): any;
-}
-
-type QueriesType = {
-  users: UserQueriesType;
-  projects: BasicQueriesType;
-  tickets: BasicQueriesType;
-};
-
-const users: UserQueriesType = {
+const users = {
   getAll() {
     return knex("users");
   },
@@ -53,22 +27,24 @@ const users: UserQueriesType = {
   delete() {},
 };
 
-const projects: BasicQueriesType = {
+const projects = {
   getAll() {},
   create() {},
   update() {},
   delete() {},
 };
 
-const tickets: BasicQueriesType = {
+const tickets = {
   getAll() {},
   create() {},
   update() {},
   delete() {},
 };
 
-export const queries: QueriesType = {
+const queries = {
   users,
   projects,
   tickets,
 };
+
+module.exports = queries;
