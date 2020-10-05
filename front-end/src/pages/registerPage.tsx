@@ -28,13 +28,13 @@ const RegisterPage = () => {
     event.preventDefault();
 
     try {
-      const resp = await fetch("/login", {
+      const resp = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(registerFormData),
       });
       const result = await resp.json();
-      console.log("result->", result);
+      console.log("result->", result.response);
     } catch (err) {
       console.log(err);
     }
@@ -50,7 +50,7 @@ const RegisterPage = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form onSubmit={onSubmitHandler} noValidate>
+        <form onSubmit={onSubmitHandler}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -87,6 +87,7 @@ const RegisterPage = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                type="email"
               />
             </Grid>
             <Grid item xs={12}>

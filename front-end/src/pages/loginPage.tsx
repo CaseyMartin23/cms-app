@@ -31,6 +31,22 @@ const LoginPage = () => {
     setLoginFormData({ ...loginFormData, [name]: value });
   };
 
+  const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const resp = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(loginFormData),
+      });
+      const result = await resp.json();
+      console.log("result->", result.response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <div>
@@ -40,7 +56,7 @@ const LoginPage = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form noValidate>
+        <form onSubmit={onSubmitHandler}>
           <TextField
             onChange={onChangeHandler}
             variant="outlined"
@@ -50,6 +66,7 @@ const LoginPage = () => {
             id="email"
             label="Email Address"
             name="email"
+            type="email"
             autoComplete="email"
             autoFocus
           />

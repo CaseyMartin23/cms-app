@@ -24,6 +24,13 @@
   },
   "homepage": "https://github.com/CaseyMartin23/cms-app#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "compression": "^1.7.4",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-session": "^1.17.1",
+    "knex": "^0.21.6",
+    "morgan": "^1.10.0",
+    "pg": "^8.4.0"
   }
 }
