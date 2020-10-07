@@ -1,23 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
-const RegisterPage = () => {
-  const [registerFormData, setRegisterFormData] = useState({});
+import styled from "styled-components";
 
-  useEffect(() => {
-    console.log("FormData->", registerFormData);
-  }, [registerFormData]);
+const ErrorMessageDiv = styled.div`
+  margin: 5px;
+  padding: 5px;
+  width: 100%;
+  border: solid red 2px;
+  border-radius: 4px;
+  text-align: center;
+  color: red;
+`;
+
+type RegisterFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
+
+const RegisterPage = () => {
+  const [redirectUrl, setRedirectUrl] = useState("");
+  const [submissionLoading, setSubmissionLoading] = useState(false);
+  const [submissionError, setSubmissionError] = useState();
+  const [registerFormData, setRegisterFormData] = useState<RegisterFormData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
 
   const onChangeHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSubmissionError(undefined);
+
     const target = event.target;
     const { name, value } = target;
 
@@ -26,6 +49,7 @@ const RegisterPage = () => {
 
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmissionLoading(true);
 
     try {
       const resp = await fetch("/api/register", {
@@ -34,19 +58,32 @@ const RegisterPage = () => {
         body: JSON.stringify(registerFormData),
       });
       const result = await resp.json();
-      console.log("result->", result.response);
+
+      if (result && result.response === "User creation successful") {
+        setRedirectUrl(result.redirectUrl);
+      }
+
+      setRegisterFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+      });
+
+      setSubmissionError(result.error);
     } catch (err) {
       console.log(err);
     }
+
+    setSubmissionLoading(false);
   };
 
+  if (redirectUrl && redirectUrl !== "") {
+    return <Redirect to={redirectUrl} />;
+  }
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div>
-        <Avatar>
-          <LockOutlinedIcon />
-        </Avatar>
+    <div>
+      <Container component="main" maxWidth="xs">
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
@@ -56,6 +93,7 @@ const RegisterPage = () => {
               <TextField
                 onChange={onChangeHandle}
                 autoComplete="fname"
+                value={registerFormData.firstName}
                 name="firstName"
                 variant="outlined"
                 required
@@ -68,6 +106,7 @@ const RegisterPage = () => {
             <Grid item xs={12} sm={6}>
               <TextField
                 onChange={onChangeHandle}
+                value={registerFormData.lastName}
                 variant="outlined"
                 required
                 fullWidth
@@ -80,6 +119,7 @@ const RegisterPage = () => {
             <Grid item xs={12}>
               <TextField
                 onChange={onChangeHandle}
+                value={registerFormData.email}
                 variant="outlined"
                 required
                 fullWidth
@@ -93,6 +133,7 @@ const RegisterPage = () => {
             <Grid item xs={12}>
               <TextField
                 onChange={onChangeHandle}
+                value={registerFormData.password}
                 variant="outlined"
                 required
                 fullWidth
@@ -103,9 +144,18 @@ const RegisterPage = () => {
                 autoComplete="current-password"
               />
             </Grid>
-            <Grid item xs={12}></Grid>
+            {submissionError && (
+              <ErrorMessageDiv>{submissionError}</ErrorMessageDiv>
+            )}
           </Grid>
-          <Button type="submit" fullWidth variant="contained" color="primary">
+          <Button
+            type="submit"
+            style={{ marginTop: "15px", marginBottom: "15px" }}
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={submissionLoading}
+          >
             Sign Up
           </Button>
           <Grid container justify="flex-end">
@@ -116,8 +166,8 @@ const RegisterPage = () => {
             </Grid>
           </Grid>
         </form>
-      </div>
-    </Container>
+      </Container>
+    </div>
   );
 };
 

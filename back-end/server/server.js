@@ -2,11 +2,14 @@ const express = require("express");
 require("dotenv").config({ silent: process.env.NODE_ENV === "production" });
 const morgan = require("morgan");
 const compression = require("compression");
-// const session = require("express-session");
-// const flash = require("express-flash");
+const passport = require("passport");
+const session = require("express-session");
+const flash = require("express-flash");
 const path = require("path");
 
 const routes = require("./routes/api");
+const initializePassport = require("./passport/passport-config");
+initializePassport(passport);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -16,20 +19,23 @@ app.use(express.static("front-end/build"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(compression());
-app.use(morgan("dev"));
-// app.use(session(
-//   {
-//     secret: process.env.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: true,
-//    }
-// ));
+app.use(flash());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 app.use("/api", routes);
 
 if (!dev) {
   app.disable("x-powered-by");
   app.use(morgan("common"));
 }
+if (dev) app.use(morgan("dev"));
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../../front-end/build/index.html"));

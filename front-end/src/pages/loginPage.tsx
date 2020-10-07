@@ -1,38 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
-const LoginPage = () => {
-  const [loginFormData, setLoginFormData] = useState({});
-  const [rememberMe, setRememberMe] = useState(true);
+type LoginFormDataType = {
+  email: string;
+  password: string;
+};
 
-  useEffect(() => {
-    console.log("LoginFormData->", loginFormData);
-  }, [loginFormData]);
+const LoginPage = () => {
+  const [redirectUrl, setRedirectUrl] = useState("");
+  const [submissionLoading, setSubmissionLoading] = useState(false);
+  const [loginFormData, setLoginFormData] = useState<LoginFormDataType>({
+    email: "",
+    password: "",
+  });
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
     const { name, value } = target;
-
-    if (name === "remember") {
-      setRememberMe(!rememberMe);
-      setLoginFormData({ ...loginFormData, [name]: rememberMe });
-    }
 
     setLoginFormData({ ...loginFormData, [name]: value });
   };
 
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmissionLoading(true);
 
     try {
       const resp = await fetch("/api/login", {
@@ -41,18 +39,23 @@ const LoginPage = () => {
         body: JSON.stringify(loginFormData),
       });
       const result = await resp.json();
-      console.log("result->", result.response);
+
+      if (result && result.response === "Login successful") {
+        setRedirectUrl(result.redirectUrl);
+      }
     } catch (err) {
       console.log(err);
     }
+
+    setSubmissionLoading(false);
   };
 
+  if (redirectUrl && redirectUrl !== "") {
+    return <Redirect to={redirectUrl} />;
+  }
   return (
-    <Container component="main" maxWidth="xs">
-      <div>
-        <Avatar>
-          <LockOutlinedIcon />
-        </Avatar>
+    <div>
+      <Container component="main" maxWidth="xs">
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
@@ -81,18 +84,13 @@ const LoginPage = () => {
             type="password"
             id="password"
           />
-          <FormControlLabel
-            control={
-              <Checkbox
-                onChange={onChangeHandler}
-                value={rememberMe}
-                name="remember"
-                color="primary"
-              />
-            }
-            label="Remember me"
-          />
-          <Button type="submit" fullWidth variant="contained" color="primary">
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={submissionLoading}
+          >
             Sign In
           </Button>
           <Grid container>
@@ -108,8 +106,8 @@ const LoginPage = () => {
             </Grid>
           </Grid>
         </form>
-      </div>
-    </Container>
+      </Container>
+    </div>
   );
 };
 

@@ -8,24 +8,27 @@ import NotFoundPage from "./pages/notFoundPage";
 
 import styled from "styled-components";
 
-const AppBackDrop = styled.div`
+const AppDiv = styled.div`
+  display: grid;
   background-color: #282c34;
   min-height: 100vh;
   text-align: center;
   color: white;
+  align-items: center;
+  justify-items: center;
 `;
 
 const App = () => {
   return (
     <Router>
-      <AppBackDrop className="App">
+      <AppDiv className="App">
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
           <Route component={NotFoundPage} />
         </Switch>
-      </AppBackDrop>
+      </AppDiv>
     </Router>
   );
 };

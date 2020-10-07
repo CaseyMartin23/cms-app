@@ -19,12 +19,12 @@ module.exports = {
   async createUser(user) {
     try {
       await knex(table).insert(user);
-      return { response: "Successfully created user!!!" };
+      return { response: "User creation successful" };
     } catch (err) {
       console.log(err);
       return {
         error: err,
-        response: "There was a problem with creating user",
+        response: "User creation unsuccessful",
       };
     }
   },
