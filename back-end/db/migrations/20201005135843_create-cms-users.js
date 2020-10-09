@@ -1,5 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
-
 exports.up = function (knex) {
   return knex.raw('create extension if not exists "uuid-ossp"').then(() => {
     return knex.schema.createTable("users", (table) => {
@@ -16,7 +14,7 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.raw('drop extension if exists "uuid-ossp"').then(() => {
-    return knex.schema.dropTable("users");
-  });
+  return knex
+    .raw('drop extension if exists "uuid-ossp"')
+    .then(() => knex.schema.dropTable("users"));
 };

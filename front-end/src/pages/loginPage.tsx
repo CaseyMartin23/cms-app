@@ -8,14 +8,17 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
+import { ErrorMessageDiv } from "../styledComps/styledComps";
+
 type LoginFormDataType = {
   email: string;
   password: string;
 };
 
 const LoginPage = () => {
-  const [redirectUrl, setRedirectUrl] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
+  const [submissionError, setSubmissionError] = useState();
   const [loginFormData, setLoginFormData] = useState<LoginFormDataType>({
     email: "",
     password: "",
@@ -24,6 +27,8 @@ const LoginPage = () => {
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
     const { name, value } = target;
+
+    setSubmissionError(undefined);
 
     setLoginFormData({ ...loginFormData, [name]: value });
   };
@@ -38,23 +43,26 @@ const LoginPage = () => {
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(loginFormData),
       });
+      console.log("resp->", resp);
       const result = await resp.json();
+      console.log("result->", result);
 
-      if (result && result.response === "Login successful") {
-        setRedirectUrl(result.redirectUrl);
+      if (result) {
+        if (result.error) {
+          setSubmissionError(result.error);
+        }
+        setIsLoggedIn(result.loggedIn);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
 
     setSubmissionLoading(false);
   };
 
-  if (redirectUrl && redirectUrl !== "") {
-    return <Redirect to={redirectUrl} />;
-  }
   return (
     <div>
+      {isLoggedIn ? <Redirect to="/" /> : null}
       <Container component="main" maxWidth="xs">
         <Typography component="h1" variant="h5">
           Sign in
@@ -84,6 +92,9 @@ const LoginPage = () => {
             type="password"
             id="password"
           />
+          {submissionError && (
+            <ErrorMessageDiv>{submissionError}</ErrorMessageDiv>
+          )}
           <Button
             type="submit"
             fullWidth

@@ -10,15 +10,7 @@ import Container from "@material-ui/core/Container";
 
 import styled from "styled-components";
 
-const ErrorMessageDiv = styled.div`
-  margin: 5px;
-  padding: 5px;
-  width: 100%;
-  border: solid red 2px;
-  border-radius: 4px;
-  text-align: center;
-  color: red;
-`;
+import { ErrorMessageDiv } from "../styledComps/styledComps";
 
 type RegisterFormData = {
   firstName: string;
@@ -28,7 +20,7 @@ type RegisterFormData = {
 };
 
 const RegisterPage = () => {
-  const [redirectUrl, setRedirectUrl] = useState("");
+  const [isRegistered, setIsRegistered] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [registerFormData, setRegisterFormData] = useState<RegisterFormData>({
@@ -59,8 +51,8 @@ const RegisterPage = () => {
       });
       const result = await resp.json();
 
-      if (result && result.response === "User creation successful") {
-        setRedirectUrl(result.redirectUrl);
+      if (result) {
+        setIsRegistered(result.registered);
       }
 
       setRegisterFormData({
@@ -72,17 +64,15 @@ const RegisterPage = () => {
 
       setSubmissionError(result.error);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
 
     setSubmissionLoading(false);
   };
 
-  if (redirectUrl && redirectUrl !== "") {
-    return <Redirect to={redirectUrl} />;
-  }
   return (
     <div>
+      {isRegistered ? <Redirect to="/login" /> : null}
       <Container component="main" maxWidth="xs">
         <Typography component="h1" variant="h5">
           Sign up

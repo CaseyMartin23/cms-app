@@ -21,7 +21,7 @@ module.exports = {
       await knex(table).insert(user);
       return { response: "User creation successful" };
     } catch (err) {
-      console.log(err);
+      console.erro(err);
       return {
         error: err,
         response: "User creation unsuccessful",

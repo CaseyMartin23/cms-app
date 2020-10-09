@@ -6,6 +6,15 @@ const queryUsers = require("../../db/queries/users");
 
 const router = express.Router();
 
+router.get("/isAuthed", (req, res) => {
+  if (!req.user) {
+    res.send(JSON.stringify({ isAuthed: false }));
+  } else {
+    res.send(JSON.stringify({ isAuthed: true }));
+  }
+  console.log("req-user->", req.user);
+});
+
 router.post("/register", async (req, res) => {
   const userRegisterInfo = req.body;
   try {
@@ -19,18 +28,18 @@ router.post("/register", async (req, res) => {
 
     if (userExists) {
       console.log("userExists->", userExists);
-      throw new Error("User Already exists!!");
+      throw new Error("User Already exists");
     } else {
       await queryUsers
         .createUser({ ...userRegisterInfo, password: hashedPassword })
         .then((resp) => {
           console.log("createUser-resp->", resp);
-          res.send(JSON.stringify({ ...resp, redirectUrl: "/login" }));
+          res.send(JSON.stringify({ ...resp, registered: true }));
         });
     }
   } catch (err) {
     console.log(err);
-    res.send(JSON.stringify({ error: err.message }));
+    res.send(JSON.stringify({ error: err.message, registered: false }));
   }
 });
 
@@ -38,11 +47,17 @@ router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user)
-      return res.send(JSON.stringify({ response: "Login unsuccessful" }));
+      return res.send(
+        JSON.stringify({
+          error: "Incorrect email/password",
+          response: "Login unsuccessful",
+          loggedIn: false,
+        })
+      );
     req.logIn(user, (err) => {
       if (err) return next(err);
       return res.send(
-        JSON.stringify({ response: "Login successful", redirectUrl: "/" })
+        JSON.stringify({ response: "Login successful", loggedIn: true })
       );
     });
   })(req, res, next);
