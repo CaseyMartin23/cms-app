@@ -8,8 +8,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
-import styled from "styled-components";
-
 import { ErrorMessageDiv } from "../styledComps/styledComps";
 
 type RegisterFormData = {
