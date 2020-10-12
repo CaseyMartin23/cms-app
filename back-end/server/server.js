@@ -7,7 +7,7 @@ const session = require("express-session");
 const flash = require("express-flash");
 const path = require("path");
 
-const routes = require("./routes/api");
+const routes = require("./routes/authenticationApi");
 const initializePassport = require("./passport/passport-config");
 initializePassport(passport);
 

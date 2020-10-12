@@ -1,7 +1,14 @@
 import React from "react";
 
-const Home = () => {
-  return <div>Home</div>;
+import Authentication from "../authApi";
+
+const Home = (props: any) => {
+  return (
+    <div>
+      <h1>Home</h1>
+      <button onClick={() => Authentication.logOut(props)}>LogOut</button>
+    </div>
+  );
 };
 
 export default Home;

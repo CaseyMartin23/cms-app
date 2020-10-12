@@ -70,7 +70,7 @@ const RegisterPage = () => {
 
   return (
     <div>
-      {isRegistered ? <Redirect to="/login" /> : null}
+      {isRegistered && <Redirect to="/login" />}
       <Container component="main" maxWidth="xs">
         <Typography component="h1" variant="h5">
           Sign up

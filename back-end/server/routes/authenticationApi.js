@@ -50,17 +50,27 @@ router.post("/login", (req, res, next) => {
       return res.send(
         JSON.stringify({
           error: "Incorrect email/password",
-          response: "Login unsuccessful",
           loggedIn: false,
         })
       );
     req.logIn(user, (err) => {
       if (err) return next(err);
-      return res.send(
-        JSON.stringify({ response: "Login successful", loggedIn: true })
-      );
+      return res.send(JSON.stringify({ error: undefined, loggedIn: true }));
     });
   })(req, res, next);
+});
+
+router.get("/logout", (req, res) => {
+  req.logOut();
+  if (!req.user) {
+    return res.send(JSON.stringify({ error: undefined, loggedOut: true }));
+  }
+  return res.send(
+    JSON.stringify({
+      error: "Something went wrong with your logout",
+      loggedOut: false,
+    })
+  );
 });
 
 module.exports = router;

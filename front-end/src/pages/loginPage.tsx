@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+// import { Redirect } from "react-router-dom";
+
+import Authentication from "../authApi";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -10,16 +12,10 @@ import Container from "@material-ui/core/Container";
 
 import { ErrorMessageDiv } from "../styledComps/styledComps";
 
-type LoginFormDataType = {
-  email: string;
-  password: string;
-};
-
-const LoginPage = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const LoginPage = (props: any) => {
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
-  const [loginFormData, setLoginFormData] = useState<LoginFormDataType>({
+  const [loginFormData, setLoginFormData] = useState({
     email: "",
     password: "",
   });
@@ -33,36 +29,23 @@ const LoginPage = () => {
     setLoginFormData({ ...loginFormData, [name]: value });
   };
 
-  const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmissionLoading(true);
 
-    try {
-      const resp = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(loginFormData),
-      });
-      console.log("resp->", resp);
-      const result = await resp.json();
-      console.log("result->", result);
+    Authentication.logIn(loginFormData, setSubmissionError).then(() => {
+      console.log("isAuthenticated->", Authentication.isAuthenticated());
+    });
 
-      if (result) {
-        if (result.error) {
-          setSubmissionError(result.error);
-        }
-        setIsLoggedIn(result.loggedIn);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    // if (Authentication.isAuthenticated()) {
+    //   props.history.push("/");
+    // }
 
     setSubmissionLoading(false);
   };
 
   return (
     <div>
-      {isLoggedIn ? <Redirect to="/" /> : null}
       <Container component="main" maxWidth="xs">
         <Typography component="h1" variant="h5">
           Sign in
