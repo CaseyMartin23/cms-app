@@ -6,7 +6,15 @@ const Home = (props: any) => {
   return (
     <div>
       <h1>Home</h1>
-      <button onClick={() => Authentication.logOut(props)}>LogOut</button>
+      <button
+        onClick={() => {
+          Authentication.logOut().then(() => {
+            if (!Authentication.isAuthenticated()) props.history.push("/login");
+          });
+        }}
+      >
+        LogOut
+      </button>
     </div>
   );
 };

@@ -34,7 +34,9 @@ const LoginPage = (props: any) => {
     setSubmissionLoading(true);
 
     Authentication.logIn(loginFormData, setSubmissionError).then(() => {
-      console.log("isAuthenticated->", Authentication.isAuthenticated());
+      if (Authentication.isAuthenticated()) {
+        props.history.push("/");
+      }
     });
 
     // if (Authentication.isAuthenticated()) {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+
+import Authentication from "../authApi";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -10,18 +11,10 @@ import Container from "@material-ui/core/Container";
 
 import { ErrorMessageDiv } from "../styledComps/styledComps";
 
-type RegisterFormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
-
-const RegisterPage = () => {
-  const [isRegistered, setIsRegistered] = useState(false);
+const RegisterPage = (props: any) => {
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
-  const [registerFormData, setRegisterFormData] = useState<RegisterFormData>({
+  const [registerFormData, setRegisterFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -41,36 +34,21 @@ const RegisterPage = () => {
     event.preventDefault();
     setSubmissionLoading(true);
 
-    try {
-      const resp = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(registerFormData),
-      });
-      const result = await resp.json();
-
-      if (result) {
-        setIsRegistered(result.registered);
+    Authentication.register(
+      registerFormData,
+      setRegisterFormData,
+      setSubmissionError
+    ).then(() => {
+      if (Authentication.isRegistered()) {
+        props.history.push("/login");
       }
-
-      setRegisterFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-      });
-
-      setSubmissionError(result.error);
-    } catch (err) {
-      console.error(err);
-    }
+    });
 
     setSubmissionLoading(false);
   };
 
   return (
     <div>
-      {isRegistered && <Redirect to="/login" />}
       <Container component="main" maxWidth="xs">
         <Typography component="h1" variant="h5">
           Sign up

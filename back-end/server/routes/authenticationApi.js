@@ -34,7 +34,9 @@ router.post("/register", async (req, res) => {
         .createUser({ ...userRegisterInfo, password: hashedPassword })
         .then((resp) => {
           console.log("createUser-resp->", resp);
-          res.send(JSON.stringify({ ...resp, registered: true }));
+          res.send(
+            JSON.stringify({ ...resp, error: undefined, registered: true })
+          );
         });
     }
   } catch (err) {

@@ -1,3 +1,10 @@
+type RegisterFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
+
 type LoginFormDataType = {
   email: string;
   password: string;
@@ -5,16 +12,46 @@ type LoginFormDataType = {
 
 class Authentication {
   private authenticated: boolean;
+  private registered: boolean;
 
   constructor() {
     this.authenticated = false;
+    this.registered = false;
   }
 
-  async register() {}
+  async register(
+    registerFormData: RegisterFormData,
+    formDataHandler: React.Dispatch<React.SetStateAction<RegisterFormData>>,
+    formErrorHandler: React.Dispatch<React.SetStateAction<undefined>>
+  ) {
+    try {
+      const resp = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(registerFormData),
+      });
+      const result = await resp.json();
+
+      if (result) {
+        const { error, registered } = result;
+        if (error) return formErrorHandler(result.error);
+        this.registered = registered;
+      }
+
+      formDataHandler({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   async logIn(
     loginFormData: LoginFormDataType,
-    handleError: React.Dispatch<React.SetStateAction<undefined>>
+    formErrorHandler: React.Dispatch<React.SetStateAction<undefined>>
   ) {
     try {
       const resp = await fetch("/api/login", {
@@ -23,31 +60,26 @@ class Authentication {
         body: JSON.stringify(loginFormData),
       });
       const result = await resp.json();
-      console.log("result->", result);
 
       if (result) {
         const { error, loggedIn } = result;
-        console.log("error->", error);
-        console.log("loggedIn->", loggedIn);
 
-        if (error) return handleError(error);
+        if (error) return formErrorHandler(error);
         this.authenticated = loggedIn;
-        console.log("authenticated->", this.authenticated);
       }
     } catch (err) {
       console.error(err);
     }
   }
 
-  async logOut(props: any) {
+  async logOut() {
     try {
       const resp = await fetch("/api/logout");
       const result = await resp.json();
 
-      //   if (result && !result.loggedOut) {
-      //     this.authenticated = result.loggedOut;
-      //     return props.history.push("/");
-      //   }
+      if (result) {
+        this.authenticated = !result.loggedOut;
+      }
     } catch (err) {
       console.error(err);
     }
@@ -55,6 +87,10 @@ class Authentication {
 
   isAuthenticated() {
     return this.authenticated;
+  }
+
+  isRegistered() {
+    return this.registered;
   }
 }
 
