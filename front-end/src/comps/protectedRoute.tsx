@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
 
 import Authentication from "../authApi";
@@ -9,13 +9,13 @@ const ProtectedRoute = (props: any) => {
   return (
     <Route
       {...rest}
-      render={() =>
-        Authentication.isAuthenticated() ? (
+      render={() => {
+        return Authentication.isAuthenticated() ? (
           <Component />
         ) : (
-          <Redirect to={authRedirect} />
-        )
-      }
+          <Redirect to="/login" />
+        );
+      }}
     />
   );
 };

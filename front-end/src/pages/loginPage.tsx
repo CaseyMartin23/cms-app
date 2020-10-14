@@ -11,21 +11,14 @@ import Container from "@material-ui/core/Container";
 
 import { ErrorMessageDiv } from "../styledComps/styledComps";
 
-const LoginPage = (props: any) => {
-  const [redirectTo, setRedirectTo] = useState<boolean | PromiseLike<boolean>>(
-    false
-  );
+const LoginPage = () => {
+  const [isAuthed, setIsAuthed] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [loginFormData, setLoginFormData] = useState({
     email: "",
     password: "",
   });
-
-  React.useEffect(() => {
-    console.log("redirectTo->", redirectTo);
-    console.log("isAuthenticated->", Authentication.isAuthenticated());
-  }, [redirectTo]);
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
@@ -41,13 +34,13 @@ const LoginPage = (props: any) => {
     setSubmissionLoading(true);
 
     Authentication.logIn(loginFormData, setSubmissionError).then(() => {
-      setRedirectTo(Authentication.isAuthenticated());
+      setIsAuthed(Authentication.isAuthenticated());
     });
 
     setSubmissionLoading(false);
   };
 
-  if (redirectTo) {
+  if (isAuthed) {
     return <Redirect to="/" />;
   }
   return (

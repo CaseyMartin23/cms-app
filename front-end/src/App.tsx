@@ -26,12 +26,7 @@ const App = () => {
     <Router>
       <AppDiv className="App">
         <Switch>
-          <ProtectedRoute
-            exact
-            path="/"
-            component={HomePage}
-            authRedirect="/login"
-          />
+          <ProtectedRoute exact path="/" component={HomePage} />
           <LoginRegisterRoute path="/login" component={LoginPage} />
           <LoginRegisterRoute path="/register" component={RegisterPage} />
           <Route component={NotFoundPage} />

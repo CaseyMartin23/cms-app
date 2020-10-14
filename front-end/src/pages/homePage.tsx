@@ -7,8 +7,9 @@ const Home = () => {
   const [redirectToAuth, setRedirectToAuth] = useState(false);
 
   const onLogOut = () => {
-    Authentication.logOut();
-    setRedirectToAuth(!redirectToAuth);
+    Authentication.logOut().then(() => {
+      setRedirectToAuth(!redirectToAuth);
+    });
   };
 
   if (redirectToAuth) return <Redirect to="/login" />;
@@ -16,7 +17,6 @@ const Home = () => {
     <div>
       <h1>Home</h1>
       <button onClick={onLogOut}>LogOut</button>
-      <a href="/login">Login</a>
     </div>
   );
 };
