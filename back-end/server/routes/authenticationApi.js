@@ -12,35 +12,28 @@ router.get("/isAuthed", (req, res) => {
   } else {
     res.send(JSON.stringify({ isAuthed: true }));
   }
-  console.log("req-user->", req.user);
 });
 
 router.post("/register", async (req, res) => {
   const userRegisterInfo = req.body;
   try {
     const hashedPassword = await bcrypt.hash(userRegisterInfo.password, 10);
-    console.log("registerData->", {
-      ...userRegisterInfo,
-      password: hashedPassword,
-    });
 
     const [userExists] = await queryUsers.getByEmail(userRegisterInfo.email);
 
     if (userExists) {
-      console.log("userExists->", userExists);
       throw new Error("User Already exists");
     } else {
       await queryUsers
         .createUser({ ...userRegisterInfo, password: hashedPassword })
         .then((resp) => {
-          console.log("createUser-resp->", resp);
           res.send(
             JSON.stringify({ ...resp, error: undefined, registered: true })
           );
         });
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.send(JSON.stringify({ error: err.message, registered: false }));
   }
 });

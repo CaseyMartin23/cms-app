@@ -1,6 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import ProtectedRoute from "./comps/protectedRoute";
+import LoginRegisterRoute from "./comps/loginRegisterRoute";
+
 import HomePage from "./pages/homePage";
 import LoginPage from "./pages/loginPage";
 import RegisterPage from "./pages/registerPage";
@@ -23,9 +26,14 @@ const App = () => {
     <Router>
       <AppDiv className="App">
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/login" component={LoginPage} />
-          <Route path="/register" component={RegisterPage} />
+          <ProtectedRoute
+            exact
+            path="/"
+            component={HomePage}
+            authRedirect="/login"
+          />
+          <LoginRegisterRoute path="/login" component={LoginPage} />
+          <LoginRegisterRoute path="/register" component={RegisterPage} />
           <Route component={NotFoundPage} />
         </Switch>
       </AppDiv>

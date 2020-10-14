@@ -85,8 +85,23 @@ class Authentication {
     }
   }
 
+  private async getAuthStatus() {
+    try {
+      const resp = await fetch("/api/isAuthed");
+      const result = await resp.json();
+
+      if (result) {
+        const { isAuthed } = result;
+        if (isAuthed !== this.authenticated) this.authenticated = isAuthed;
+      }
+      return this.authenticated;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   isAuthenticated() {
-    return this.authenticated;
+    return this.getAuthStatus().then((resp: any) => resp);
   }
 
   isRegistered() {

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-// import { Redirect } from "react-router-dom";
-
+import { Redirect } from "react-router-dom";
 import Authentication from "../authApi";
 
 import Button from "@material-ui/core/Button";
@@ -13,12 +12,20 @@ import Container from "@material-ui/core/Container";
 import { ErrorMessageDiv } from "../styledComps/styledComps";
 
 const LoginPage = (props: any) => {
+  const [redirectTo, setRedirectTo] = useState<boolean | PromiseLike<boolean>>(
+    false
+  );
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [loginFormData, setLoginFormData] = useState({
     email: "",
     password: "",
   });
+
+  React.useEffect(() => {
+    console.log("redirectTo->", redirectTo);
+    console.log("isAuthenticated->", Authentication.isAuthenticated());
+  }, [redirectTo]);
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
@@ -34,18 +41,15 @@ const LoginPage = (props: any) => {
     setSubmissionLoading(true);
 
     Authentication.logIn(loginFormData, setSubmissionError).then(() => {
-      if (Authentication.isAuthenticated()) {
-        props.history.push("/");
-      }
+      setRedirectTo(Authentication.isAuthenticated());
     });
-
-    // if (Authentication.isAuthenticated()) {
-    //   props.history.push("/");
-    // }
 
     setSubmissionLoading(false);
   };
 
+  if (redirectTo) {
+    return <Redirect to="/" />;
+  }
   return (
     <div>
       <Container component="main" maxWidth="xs">
