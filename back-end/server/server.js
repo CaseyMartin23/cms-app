@@ -4,16 +4,19 @@ const morgan = require("morgan");
 const compression = require("compression");
 const passport = require("passport");
 const session = require("express-session");
+const sessionStore = require("connect-session-knex")(session);
 const flash = require("express-flash");
 const path = require("path");
 
 const routes = require("./routes/authenticationApi");
+const knex = require("../db/knex");
 const initializePassport = require("./passport/passport-config");
 initializePassport(passport);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 const dev = app.get("env") !== "production";
+const store = new sessionStore({ knex });
 
 app.use(express.static("front-end/build"));
 app.use(express.urlencoded({ extended: false }));
@@ -25,6 +28,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store,
   })
 );
 app.use(passport.initialize());

@@ -58,6 +58,7 @@ router.post("/login", (req, res, next) => {
 router.get("/logout", (req, res) => {
   req.logOut();
   if (!req.user) {
+    req.session.destroy();
     return res.send(JSON.stringify({ error: undefined, loggedOut: true }));
   }
   return res.send(
