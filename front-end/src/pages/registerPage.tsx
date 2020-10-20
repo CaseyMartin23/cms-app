@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-import Authentication from "../authApi";
-
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
@@ -33,16 +31,6 @@ const RegisterPage = (props: any) => {
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmissionLoading(true);
-
-    Authentication.register(
-      registerFormData,
-      setRegisterFormData,
-      setSubmissionError
-    ).then(() => {
-      if (Authentication.isRegistered()) {
-        props.history.push("/login");
-      }
-    });
 
     setSubmissionLoading(false);
   };

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import Authentication from "../authApi";
+
+import { UserAuthContext } from "../userAuthContext";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -12,7 +13,7 @@ import Container from "@material-ui/core/Container";
 import { ErrorMessageDiv } from "../styledComps/styledComps";
 
 const LoginPage = () => {
-  const [isAuthed, setIsAuthed] = useState(false);
+  const { isAuthed, setIsAuthed } = React.useContext(UserAuthContext);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [loginFormData, setLoginFormData] = useState({
@@ -29,13 +30,26 @@ const LoginPage = () => {
     setLoginFormData({ ...loginFormData, [name]: value });
   };
 
-  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmissionLoading(true);
 
-    Authentication.logIn(loginFormData, setSubmissionError).then(() => {
-      setIsAuthed(Authentication.isAuthenticated());
-    });
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(loginFormData),
+      });
+      const result = await response.json();
+
+      if (result) {
+        console.log("onSubmitHandler-result->", result);
+        if (result.error) return setSubmissionError(result.error);
+        if (setIsAuthed) setIsAuthed(result.loggedIn);
+      }
+    } catch (err) {
+      console.error(err);
+    }
 
     setSubmissionLoading(false);
   };

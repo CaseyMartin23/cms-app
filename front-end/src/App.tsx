@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import { UserAuthProvider } from "./userAuthContext";
 import ProtectedRoute from "./comps/protectedRoute";
 import LoginRegisterRoute from "./comps/loginRegisterRoute";
 
@@ -22,16 +23,38 @@ const AppDiv = styled.div`
 `;
 
 const App = () => {
+  const [isAuthed, setIsAuthed] = React.useState(false);
+
+  React.useEffect(() => {
+    getAuthStatus();
+  });
+
+  const getAuthStatus = async () => {
+    try {
+      const resp = await fetch("/api/isAuthed");
+      const result = await resp.json();
+
+      if (result) {
+        console.log("getAuthStatus-result->", result);
+        setIsAuthed(result.isAuthed);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Router>
-      <AppDiv className="App">
-        <Switch>
-          <ProtectedRoute exact path="/" component={HomePage} />
-          <LoginRegisterRoute path="/login" component={LoginPage} />
-          <LoginRegisterRoute path="/register" component={RegisterPage} />
-          <Route component={NotFoundPage} />
-        </Switch>
-      </AppDiv>
+      <UserAuthProvider value={{ isAuthed, setIsAuthed }}>
+        <AppDiv className="App">
+          <Switch>
+            <ProtectedRoute exact path="/" component={HomePage} />
+            <Route path="/login" component={LoginPage} />
+            <Route path="/register" component={RegisterPage} />
+            <Route component={NotFoundPage} />
+          </Switch>
+        </AppDiv>
+      </UserAuthProvider>
     </Router>
   );
 };
