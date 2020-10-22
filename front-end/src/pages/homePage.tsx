@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 
-import Authentication from "../authApi";
+import { UserAuthContext } from "../userAuthContext";
 
 const Home = () => {
-  const [redirectToAuth, setRedirectToAuth] = useState(false);
+  const { isAuthed, setIsAuthed } = React.useContext(UserAuthContext);
+  const onLogOut = async () => {
+    try {
+      const response = await fetch("/api/logout");
+      const result = await response.json();
 
-  const onLogOut = () => {
-    Authentication.logOut().then(() => {
-      setRedirectToAuth(!redirectToAuth);
-    });
+      if (result) {
+        console.log("onLogOut-result->", result);
+        if (setIsAuthed) setIsAuthed(!result.loggedOut);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  if (redirectToAuth) return <Redirect to="/login" />;
+  if (!isAuthed) return <Redirect to="/login" />;
   return (
     <div>
       <h1>Home</h1>
