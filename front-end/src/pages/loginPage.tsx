@@ -10,7 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
-import { ErrorMessageDiv } from "../styledComps/styledComps";
+import { ErrorMessageDiv } from "../comps/styledComps";
 
 const LoginPage = () => {
   const { isAuthed, setIsAuthed } = React.useContext(UserAuthContext);

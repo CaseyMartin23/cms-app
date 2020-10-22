@@ -5,7 +5,7 @@ import { UserAuthProvider } from "./userAuthContext";
 import ProtectedRoute from "./comps/protectedRoute";
 import LoginRegisterRoute from "./comps/loginRegisterRoute";
 
-import HomePage from "./pages/homePage";
+import Dashboard from "./pages/dashboard";
 import LoginPage from "./pages/loginPage";
 import RegisterPage from "./pages/registerPage";
 import NotFoundPage from "./pages/notFoundPage";
@@ -48,9 +48,9 @@ const App = () => {
       <UserAuthProvider value={{ isAuthed, setIsAuthed }}>
         <AppDiv className="App">
           <Switch>
-            <ProtectedRoute exact path="/" component={HomePage} />
-            <Route path="/login" component={LoginPage} />
-            <Route path="/register" component={RegisterPage} />
+            <ProtectedRoute exact path="/" component={Dashboard} />
+            <LoginRegisterRoute path="/login" component={LoginPage} />
+            <LoginRegisterRoute path="/register" component={RegisterPage} />
             <Route component={NotFoundPage} />
           </Switch>
         </AppDiv>

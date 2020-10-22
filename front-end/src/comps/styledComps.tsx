@@ -11,3 +11,8 @@ export const ErrorMessageDiv = styled.div`
   text-align: center;
   color: red;
 `;
+
+export const DashboardDiv = styled.div`
+  height: 100vh;
+  width: 100vw;
+`;
