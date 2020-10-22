@@ -16,3 +16,14 @@ export const DashboardDiv = styled.div`
   height: 100vh;
   width: 100vw;
 `;
+
+export const Drawer = styled.div`
+  height: 100vh;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  transition: 0.5;
+`;

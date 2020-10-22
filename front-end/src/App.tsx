@@ -35,7 +35,6 @@ const App = () => {
       const result = await resp.json();
 
       if (result) {
-        console.log("getAuthStatus-result->", result);
         setIsAuthed(result.isAuthed);
       }
     } catch (err) {

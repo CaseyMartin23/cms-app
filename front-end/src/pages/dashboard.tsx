@@ -8,12 +8,15 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import MenuIcon from "@material-ui/icons/Menu";
 
-import { DashboardDiv } from "../comps/styledComps";
+import MenuIcon from "@material-ui/icons/Menu";
+import CancelIcon from "@material-ui/icons/Cancel";
+
+import { DashboardDiv, Drawer } from "../comps/styledComps";
 
 const Dashboard = () => {
   const { isAuthed, setIsAuthed } = React.useContext(UserAuthContext);
+  const drawerElement = React.useRef(null);
 
   const onLogout = async () => {
     try {
@@ -28,12 +31,19 @@ const Dashboard = () => {
     }
   };
 
+  const toggleDrawer = () => {};
+
   if (!isAuthed) return <Redirect to="/login" />;
   return (
     <DashboardDiv>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
+          <IconButton
+            onClick={toggleDrawer}
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+          >
             <MenuIcon />
           </IconButton>
           <Typography style={{ flexGrow: 1, textAlign: "left" }} variant="h6">
@@ -44,6 +54,11 @@ const Dashboard = () => {
           </Button>
         </Toolbar>
       </AppBar>
+      <Drawer>
+        <IconButton>
+          <CancelIcon />
+        </IconButton>
+      </Drawer>
       <h1>Home</h1>
     </DashboardDiv>
   );

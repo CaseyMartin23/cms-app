@@ -7,8 +7,6 @@ const ProtectedRoute = (props: any) => {
   const { component: Component, authRedirect, ...rest } = props;
   const isAuthed = React.useContext(UserAuthContext);
 
-  console.log("ProtectedRoute-isAuthed->", isAuthed);
-
   return (
     <Route
       {...rest}

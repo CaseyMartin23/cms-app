@@ -43,7 +43,6 @@ const LoginPage = () => {
       const result = await response.json();
 
       if (result) {
-        console.log("onSubmitHandler-result->", result);
         if (result.error) setSubmissionError(result.error);
         if (setIsAuthed) setIsAuthed(result.loggedIn);
       }

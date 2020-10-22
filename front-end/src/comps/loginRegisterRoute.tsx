@@ -7,8 +7,6 @@ const LoginRegisterRoute = (props: any) => {
   const { component: Component, ...rest } = props;
   const { isAuthed } = React.useContext(UserAuthContext);
 
-  console.log("LoginRegisterRoute-isAuthed->", isAuthed);
-
   return (
     <Route
       {...rest}
