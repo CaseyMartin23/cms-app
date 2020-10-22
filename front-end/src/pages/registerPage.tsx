@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { Redirect } from "react-router-dom";
+
+import { UserAuthContext } from "../userAuthContext";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -9,7 +12,9 @@ import Container from "@material-ui/core/Container";
 
 import { ErrorMessageDiv } from "../styledComps/styledComps";
 
-const RegisterPage = (props: any) => {
+const RegisterPage = () => {
+  const { isAuthed } = useContext(UserAuthContext);
+  const [isRegistered, setIsRegistered] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [registerFormData, setRegisterFormData] = useState({
@@ -32,9 +37,27 @@ const RegisterPage = (props: any) => {
     event.preventDefault();
     setSubmissionLoading(true);
 
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(registerFormData),
+      });
+      const result = await response.json();
+
+      if (result) {
+        if (result.error) setSubmissionError(result.error);
+        setIsRegistered(result.registered);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
     setSubmissionLoading(false);
   };
 
+  if (isAuthed) return <Redirect to="/" />;
+  if (isRegistered) return <Redirect to="/login" />;
   return (
     <div>
       <Container component="main" maxWidth="xs">

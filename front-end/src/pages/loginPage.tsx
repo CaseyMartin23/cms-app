@@ -44,7 +44,7 @@ const LoginPage = () => {
 
       if (result) {
         console.log("onSubmitHandler-result->", result);
-        if (result.error) return setSubmissionError(result.error);
+        if (result.error) setSubmissionError(result.error);
         if (setIsAuthed) setIsAuthed(result.loggedIn);
       }
     } catch (err) {
@@ -101,11 +101,6 @@ const LoginPage = () => {
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="/recovery" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
               <Link href="/register" variant="body2">
                 Don't have an account? Sign Up
