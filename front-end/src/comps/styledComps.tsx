@@ -1,5 +1,15 @@
 import styled from "styled-components";
 
+export const AppDiv = styled.div`
+  display: grid;
+  background-color: #282c34;
+  min-height: 100vh;
+  text-align: center;
+  color: white;
+  align-items: center;
+  justify-items: center;
+`;
+
 export const ErrorMessageDiv = styled.div`
   margin-top: 5px;
   margin-bottom: 5px;

@@ -9,17 +9,7 @@ import LoginPage from "./pages/loginPage";
 import RegisterPage from "./pages/registerPage";
 import NotFoundPage from "./pages/notFoundPage";
 
-import styled from "styled-components";
-
-const AppDiv = styled.div`
-  display: grid;
-  background-color: #282c34;
-  min-height: 100vh;
-  text-align: center;
-  color: white;
-  align-items: center;
-  justify-items: center;
-`;
+import { AppDiv } from "./comps/styledComps";
 
 const App = () => {
   const [isAuthed, setIsAuthed] = React.useState(false);

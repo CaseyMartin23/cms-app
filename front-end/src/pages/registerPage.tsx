@@ -9,8 +9,17 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import { ErrorMessageDiv } from "../comps/styledComps";
+
+type onRoleSelectChangeEventType = {
+  name?: string | undefined;
+  value: unknown;
+};
 
 const RegisterPage = () => {
   const { isAuthed } = useContext(UserAuthContext);
@@ -20,9 +29,14 @@ const RegisterPage = () => {
   const [registerFormData, setRegisterFormData] = useState({
     firstName: "",
     lastName: "",
+    role: 2,
     email: "",
     password: "",
   });
+
+  React.useEffect(() => {
+    console.log("registerFormData->", registerFormData);
+  }, [registerFormData]);
 
   const onChangeHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSubmissionError(undefined);
@@ -31,6 +45,16 @@ const RegisterPage = () => {
     const { name, value } = target;
 
     setRegisterFormData({ ...registerFormData, [name]: value });
+  };
+
+  const onRoleSelectChange = (
+    event: React.ChangeEvent<onRoleSelectChangeEventType>
+  ) => {
+    setSubmissionError(undefined);
+
+    const { name, value } = event.target;
+
+    setRegisterFormData({ ...registerFormData, [`${name}`]: value });
   };
 
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -92,6 +116,21 @@ const RegisterPage = () => {
                 name="lastName"
                 autoComplete="lname"
               />
+            </Grid>
+            <Grid item>
+              <FormControl variant="outlined">
+                <InputLabel id="select-outlined-label">Role</InputLabel>
+                <Select
+                  id="select-outlined"
+                  value={registerFormData.role}
+                  onChange={onRoleSelectChange}
+                  name="role"
+                  label="Role"
+                >
+                  <MenuItem value={1}>Admin</MenuItem>
+                  <MenuItem value={2}>Basic</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
               <TextField
