@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { UserAuthProvider } from "./userAuthContext";
 import ProtectedRoute from "./comps/protectedRoute";
-import LoginRegisterRoute from "./comps/loginRegisterRoute";
 
 import Dashboard from "./pages/dashboard";
 import LoginPage from "./pages/loginPage";
@@ -48,8 +47,8 @@ const App = () => {
         <AppDiv className="App">
           <Switch>
             <ProtectedRoute exact path="/" component={Dashboard} />
-            <LoginRegisterRoute path="/login" component={LoginPage} />
-            <LoginRegisterRoute path="/register" component={RegisterPage} />
+            <Route path="/login" component={LoginPage} />
+            <Route path="/register" component={RegisterPage} />
             <Route component={NotFoundPage} />
           </Switch>
         </AppDiv>

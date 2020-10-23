@@ -25,5 +25,6 @@ export const Drawer = styled.div`
   top: 0;
   left: 0;
   overflow-x: hidden;
-  transition: 0.5;
+  transition: 0.5s;
+  background-color: blue;
 `;

@@ -16,7 +16,7 @@ import { DashboardDiv, Drawer } from "../comps/styledComps";
 
 const Dashboard = () => {
   const { isAuthed, setIsAuthed } = React.useContext(UserAuthContext);
-  const drawerElement = React.useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const onLogout = async () => {
     try {
@@ -31,19 +31,27 @@ const Dashboard = () => {
     }
   };
 
-  const toggleDrawer = () => {};
+  const toggleDrawer = () => {
+    const drawerElement = document.getElementById("drawer");
+
+    if (drawerElement) {
+      if (!isOpen) {
+        drawerElement.style.width = "300px";
+        setIsOpen(!isOpen);
+      }
+      if (isOpen) {
+        drawerElement.style.width = "0px";
+        setIsOpen(!isOpen);
+      }
+    }
+  };
 
   if (!isAuthed) return <Redirect to="/login" />;
   return (
     <DashboardDiv>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            onClick={toggleDrawer}
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-          >
+          <IconButton onClick={toggleDrawer} edge="start" color="inherit">
             <MenuIcon />
           </IconButton>
           <Typography style={{ flexGrow: 1, textAlign: "left" }} variant="h6">
@@ -54,8 +62,12 @@ const Dashboard = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      <Drawer>
-        <IconButton>
+      <Drawer id="drawer">
+        <IconButton
+          style={{ float: "right" }}
+          onClick={toggleDrawer}
+          color="inherit"
+        >
           <CancelIcon />
         </IconButton>
       </Drawer>
