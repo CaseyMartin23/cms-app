@@ -95,7 +95,7 @@ const RegisterPage = () => {
                 onChange={onChangeHandle}
                 autoComplete="fname"
                 value={registerFormData.firstName}
-                name="firstName"
+                name="first_name"
                 variant="outlined"
                 required
                 fullWidth
@@ -113,24 +113,9 @@ const RegisterPage = () => {
                 fullWidth
                 id="lastName"
                 label="Last Name"
-                name="lastName"
+                name="last_name"
                 autoComplete="lname"
               />
-            </Grid>
-            <Grid item>
-              <FormControl variant="outlined">
-                <InputLabel id="select-outlined-label">Role</InputLabel>
-                <Select
-                  id="select-outlined"
-                  value={registerFormData.role}
-                  onChange={onRoleSelectChange}
-                  name="role"
-                  label="Role"
-                >
-                  <MenuItem value={1}>Admin</MenuItem>
-                  <MenuItem value={2}>Basic</MenuItem>
-                </Select>
-              </FormControl>
             </Grid>
             <Grid item xs={12}>
               <TextField

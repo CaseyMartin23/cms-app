@@ -8,7 +8,7 @@
     "start": "node back-end/server/server.js",
     "prod": "NODE_ENV=production npm start",
     "preprod": "cd front-end && npm run build",
-    "dev": "concurrently -n 'server,client' -c 'blue,cyan' \"npm run dev-backend\" \"npm run dev-frontend\"",
+    "dev": "concurrently --kill others-on-fail -n 'server,client' -c 'blue,cyan' \"npm run dev-backend\" \"npm run dev-frontend\"",
     "dev-backend": "nodemon back-end/server/server.js",
     "dev-frontend": "cd front-end && npm start"
   },
