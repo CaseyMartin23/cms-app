@@ -1,5 +1,5 @@
 exports.up = (knex) =>
-  knex.schema.createTable("assigned_ticket", (table) => {
+  knex.schema.createTable("assigned_tickets", (table) => {
     table.increments("id").notNullable();
     table.integer("ticket_id").unsigned().references("tickets.id");
     table.uuid("user_id").unsigned().references("users.id");

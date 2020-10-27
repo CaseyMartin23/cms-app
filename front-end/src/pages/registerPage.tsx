@@ -9,17 +9,8 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 
 import { ErrorMessageDiv } from "../comps/styledComps";
-
-type onRoleSelectChangeEventType = {
-  name?: string | undefined;
-  value: unknown;
-};
 
 const RegisterPage = () => {
   const { isAuthed } = useContext(UserAuthContext);
@@ -27,9 +18,8 @@ const RegisterPage = () => {
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [registerFormData, setRegisterFormData] = useState({
-    firstName: "",
-    lastName: "",
-    role: 2,
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
   });
@@ -38,23 +28,13 @@ const RegisterPage = () => {
     console.log("registerFormData->", registerFormData);
   }, [registerFormData]);
 
-  const onChangeHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSubmissionError(undefined);
 
     const target = event.target;
     const { name, value } = target;
 
     setRegisterFormData({ ...registerFormData, [name]: value });
-  };
-
-  const onRoleSelectChange = (
-    event: React.ChangeEvent<onRoleSelectChangeEventType>
-  ) => {
-    setSubmissionError(undefined);
-
-    const { name, value } = event.target;
-
-    setRegisterFormData({ ...registerFormData, [`${name}`]: value });
   };
 
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -92,9 +72,9 @@ const RegisterPage = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                onChange={onChangeHandle}
+                onChange={onChangeHandler}
                 autoComplete="fname"
-                value={registerFormData.firstName}
+                value={registerFormData.first_name}
                 name="first_name"
                 variant="outlined"
                 required
@@ -106,8 +86,8 @@ const RegisterPage = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                onChange={onChangeHandle}
-                value={registerFormData.lastName}
+                onChange={onChangeHandler}
+                value={registerFormData.last_name}
                 variant="outlined"
                 required
                 fullWidth
@@ -119,7 +99,7 @@ const RegisterPage = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                onChange={onChangeHandle}
+                onChange={onChangeHandler}
                 value={registerFormData.email}
                 variant="outlined"
                 required
@@ -133,7 +113,7 @@ const RegisterPage = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                onChange={onChangeHandle}
+                onChange={onChangeHandler}
                 value={registerFormData.password}
                 variant="outlined"
                 required
