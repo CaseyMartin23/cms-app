@@ -27,7 +27,7 @@ export const DashboardDiv = styled.div`
   width: 100vw;
 `;
 
-export const Drawer = styled.div`
+export const StyledDrawer = styled.div`
   height: 100vh;
   width: 0;
   position: fixed;
@@ -36,5 +36,5 @@ export const Drawer = styled.div`
   left: 0;
   overflow-x: hidden;
   transition: 0.5s;
-  background-color: blue;
+  background-color: #2e3138;
 `;
