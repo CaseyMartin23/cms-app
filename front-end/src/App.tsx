@@ -32,66 +32,14 @@ const App = () => {
     }
   };
 
-  const onRegister = async (formData: any) => {
-    try {
-      const response = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const result = await response.json();
+  const onLogin = () => {};
 
-      if (result) {
-        //   if (result.error) setSubmissionError(result.error);
-        //   if (result.registered) {
-        //     setIsRegistered(result.registered);
-        //   }
-      }
-      // setSubmissionLoading(false);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const onLogin = async (formData: any) => {
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const result = await response.json();
-
-      if (result) {
-        //   if (result.error) setSubmissionError(result.error);
-        //   if (result.loggedIn) {
-        //     setSubmissionLoading(false);
-        //     setIsLoggedIn(result.loggedIn);
-        //   }
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const onLogout = async () => {
-    try {
-      const response = await fetch("/api/logout");
-      const result = await response.json();
-
-      // if (result) {
-      //   setIsLoggedIn(!result.loggedOut);
-      // }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const onLogout = () => {};
 
   const UserAuthProviderValue = {
     authorizedUser,
     onLogout,
     onLogin,
-    onRegister,
     isAuthenticated,
   };
 

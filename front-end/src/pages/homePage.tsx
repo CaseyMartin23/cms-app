@@ -17,21 +17,7 @@ import { HomePageDiv } from "../comps/styledComps";
 const HomePage = (props: any) => {
   const { match } = props;
   const isAuthed = React.useContext(UserAuthContext);
-  const [isLoggedIn, setIsLoggedIn] = useState(isAuthed);
   const [isOpen, setIsOpen] = useState(false);
-
-  const onLogout = async () => {
-    try {
-      const response = await fetch("/api/logout");
-      const result = await response.json();
-
-      if (result) {
-        setIsLoggedIn(!result.loggedOut);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const toggleDrawer = () => {
     const drawerElement = document.getElementById("drawer");
@@ -48,13 +34,9 @@ const HomePage = (props: any) => {
     }
   };
 
-  console.log("HomePage-isLoggedIn->", isLoggedIn);
-  console.log("HomePage-isAuthed->", isAuthed);
-
-  // if (!isAuthed || !isLoggedIn) return <Redirect to="/" />;
   return (
     <HomePageDiv>
-      <NavBar toggleDrawer={toggleDrawer} onLogout={onLogout} />
+      <NavBar toggleDrawer={toggleDrawer} />
       <Drawer toggleDrawer={toggleDrawer} baseUrl={match.url} />
 
       <Switch>

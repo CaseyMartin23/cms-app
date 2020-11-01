@@ -10,10 +10,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 
 type NavBarPropsType = {
   toggleDrawer(): void;
-  onLogout(): void;
 };
 
-const NavBar: React.FC<NavBarPropsType> = ({ toggleDrawer, onLogout }) => {
+const NavBar: React.FC<NavBarPropsType> = ({ toggleDrawer }) => {
   return (
     <AppBar position="static">
       <Toolbar>
@@ -23,7 +22,7 @@ const NavBar: React.FC<NavBarPropsType> = ({ toggleDrawer, onLogout }) => {
         <Typography style={{ flexGrow: 1, textAlign: "left" }} variant="h6">
           CMS - Demo App
         </Typography>
-        <Button color="inherit" onClick={onLogout}>
+        <Button color="inherit" onClick={() => {}}>
           Logout
         </Button>
       </Toolbar>

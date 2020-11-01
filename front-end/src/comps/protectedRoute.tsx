@@ -5,13 +5,13 @@ import { UserAuthContext } from "../userAuthContext";
 
 const ProtectedRoute = (props: any) => {
   const { component: Component, authRedirect, ...rest } = props;
-  const isAuthed = React.useContext(UserAuthContext);
+  const { isAuthenticated } = React.useContext(UserAuthContext);
 
   return (
     <Route
       {...rest}
       render={(props) => {
-        return isAuthed ? <Component {...props} /> : <Redirect to="/" />;
+        return isAuthenticated ? <Component {...props} /> : <Redirect to="/" />;
       }}
     />
   );

@@ -12,7 +12,7 @@ import Container from "@material-ui/core/Container";
 import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
 
 const LoginPage = () => {
-  const isAuthed = React.useContext(UserAuthContext);
+  const { authorizedUser } = React.useContext(UserAuthContext);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
@@ -54,19 +54,7 @@ const LoginPage = () => {
     }
   };
 
-  // React.useEffect(() => {
-  //   console.log("LoginPage-isLoggedIn->", isLoggedIn);
-  //   console.log("LoginPage-isAuthed->", isAuthed);
-  // }, [isLoggedIn, isAuthed]);
-
-  if (isLoggedIn) {
-    console.log("LoginPage-isLoggedIn->", isLoggedIn);
-    return <Redirect to="/dashboard" />;
-  }
-  if (isAuthed) {
-    console.log("LoginPage-isAuthed->", isAuthed);
-    return <Redirect to="/dashboard" />;
-  }
+  if (isLoggedIn || au) return <Redirect to="/dashboard" />;
   return (
     <div>
       <Container component="main" maxWidth="xs">
