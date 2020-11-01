@@ -8,9 +8,9 @@ const router = express.Router();
 
 router.get("/isAuthed", (req, res) => {
   if (!req.user) {
-    res.send(JSON.stringify({ isAuthed: false }));
+    res.send(JSON.stringify({ error: "User not authorized", user: {} }));
   } else {
-    res.send(JSON.stringify({ isAuthed: true }));
+    res.send(JSON.stringify({ error: undefined, user: req.user }));
   }
 });
 

@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { Link } from "react-router-dom";
+
 export const AppDiv = styled.div`
   display: grid;
   background-color: #282c34;
@@ -22,7 +24,7 @@ export const ErrorMessageDiv = styled.div`
   color: red;
 `;
 
-export const DashboardDiv = styled.div`
+export const HomePageDiv = styled.div`
   height: 100vh;
   width: 100vw;
 `;
@@ -37,4 +39,25 @@ export const StyledDrawer = styled.div`
   overflow-x: hidden;
   transition: 0.5s;
   background-color: #2e3138;
+`;
+
+export const DrawerToolbar = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const Divider = styled.hr`
+  height: 0;
+  border: 0;
+  border-top: 0.5px solid #5a5f6b;
+`;
+
+export const DrawerItem = styled(Link)``;
+
+export const FormLink = styled(Link)`
+  color: #3f51b5;
+  text-decoration: none;
+  &:hover {
+    text-decoration-line: underline;
+  }
 `;
