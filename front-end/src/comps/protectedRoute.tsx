@@ -7,13 +7,11 @@ const ProtectedRoute = (props: any) => {
   const { component: Component, authRedirect, ...rest } = props;
   const isAuthed = React.useContext(UserAuthContext);
 
-  console.log("ProtectedRoute-isAuthed->", isAuthed);
-
   return (
     <Route
       {...rest}
-      render={() => {
-        return isAuthed ? <Component /> : <Redirect to="/login" />;
+      render={(props) => {
+        return isAuthed ? <Component {...props} /> : <Redirect to="/" />;
       }}
     />
   );

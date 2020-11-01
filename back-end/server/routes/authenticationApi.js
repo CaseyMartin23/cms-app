@@ -8,9 +8,9 @@ const router = express.Router();
 
 router.get("/isAuthed", (req, res) => {
   if (!req.user) {
-    res.send(JSON.stringify({ isAuthed: false }));
+    res.send(JSON.stringify({ error: "User not authorized", user: {} }));
   } else {
-    res.send(JSON.stringify({ isAuthed: true }));
+    res.send(JSON.stringify({ error: undefined, user: req.user }));
   }
 });
 
@@ -19,9 +19,10 @@ router.post("/register", async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(userRegisterInfo.password, 10);
 
-    const [userExists] = await queryUsers.getByEmail(userRegisterInfo.email);
+    const userExists = await queryUsers.getByEmail(userRegisterInfo.email);
 
-    if (userExists) {
+    if (userExists.length > 0) {
+      console.log("userExists->", userExists);
       throw new Error("User Already exists");
     } else {
       await queryUsers

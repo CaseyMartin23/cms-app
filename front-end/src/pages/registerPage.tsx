@@ -5,26 +5,25 @@ import { UserAuthContext } from "../userAuthContext";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
-import { ErrorMessageDiv } from "../styledComps/styledComps";
+import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
 
 const RegisterPage = () => {
-  const { isAuthed } = useContext(UserAuthContext);
+  const isAuthed = useContext(UserAuthContext);
   const [isRegistered, setIsRegistered] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [registerFormData, setRegisterFormData] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
   });
 
-  const onChangeHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSubmissionError(undefined);
 
     const target = event.target;
@@ -47,17 +46,18 @@ const RegisterPage = () => {
 
       if (result) {
         if (result.error) setSubmissionError(result.error);
-        setIsRegistered(result.registered);
+        if (result.registered) {
+          setIsRegistered(result.registered);
+        }
       }
+      setSubmissionLoading(false);
     } catch (err) {
       console.error(err);
     }
-
-    setSubmissionLoading(false);
   };
 
-  if (isAuthed) return <Redirect to="/" />;
-  if (isRegistered) return <Redirect to="/login" />;
+  if (isAuthed) return <Redirect to="/dashboard" />;
+  if (isRegistered) return <Redirect to="/" />;
   return (
     <div>
       <Container component="main" maxWidth="xs">
@@ -68,10 +68,10 @@ const RegisterPage = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                onChange={onChangeHandle}
+                onChange={onChangeHandler}
                 autoComplete="fname"
-                value={registerFormData.firstName}
-                name="firstName"
+                value={registerFormData.first_name}
+                name="first_name"
                 variant="outlined"
                 required
                 fullWidth
@@ -82,20 +82,20 @@ const RegisterPage = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                onChange={onChangeHandle}
-                value={registerFormData.lastName}
+                onChange={onChangeHandler}
+                value={registerFormData.last_name}
                 variant="outlined"
                 required
                 fullWidth
                 id="lastName"
                 label="Last Name"
-                name="lastName"
+                name="last_name"
                 autoComplete="lname"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                onChange={onChangeHandle}
+                onChange={onChangeHandler}
                 value={registerFormData.email}
                 variant="outlined"
                 required
@@ -109,7 +109,7 @@ const RegisterPage = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                onChange={onChangeHandle}
+                onChange={onChangeHandler}
                 value={registerFormData.password}
                 variant="outlined"
                 required
@@ -137,9 +137,7 @@ const RegisterPage = () => {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="/login" variant="body2">
-                Already have an account? Sign in
-              </Link>
+              <FormLink to="/">Already have an account? Sign in</FormLink>
             </Grid>
           </Grid>
         </form>
