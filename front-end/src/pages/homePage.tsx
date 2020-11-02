@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Switch } from "react-router-dom";
-import ProtectedRoute from "../comps/protectedRoute";
+import { Switch, Route } from "react-router-dom";
 
 import NavBar from "../comps/navBar";
 import Drawer from "../comps/drawer";
@@ -37,19 +36,10 @@ const HomePage = (props: any) => {
       <Drawer toggleDrawer={toggleDrawer} baseUrl={match.url} />
 
       <Switch>
-        <ProtectedRoute
-          path={`${match.path}/workspaces`}
-          component={WorkspacesPage}
-        />
-        <ProtectedRoute
-          path={`${match.path}/projects`}
-          component={ProjectsPage}
-        />
-        <ProtectedRoute
-          path={`${match.path}/tickets`}
-          component={TicketsPage}
-        />
-        <ProtectedRoute exact path={`${match.path}`} component={Dashboard} />
+        <Route path={`${match.path}/workspaces`} component={WorkspacesPage} />
+        <Route path={`${match.path}/projects`} component={ProjectsPage} />
+        <Route path={`${match.path}/tickets`} component={TicketsPage} />
+        <Route exact path={`${match.path}`} component={Dashboard} />
       </Switch>
     </HomePageDiv>
   );

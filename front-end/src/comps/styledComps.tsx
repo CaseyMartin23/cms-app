@@ -43,7 +43,14 @@ export const StyledDrawer = styled.div`
 
 export const DrawerToolbar = styled.div`
   display: flex;
-  justify-content: flex-end;
+  padding-top: 8px;
+  padding-left: 24px;
+  padding-right: 24px;
+`;
+
+export const DrawerLink = styled(Link)`
+  text-decoration: none;
+  color: white;
 `;
 
 export const Divider = styled.hr`
@@ -51,8 +58,6 @@ export const Divider = styled.hr`
   border: 0;
   border-top: 0.5px solid #5a5f6b;
 `;
-
-export const DrawerItem = styled(Link)``;
 
 export const FormLink = styled(Link)`
   color: #3f51b5;
