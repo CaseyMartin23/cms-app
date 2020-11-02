@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 
 import { UserAuthContext } from "../userAuthContext";
 
-const ProtectedRoute = (props: any) => {
+const LoginRoute = (props: any) => {
   const { component: Component, authRedirect, ...rest } = props;
   const { isAuthenticated } = React.useContext(UserAuthContext);
 
@@ -11,10 +11,14 @@ const ProtectedRoute = (props: any) => {
     <Route
       {...rest}
       render={(props) => {
-        return isAuthenticated ? <Component {...props} /> : <Redirect to="/" />;
+        return isAuthenticated ? (
+          <Redirect to="/dashboard" />
+        ) : (
+          <Component {...props} />
+        );
       }}
     />
   );
 };
 
-export default ProtectedRoute;
+export default LoginRoute;

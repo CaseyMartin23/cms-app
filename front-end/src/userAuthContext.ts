@@ -1,14 +1,18 @@
 import React from "react";
 
-type UserAuthType = {
-  isAuthed: boolean;
-  setIsAuthed: undefined | React.Dispatch<React.SetStateAction<boolean>>;
+type UserAuthContextDefaultValueType = {
+  authorizedUser: {};
+  onLogout: undefined | (() => Promise<void>);
+  onLogin: undefined | ((user: object) => void);
+  isAuthenticated: boolean;
 };
 
-const userAuth: UserAuthType = {
-  isAuthed: false,
-  setIsAuthed: undefined,
+const UserAuthContextDefaultValue: UserAuthContextDefaultValueType = {
+  authorizedUser: {},
+  onLogout: undefined,
+  onLogin: undefined,
+  isAuthenticated: false,
 };
 
-export const UserAuthContext = React.createContext(userAuth);
+export const UserAuthContext = React.createContext(UserAuthContextDefaultValue);
 export const UserAuthProvider = UserAuthContext.Provider;

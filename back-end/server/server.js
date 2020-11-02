@@ -39,6 +39,7 @@ if (!dev) {
   app.disable("x-powered-by");
   app.use(morgan("common"));
 }
+
 if (dev) app.use(morgan("dev"));
 
 app.get("*", (req, res) => {

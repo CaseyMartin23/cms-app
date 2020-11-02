@@ -1,31 +1,60 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import { Switch } from "react-router-dom";
 
 import { UserAuthContext } from "../userAuthContext";
+import ProtectedRoute from "../comps/protectedRoute";
 
-const Home = () => {
-  const { isAuthed, setIsAuthed } = React.useContext(UserAuthContext);
-  const onLogOut = async () => {
-    try {
-      const response = await fetch("/api/logout");
-      const result = await response.json();
+import NavBar from "../comps/navBar";
+import Drawer from "../comps/drawer";
 
-      if (result) {
-        console.log("onLogOut-result->", result);
-        if (setIsAuthed) setIsAuthed(!result.loggedOut);
+import Dashboard from "./dashboard";
+import WorkspacesPage from "./workspacesPage";
+import ProjectsPage from "./projectsPage";
+import TicketsPage from "./ticketsPage";
+
+import { HomePageDiv } from "../comps/styledComps";
+
+const HomePage = (props: any) => {
+  const { match } = props;
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    const drawerElement = document.getElementById("drawer");
+
+    if (drawerElement) {
+      if (!isOpen) {
+        drawerElement.style.width = "300px";
+        setIsOpen(!isOpen);
       }
-    } catch (err) {
-      console.error(err);
+      if (isOpen) {
+        drawerElement.style.width = "0px";
+        setIsOpen(!isOpen);
+      }
     }
   };
 
-  if (!isAuthed) return <Redirect to="/login" />;
   return (
-    <div>
-      <h1>Home</h1>
-      <button onClick={onLogOut}>LogOut</button>
-    </div>
+    <HomePageDiv>
+      <NavBar toggleDrawer={toggleDrawer} />
+      <Drawer toggleDrawer={toggleDrawer} baseUrl={match.url} />
+
+      <Switch>
+        <ProtectedRoute
+          path={`${match.path}/workspaces`}
+          component={WorkspacesPage}
+        />
+        <ProtectedRoute
+          path={`${match.path}/projects`}
+          component={ProjectsPage}
+        />
+        <ProtectedRoute
+          path={`${match.path}/tickets`}
+          component={TicketsPage}
+        />
+        <ProtectedRoute exact path={`${match.path}`} component={Dashboard} />
+      </Switch>
+    </HomePageDiv>
   );
 };
 
-export default Home;
+export default HomePage;

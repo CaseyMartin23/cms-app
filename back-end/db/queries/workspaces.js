@@ -1,5 +1,5 @@
-const knex = require("../knex.js");
-const table = "companies";
+const knex = require("../knex");
+const table = "workspaces";
 
 module.exports = {
   getById(id) {
