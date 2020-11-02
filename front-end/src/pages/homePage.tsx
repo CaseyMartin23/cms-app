@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Switch } from "react-router-dom";
-
-import { UserAuthContext } from "../userAuthContext";
 import ProtectedRoute from "../comps/protectedRoute";
 
 import NavBar from "../comps/navBar";

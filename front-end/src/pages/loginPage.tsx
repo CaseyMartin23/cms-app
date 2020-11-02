@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 
 import { UserAuthContext } from "../userAuthContext";
 
@@ -13,7 +12,6 @@ import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
 
 const LoginPage = () => {
   const { onLogin } = React.useContext(UserAuthContext);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [loginFormData, setLoginFormData] = useState({

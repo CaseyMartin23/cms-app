@@ -1,7 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-
-import { UserAuthContext } from "../userAuthContext";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
