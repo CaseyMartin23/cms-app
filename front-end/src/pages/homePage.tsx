@@ -16,7 +16,6 @@ import { HomePageDiv } from "../comps/styledComps";
 
 const HomePage = (props: any) => {
   const { match } = props;
-  const isAuthed = React.useContext(UserAuthContext);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDrawer = () => {

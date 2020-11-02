@@ -51,7 +51,9 @@ router.post("/login", (req, res, next) => {
       );
     req.logIn(user, (err) => {
       if (err) return next(err);
-      return res.send(JSON.stringify({ error: undefined, loggedIn: true }));
+      return res.send(
+        JSON.stringify({ error: undefined, loggedIn: true, user: user })
+      );
     });
   })(req, res, next);
 });

@@ -12,7 +12,6 @@ import Container from "@material-ui/core/Container";
 import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
 
 const RegisterPage = () => {
-  const isAuthed = useContext(UserAuthContext);
   const [isRegistered, setIsRegistered] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
@@ -45,19 +44,19 @@ const RegisterPage = () => {
       const result = await response.json();
 
       if (result) {
-        if (result.error) setSubmissionError(result.error);
-        if (result.registered) {
-          setIsRegistered(result.registered);
+        const { error, registered } = result;
+        if (error) setSubmissionError(error);
+        if (registered) {
+          setSubmissionLoading(false);
+          setIsRegistered(registered);
         }
       }
-      setSubmissionLoading(false);
     } catch (err) {
       console.error(err);
     }
   };
 
-  if (isAuthed) return <Redirect to="/dashboard" />;
-  if (isRegistered) return <Redirect to="/" />;
+  if (isRegistered) return <Redirect to="/dashboard" />;
   return (
     <div>
       <Container component="main" maxWidth="xs">

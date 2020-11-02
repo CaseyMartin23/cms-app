@@ -2,8 +2,8 @@ import React from "react";
 
 type UserAuthContextDefaultValueType = {
   authorizedUser: {};
-  onLogout: undefined | (() => void);
-  onLogin: undefined | (() => void);
+  onLogout: undefined | (() => Promise<void>);
+  onLogin: undefined | ((user: object) => void);
   isAuthenticated: boolean;
 };
 

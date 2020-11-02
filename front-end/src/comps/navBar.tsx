@@ -7,12 +7,15 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 import MenuIcon from "@material-ui/icons/Menu";
+import { UserAuthContext } from "../userAuthContext";
 
 type NavBarPropsType = {
   toggleDrawer(): void;
 };
 
 const NavBar: React.FC<NavBarPropsType> = ({ toggleDrawer }) => {
+  const { onLogout } = React.useContext(UserAuthContext);
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -22,7 +25,7 @@ const NavBar: React.FC<NavBarPropsType> = ({ toggleDrawer }) => {
         <Typography style={{ flexGrow: 1, textAlign: "left" }} variant="h6">
           CMS - Demo App
         </Typography>
-        <Button color="inherit" onClick={() => {}}>
+        <Button color="inherit" onClick={onLogout}>
           Logout
         </Button>
       </Toolbar>

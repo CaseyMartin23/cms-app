@@ -12,8 +12,8 @@ import Container from "@material-ui/core/Container";
 import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
 
 const LoginPage = () => {
-  const { authorizedUser } = React.useContext(UserAuthContext);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { onLogin } = React.useContext(UserAuthContext);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [loginFormData, setLoginFormData] = useState({
@@ -43,10 +43,11 @@ const LoginPage = () => {
       const result = await response.json();
 
       if (result) {
-        if (result.error) setSubmissionError(result.error);
-        if (result.loggedIn) {
+        const { error, loggedIn, user } = result;
+        if (error) setSubmissionError(error);
+        if (onLogin && loggedIn && user) {
           setSubmissionLoading(false);
-          setIsLoggedIn(result.loggedIn);
+          onLogin(user);
         }
       }
     } catch (err) {
@@ -54,7 +55,6 @@ const LoginPage = () => {
     }
   };
 
-  if (isLoggedIn || au) return <Redirect to="/dashboard" />;
   return (
     <div>
       <Container component="main" maxWidth="xs">
