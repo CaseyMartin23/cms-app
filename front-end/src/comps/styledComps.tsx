@@ -66,3 +66,9 @@ export const FormLink = styled(Link)`
     text-decoration-line: underline;
   }
 `;
+
+export const Pannel = styled.div`
+  margin: 30px;
+  padding: 20px;
+  background-color: grey;
+`;
