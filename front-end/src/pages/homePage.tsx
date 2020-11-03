@@ -20,7 +20,7 @@ const HomePage = (props: any) => {
 
     if (drawerElement) {
       if (!isOpen) {
-        drawerElement.style.width = "300px";
+        drawerElement.style.width = "250px";
         setIsOpen(!isOpen);
       }
       if (isOpen) {

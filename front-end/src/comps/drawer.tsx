@@ -9,7 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import WorkIcon from "@material-ui/icons/Work";
-import AccountTreeIcon from "@material-ui/icons/AccountTree";
+import FolderIcon from "@material-ui/icons/Folder";
 import ConfirmationNumberIcon from "@material-ui/icons/ConfirmationNumber";
 
 import {
@@ -57,7 +57,7 @@ const Drawer: React.FC<DrawerPropsType> = ({ toggleDrawer, baseUrl }) => {
         <DrawerLink to={`${baseUrl}/projects`}>
           <ListItem button>
             <ListItemIcon>
-              <AccountTreeIcon color="primary" />
+              <FolderIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary="Projects" />
           </ListItem>

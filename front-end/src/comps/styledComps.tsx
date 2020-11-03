@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 export const AppDiv = styled.div`
   display: grid;
-  background-color: #282c34;
   min-height: 100vh;
   text-align: center;
   color: white;
@@ -68,7 +67,13 @@ export const FormLink = styled(Link)`
 `;
 
 export const Pannel = styled.div`
-  margin: 30px;
-  padding: 20px;
-  background-color: grey;
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+`;
+
+export const ItemContainer = styled.div`
+  border: 1px solid blue;
+  border-radius: 4px;
+  padding: 10px 20px;
 `;
