@@ -68,8 +68,8 @@ export const FormLink = styled(Link)`
 
 export const Pannel = styled.div`
   display: grid;
-  align-items: center;
-  justify-items: center;
+  /* align-items: center; */
+  place-content: start space-evenly;
 `;
 
 export const PannelContainer = styled.div`

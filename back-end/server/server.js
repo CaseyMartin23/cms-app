@@ -8,7 +8,8 @@ const sessionStore = require("connect-session-knex")(session);
 const flash = require("express-flash");
 const path = require("path");
 
-const routes = require("./routes/authenticationApi");
+const authenticationRoutes = require("./routes/authenticationApi");
+const workspaceRoutes = require("./routes/workspacesApi");
 const knex = require("../db/knex");
 const initializePassport = require("./passport/passport-config");
 initializePassport(passport);
@@ -33,7 +34,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use("/api", routes);
+app.use("/api", authenticationRoutes, workspaceRoutes);
 
 if (!dev) {
   app.disable("x-powered-by");
