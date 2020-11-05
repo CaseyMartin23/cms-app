@@ -67,6 +67,12 @@ export const FormLink = styled(Link)`
 `;
 
 export const Pannel = styled.div`
+  display: grid;
+  align-items: center;
+  justify-items: center;
+`;
+
+export const PannelContainer = styled.div`
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
@@ -75,5 +81,22 @@ export const Pannel = styled.div`
 export const ItemContainer = styled.div`
   border: 1px solid blue;
   border-radius: 4px;
-  padding: 10px 20px;
+  padding: 10px 20px 20px;
+  width: 350px;
+  /* height: 190px; */
+  margin: 10px;
+`;
+
+export const ItemContainerHeader = styled.div`
+  text-align: left;
+  margin-bottom: 5px;
+  padding: 5px;
+`;
+
+export const ItemContainerArea = styled.div`
+  height: 160px;
+  overflow-y: auto;
+  border: 1px solid #6b6b6b;
+  border-radius: 4px;
+  background-color: #6b6b6b;
 `;

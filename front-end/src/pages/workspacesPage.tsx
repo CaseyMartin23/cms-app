@@ -10,7 +10,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 import FolderIcon from "@material-ui/icons/Folder";
 
-import { Pannel, ItemContainer } from "../comps/styledComps";
+import {
+  Pannel,
+  PannelContainer,
+  ItemContainer,
+  ItemContainerHeader,
+  ItemContainerArea,
+} from "../comps/styledComps";
 
 const WorkspacesPage = () => {
   return (
@@ -24,69 +30,90 @@ const WorkspacesPage = () => {
         </Button>
       </Toolbar>
       <Pannel>
-        <ItemContainer>
-          <span>Workspace's Name</span>
-          <List>
-            <ListItem button>
-              <ListItemIcon>
-                <FolderIcon />
-              </ListItemIcon>
-              <ListItemText primary="project in workspace" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <FolderIcon />
-              </ListItemIcon>
-              <ListItemText primary="project in workspace" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <FolderIcon />
-              </ListItemIcon>
-              <ListItemText primary="project in workspace" />
-            </ListItem>
-          </List>
-        </ItemContainer>
-        <ItemContainer>
-          <span>Workspace's Name</span>
-          <List>
-            <ListItem button>
-              <ListItemIcon>
-                <FolderIcon />
-              </ListItemIcon>
-              <ListItemText primary="project in workspace" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <FolderIcon />
-              </ListItemIcon>
-              <ListItemText primary="project in workspace" />
-            </ListItem>
-          </List>
-        </ItemContainer>
-        <ItemContainer>
-          <span>Workspace's Name</span>
-          <List>
-            <ListItem button>
-              <ListItemIcon>
-                <FolderIcon />
-              </ListItemIcon>
-              <ListItemText primary="project in workspace" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <FolderIcon />
-              </ListItemIcon>
-              <ListItemText primary="project in workspace" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <FolderIcon />
-              </ListItemIcon>
-              <ListItemText primary="project in workspace" />
-            </ListItem>
-          </List>
-        </ItemContainer>
+        <PannelContainer>
+          <ItemContainer>
+            <ItemContainerHeader>Workspace's Name</ItemContainerHeader>
+            <ItemContainerArea>
+              <List>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="project in workspace" />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="project in workspace" />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="project in workspace" />
+                </ListItem>
+              </List>
+            </ItemContainerArea>
+          </ItemContainer>
+          <ItemContainer>
+            <ItemContainerHeader>Workspace's Name</ItemContainerHeader>
+            <ItemContainerArea>
+              <List>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="project in workspace" />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="project in workspace" />
+                </ListItem>
+              </List>
+            </ItemContainerArea>
+          </ItemContainer>
+          <ItemContainer>
+            <ItemContainerHeader>Workspace's Name</ItemContainerHeader>
+            <ItemContainerArea>
+              <List>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="project in workspace" />
+                </ListItem>
+
+                <ListItem button>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="project in workspace" />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="project in workspace" />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="project in workspace" />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="project in workspace" />
+                </ListItem>
+              </List>
+            </ItemContainerArea>
+          </ItemContainer>
+        </PannelContainer>
       </Pannel>
     </div>
   );
