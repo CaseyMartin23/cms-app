@@ -42,7 +42,10 @@ const LoginPage = () => {
 
       if (result) {
         const { error, loggedIn, user } = result;
-        if (error) setSubmissionError(error);
+        if (error) {
+          setSubmissionLoading(false);
+          setSubmissionError(error);
+        }
         if (onLogin && loggedIn && user) {
           setSubmissionLoading(false);
           onLogin(user);

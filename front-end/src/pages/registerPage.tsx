@@ -43,7 +43,10 @@ const RegisterPage = () => {
 
       if (result) {
         const { error, registered } = result;
-        if (error) setSubmissionError(error);
+        if (error) {
+          setSubmissionLoading(false);
+          setSubmissionError(error);
+        }
         if (registered) {
           setSubmissionLoading(false);
           setIsRegistered(registered);

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const queryWorkspaces = require("../../db/queries/workspaces");
 
-router.get("/userWorkspaces", async (req, res) => {
+router.get("/user-workspaces", async (req, res) => {
   const userWorkspaces = await queryWorkspaces.getWorkspacesByUserId(
     req.user.id
   );
