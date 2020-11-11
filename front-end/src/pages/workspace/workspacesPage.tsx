@@ -36,40 +36,7 @@ const WorkspacesPage = () => {
       </Toolbar>
       <WorkspaceForm isOpen={openForm} onClose={onFormClose} />
       <Pannel>
-        <PannelContainer>
-          <ItemDisplay
-            itemHeader="Workspace's Name"
-            subItemsList={[
-              "project in workspace",
-              "project in workspace",
-              "project in workspace",
-            ]}
-          />
-          <ItemDisplay
-            itemHeader="Workspace's Name"
-            subItemsList={[
-              "project in workspace",
-              "project in workspace",
-              "project in workspace",
-            ]}
-          />
-          <ItemDisplay
-            itemHeader="Workspace's Name"
-            subItemsList={[
-              "project in workspace",
-              "project in workspace",
-              "project in workspace",
-            ]}
-          />
-          <ItemDisplay
-            itemHeader="Workspace's Name"
-            subItemsList={[
-              "project in workspace",
-              "project in workspace",
-              "project in workspace",
-            ]}
-          />
-        </PannelContainer>
+        <PannelContainer></PannelContainer>
       </Pannel>
     </div>
   );

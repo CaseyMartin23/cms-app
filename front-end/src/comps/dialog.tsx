@@ -3,17 +3,10 @@ import React, { useEffect } from "react";
 import { Modal, ModalContent } from "./styledComps";
 
 type DialogPropsType = {
-  title: string;
   isOpen: boolean;
-  onClose(): void;
 };
 
-const Dialog: React.FC<DialogPropsType> = ({
-  title,
-  isOpen,
-  onClose,
-  children,
-}) => {
+const Dialog: React.FC<DialogPropsType> = ({ isOpen, children }) => {
   useEffect(() => {
     toggleModal();
   }, [isOpen]);
@@ -29,11 +22,8 @@ const Dialog: React.FC<DialogPropsType> = ({
   };
 
   return (
-    <Modal id="modal" onClick={onClose}>
-      <ModalContent>
-        <h4>{title}</h4>
-        {children}
-      </ModalContent>
+    <Modal id="modal">
+      <ModalContent>{children}</ModalContent>
     </Modal>
   );
 };

@@ -72,7 +72,7 @@ export const Modal = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  width: 50%;
+  padding: 10px;
   margin: auto;
   background-color: #8c8c8c;
   border: 1px solid #8c8c8c;
