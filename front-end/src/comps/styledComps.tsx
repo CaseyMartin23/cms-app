@@ -28,23 +28,24 @@ export const HomePageDiv = styled.div`
   width: 100vw;
 `;
 
-export const StyledDrawer = styled.div`
-  height: 100vh;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  overflow-x: hidden;
-  transition: 0.5s;
-  background-color: #2e3138;
+export const MainContent = styled.div`
+  width: 100%;
 `;
 
-export const DrawerToolbar = styled.div`
+export const MainWindow = styled.div`
   display: flex;
-  padding-top: 8px;
-  padding-left: 24px;
-  padding-right: 24px;
+  height: 100%;
+  width: 100%;
+`;
+
+export const ContentDisplay = styled.div`
+  overflow: auto;
+  padding: 10px;
+`;
+
+export const StyledDrawer = styled.div`
+  width: 250px;
+  background-color: #2e3138;
 `;
 
 export const DrawerLink = styled(Link)`
@@ -58,6 +59,26 @@ export const Divider = styled.hr`
   border-top: 0.5px solid #5a5f6b;
 `;
 
+export const Modal = styled.div`
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+`;
+
+export const ModalContent = styled.div`
+  width: 50%;
+  margin: auto;
+  background-color: #8c8c8c;
+  border: 1px solid #8c8c8c;
+  border-radius: 4px;
+`;
+
 export const FormLink = styled(Link)`
   color: #3f51b5;
   text-decoration: none;
@@ -68,8 +89,6 @@ export const FormLink = styled(Link)`
 
 export const Pannel = styled.div`
   display: grid;
-  /* align-items: center; */
-  place-content: start space-evenly;
 `;
 
 export const PannelContainer = styled.div`
@@ -82,9 +101,8 @@ export const ItemContainer = styled.div`
   border: 1px solid blue;
   border-radius: 4px;
   padding: 10px 20px 20px;
-  width: 350px;
-  /* height: 190px; */
-  margin: 10px;
+  width: 300px;
+  margin: 5px;
 `;
 
 export const ItemContainerHeader = styled.div`

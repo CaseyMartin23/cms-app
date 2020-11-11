@@ -1,42 +1,22 @@
 import React from "react";
 
-import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
-import MenuIcon from "@material-ui/icons/Menu";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import WorkIcon from "@material-ui/icons/Work";
 import FolderIcon from "@material-ui/icons/Folder";
 import ConfirmationNumberIcon from "@material-ui/icons/ConfirmationNumber";
 
-import {
-  StyledDrawer,
-  DrawerToolbar,
-  DrawerLink,
-  Divider,
-} from "./styledComps";
+import { StyledDrawer, DrawerLink } from "./styledComps";
 
-type DrawerPropsType = {
-  toggleDrawer(): void;
-  baseUrl: string;
-};
-
-const Drawer: React.FC<DrawerPropsType> = ({ toggleDrawer, baseUrl }) => {
+const Drawer: React.FC = () => {
   return (
-    <StyledDrawer id="drawer">
-      <DrawerToolbar>
-        <IconButton onClick={toggleDrawer} edge="start" color="inherit">
-          <MenuIcon />
-        </IconButton>
-      </DrawerToolbar>
-
-      <Divider />
-
+    <StyledDrawer>
       <List>
-        <DrawerLink to={`${baseUrl}`}>
+        <DrawerLink to="/dashboard">
           <ListItem button>
             <ListItemIcon>
               <DashboardIcon color="primary" />
@@ -45,7 +25,7 @@ const Drawer: React.FC<DrawerPropsType> = ({ toggleDrawer, baseUrl }) => {
           </ListItem>
         </DrawerLink>
 
-        <DrawerLink to={`${baseUrl}/workspaces`}>
+        <DrawerLink to="/dashboard/workspaces">
           <ListItem button>
             <ListItemIcon>
               <WorkIcon color="primary" />
@@ -54,7 +34,7 @@ const Drawer: React.FC<DrawerPropsType> = ({ toggleDrawer, baseUrl }) => {
           </ListItem>
         </DrawerLink>
 
-        <DrawerLink to={`${baseUrl}/projects`}>
+        <DrawerLink to="/dashboard/projects">
           <ListItem button>
             <ListItemIcon>
               <FolderIcon color="primary" />
@@ -63,7 +43,7 @@ const Drawer: React.FC<DrawerPropsType> = ({ toggleDrawer, baseUrl }) => {
           </ListItem>
         </DrawerLink>
 
-        <DrawerLink to={`${baseUrl}/tickets`}>
+        <DrawerLink to="/dashboard/tickets">
           <ListItem button>
             <ListItemIcon>
               <ConfirmationNumberIcon color="primary" />
