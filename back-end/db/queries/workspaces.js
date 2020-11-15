@@ -2,9 +2,9 @@ const knex = require("../knex");
 const table = "workspaces";
 
 module.exports = {
-  async getWorkspacesById(id) {
+  async getWorkspaceById(id) {
     try {
-      return await knex(table).where("id", id);
+      return await knex.from(table).select("id", "name").where("id", id);
     } catch (err) {
       console.error(err);
     }
@@ -27,9 +27,11 @@ module.exports = {
       console.error(err);
     }
   },
-  async updateWorkspace(id, newWorkspace) {
+  async updateWorkspace(newWorkspace) {
     try {
-      await knex(table).where("id", id).update(newWorkspace);
+      const workspaceId = newWorkspace.id;
+      await knex(table).where("id", workspaceId).update(newWorkspace);
+      return { response: "Workspace update successful" };
     } catch (err) {
       console.error(err);
     }
@@ -37,6 +39,7 @@ module.exports = {
   async deleteWorkspace(id) {
     try {
       await knex(table).where("id", id).del();
+      return { response: "Workspace deletion successful" };
     } catch (err) {
       console.error(err);
     }

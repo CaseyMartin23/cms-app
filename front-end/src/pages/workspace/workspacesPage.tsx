@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -11,6 +11,7 @@ import { Pannel, PannelContainer } from "../../comps/styledComps";
 
 const WorkspacesPage = () => {
   const [openForm, setOpenForm] = useState(false);
+  const [workspaces, setWorkspaces] = useState([]);
 
   const onFormOpen = () => {
     setOpenForm(true);
@@ -18,6 +19,14 @@ const WorkspacesPage = () => {
 
   const onFormClose = () => {
     setOpenForm(false);
+  };
+
+  const getUserWorkspaces = async () => {
+    try {
+      const response = await fetch(`/api/user-workspaces`);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -36,7 +45,9 @@ const WorkspacesPage = () => {
       </Toolbar>
       <WorkspaceForm isOpen={openForm} onClose={onFormClose} />
       <Pannel>
-        <PannelContainer></PannelContainer>
+        <PannelContainer>
+          <ItemDisplay itemHeader="Workspace Name" subItemsList={["project"]} />
+        </PannelContainer>
       </Pannel>
     </div>
   );

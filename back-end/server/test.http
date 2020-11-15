@@ -1,0 +1,46 @@
+POST http://localhost:8080/api/create-workspace
+Content-Type: application/json
+
+{
+    "name": "TEST4 Workspace",
+    "owned_by": "3f66b5e9-941c-41b6-824c-0d6f0ef3257e"
+}
+
+###
+PUT http://localhost:8080/api/update-workspace
+Content-Type: application/json
+
+{
+    "id": 4,
+    "name": "Updated Test4 Workspace",
+    "owned_by": "3f66b5e9-941c-41b6-824c-0d6f0ef3257e"
+}
+
+###
+DELETE http://localhost:8080/api/delete-workspace/3
+
+###
+GET http://localhost:8080/api/workspace/1
+
+###
+GET http://localhost:8080/api/user-workspaces/3f66b5e9-941c-41b6-824c-0d6f0ef3257e
+
+
+###
+POST http://localhost:8080/api/create-project
+Content-Type: application/json
+
+{
+    "name": "TEST2 Project",
+    "owned_by": "3f66b5e9-941c-41b6-824c-0d6f0ef3257e",
+    "workspace": 4
+
+}
+
+###
+PUT http://localhost:8080/api/update-project
+Content-Type: application/json
+
+{
+
+}

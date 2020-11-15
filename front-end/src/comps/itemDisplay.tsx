@@ -24,18 +24,22 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
 }) => {
   const ItemList = () => {
     return (
-      <List>
-        {subItemsList &&
-          subItemsList.length > 0 &&
-          subItemsList.map((subItem, index) => (
-            <ListItem key={`${index}`} button>
-              <ListItemIcon>
-                <FolderIcon />
-              </ListItemIcon>
-              <ListItemText primary={subItem} />
-            </ListItem>
-          ))}
-      </List>
+      <div>
+        {subItemsList && subItemsList.length > 0 ? (
+          <List>
+            {subItemsList.map((subItem, index) => (
+              <ListItem key={`${index}`} button>
+                <ListItemIcon>
+                  <FolderIcon />
+                </ListItemIcon>
+                <ListItemText primary={subItem} />
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          "No projects in this workspace"
+        )}
+      </div>
     );
   };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -9,24 +9,53 @@ import Button from "@material-ui/core/Button";
 import Dialog from "../../comps/dialog";
 
 type WorkspacesFormPropsType = {
+  workspaceId?: number;
   isOpen: boolean;
   onClose(): void;
 };
 
 const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
+  workspaceId,
   isOpen,
   onClose,
 }) => {
-  const onCreateWorkspaceSubmit = () => {};
+  const [existingWorkspace, setExistingWorkspace] = useState();
+
+  useEffect(() => {
+    getExistingWorkspace();
+    console.log("existingWorkspace->", existingWorkspace);
+  }, [existingWorkspace]);
+
+  const getExistingWorkspace = async () => {
+    if (workspaceId) {
+      try {
+        const response = await fetch(`/api/workspace/${workspaceId}`);
+        const result = await response.json();
+
+        if (result) {
+          if (Array.isArray(result) && result.length > 0) {
+            const [workspace] = result;
+            setExistingWorkspace(workspace);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  // const onCreateWorkspace = () => {};
+
+  const onFormSubmit = () => {};
 
   return (
     <div>
       <Dialog isOpen={isOpen}>
         <Container component="main" maxWidth="xs">
           <Typography style={{ padding: "5px" }} component="h1" variant="h5">
-            Sign up
+            {workspaceId ? "Update Workspace" : "Create Workspace"}
           </Typography>
-          <form onSubmit={() => {}} style={{ width: "396px" }}>
+          <form onSubmit={onFormSubmit} style={{ width: "396px" }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -62,7 +91,7 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
                   variant="contained"
                   color="primary"
                 >
-                  add
+                  {workspaceId ? "save" : "create"}
                 </Button>
               </Grid>
             </Grid>
