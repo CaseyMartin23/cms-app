@@ -8,10 +8,19 @@ import Button from "@material-ui/core/Button";
 
 import Dialog from "../../comps/dialog";
 
+import { ErrorMessageDiv } from "../../comps/styledComps";
+
 type WorkspacesFormPropsType = {
   workspaceId?: number;
   isOpen: boolean;
   onClose(): void;
+};
+
+type ExistingWorkspaceType = {
+  id: number;
+  name: string;
+  owned_by: string;
+  created_at: string;
 };
 
 const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
@@ -19,11 +28,17 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
   isOpen,
   onClose,
 }) => {
-  const [existingWorkspace, setExistingWorkspace] = useState();
+  const [existingWorkspace, setExistingWorkspace] = useState<
+    ExistingWorkspaceType | undefined
+  >();
+  const [workspaceFormData, setWorkspaceFormData] = useState({
+    name: existingWorkspace ? existingWorkspace.name : "",
+  });
+  const [submisssionLoading, setSubmissionLoading] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | undefined>();
 
   useEffect(() => {
     getExistingWorkspace();
-    console.log("existingWorkspace->", existingWorkspace);
   }, [existingWorkspace]);
 
   const getExistingWorkspace = async () => {
@@ -44,9 +59,57 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
     }
   };
 
-  // const onCreateWorkspace = () => {};
+  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const target = event.target;
+    const { name, value } = target;
 
-  const onFormSubmit = () => {};
+    setSubmissionError(undefined);
+
+    if (name === "name" && value.toString().length < 1) {
+      setSubmissionError("Workspace name can't be empty");
+    }
+
+    setWorkspaceFormData({ ...workspaceFormData, [name]: value });
+  };
+
+  const onCreateWorkspace = async () => {
+    try {
+      const response = await fetch("/api/create-workspace", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          ...workspaceFormData,
+          name: workspaceFormData.name.toString().trim(),
+        }),
+      });
+      const result = await response;
+
+      console.log("onCreateWorkspace-result->", result);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const onFormClose = () => {
+    if (!existingWorkspace) setWorkspaceFormData({ name: "" });
+    onClose();
+  };
+
+  const onUpdateWorkspace = () => {};
+
+  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmissionLoading(true);
+
+    if (existingWorkspace) {
+      onUpdateWorkspace();
+    } else {
+      onCreateWorkspace();
+    }
+
+    setSubmissionLoading(false);
+    onClose();
+  };
 
   return (
     <div>
@@ -59,17 +122,20 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  onChange={() => {}}
-                  value=""
+                  onChange={onChangeHandler}
+                  value={workspaceFormData.name}
                   variant="outlined"
                   required
                   fullWidth
-                  name="workspace_name"
+                  name="name"
                   label="Workspace Name"
                   type="text"
                   id="workspace_name"
                 />
               </Grid>
+              {submissionError && (
+                <ErrorMessageDiv>{submissionError}</ErrorMessageDiv>
+              )}
             </Grid>
             <Grid
               container
@@ -78,7 +144,7 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
             >
               <Grid item>
                 <Button
-                  onClick={onClose}
+                  onClick={onFormClose}
                   style={{ width: "82px", marginRight: "10px" }}
                   variant="contained"
                   color="primary"

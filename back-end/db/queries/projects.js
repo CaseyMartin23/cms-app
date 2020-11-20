@@ -11,7 +11,10 @@ module.exports = {
   },
   async getProjectsByUserId(userId) {
     try {
-      return await knex(table).where("owned_by", userId);
+      return await knex
+        .from(table)
+        .select("id", "name")
+        .where("owned_by", userId);
     } catch (err) {
       console.error(err);
     }

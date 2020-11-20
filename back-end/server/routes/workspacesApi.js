@@ -51,6 +51,7 @@ router.get("/user-workspaces", async (req, res) => {
   const userWorkspaces = await queryWorkspaces.getWorkspacesByUserId(
     req.user.id
   );
+  // console.log("userWorkspaces->", userWorkspaces);
   res.send(JSON.stringify(userWorkspaces));
 });
 

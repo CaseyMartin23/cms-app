@@ -1,4 +1,5 @@
 const knex = require("../knex");
+const queryProjects = require("./projects");
 const table = "workspaces";
 
 module.exports = {
@@ -11,10 +12,29 @@ module.exports = {
   },
   async getWorkspacesByUserId(userId) {
     try {
-      return await knex
+      const workspaces = await knex
         .from(table)
         .select("id", "name")
         .where("owned_by", userId);
+
+      console.log("All-User-Workspaces->", workspaces);
+
+      const userWorkspaces = await Promise.all(
+        workspaces.map(async (workspace) => {
+          const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
+            workspace.id
+          );
+          console.log("workspaceProjects->", workspaceProjects);
+
+          return {
+            ...workspace,
+            projects: workspaceProjects,
+          };
+        })
+      );
+
+      console.log("userWorkspaces->", userWorkspaces);
+      return userWorkspaces;
     } catch (err) {
       console.error(err);
     }

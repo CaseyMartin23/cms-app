@@ -15,7 +15,7 @@ import {
 
 type ItemDisplayPropsType = {
   itemHeader: string;
-  subItemsList?: string[];
+  subItemsList?: [{ id: number; name: string }];
 };
 
 const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
@@ -27,12 +27,12 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
       <div>
         {subItemsList && subItemsList.length > 0 ? (
           <List>
-            {subItemsList.map((subItem, index) => (
-              <ListItem key={`${index}`} button>
+            {subItemsList.map((subItem) => (
+              <ListItem key={`${subItem.id}`} button>
                 <ListItemIcon>
                   <FolderIcon />
                 </ListItemIcon>
-                <ListItemText primary={subItem} />
+                <ListItemText primary={subItem.name} />
               </ListItem>
             ))}
           </List>

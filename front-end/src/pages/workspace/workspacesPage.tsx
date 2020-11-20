@@ -9,9 +9,52 @@ import WorkspaceForm from "./workspacesForm";
 
 import { Pannel, PannelContainer } from "../../comps/styledComps";
 
+type WorkspaceType = {
+  id: number;
+  name: string;
+  projects: [
+    {
+      id: number;
+      name: string;
+    }
+  ];
+};
+
+type WorkspaceEqualityType = {
+  [key: string]: string | number | [{ [key: string]: string | number }];
+};
+
 const WorkspacesPage = () => {
   const [openForm, setOpenForm] = useState(false);
   const [workspaces, setWorkspaces] = useState([]);
+
+  useEffect(() => {
+    getUserWorkspaces();
+  }, [workspaces]);
+
+  const compareUserWorkspacesEquality = (
+    firstWorkspaces: WorkspaceType[],
+    secondWorkspaces: WorkspaceType[]
+  ) => {
+    if (firstWorkspaces.length !== secondWorkspaces.length) return false;
+
+    return true;
+  };
+
+  const getUserWorkspaces = async () => {
+    try {
+      const response = await fetch("/api/user-workspaces");
+      const result = await response.json();
+
+      if (workspaces !== result) {
+        console.log("workspaces->", workspaces);
+        console.log("result->", result);
+        // setWorkspaces(result);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const onFormOpen = () => {
     setOpenForm(true);
@@ -19,14 +62,6 @@ const WorkspacesPage = () => {
 
   const onFormClose = () => {
     setOpenForm(false);
-  };
-
-  const getUserWorkspaces = async () => {
-    try {
-      const response = await fetch(`/api/user-workspaces`);
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   return (
@@ -46,7 +81,16 @@ const WorkspacesPage = () => {
       <WorkspaceForm isOpen={openForm} onClose={onFormClose} />
       <Pannel>
         <PannelContainer>
-          <ItemDisplay itemHeader="Workspace Name" subItemsList={["project"]} />
+          {workspaces && workspaces.length < 1
+            ? "No Workspaces"
+            : workspaces &&
+              workspaces.map((workspace: WorkspaceType, index: number) => (
+                <ItemDisplay
+                  key={`${workspace.id}-${index}-${workspace.name}`}
+                  itemHeader={workspace.name}
+                  subItemsList={workspace.projects}
+                />
+              ))}
         </PannelContainer>
       </Pannel>
     </div>
