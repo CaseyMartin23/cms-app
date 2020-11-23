@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 export const AppDiv = styled.div`
   display: grid;
-  background-color: #282c34;
   min-height: 100vh;
   text-align: center;
   color: white;
@@ -29,21 +28,29 @@ export const HomePageDiv = styled.div`
   width: 100vw;
 `;
 
+export const MainContent = styled.div`
+  width: 100%;
+`;
+
+export const MainWindow = styled.div`
+  display: flex;
+  height: 100%;
+  width: 100%;
+`;
+
+export const ContentDisplay = styled.div`
+  overflow: auto;
+  padding: 10px;
+`;
+
 export const StyledDrawer = styled.div`
-  height: 100vh;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  overflow-x: hidden;
-  transition: 0.5s;
+  width: 250px;
   background-color: #2e3138;
 `;
 
-export const DrawerToolbar = styled.div`
-  display: flex;
-  justify-content: flex-end;
+export const DrawerLink = styled(Link)`
+  text-decoration: none;
+  color: white;
 `;
 
 export const Divider = styled.hr`
@@ -52,7 +59,25 @@ export const Divider = styled.hr`
   border-top: 0.5px solid #5a5f6b;
 `;
 
-export const DrawerItem = styled(Link)``;
+export const Modal = styled.div`
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+`;
+
+export const ModalContent = styled.div`
+  padding: 10px;
+  margin: auto;
+  background-color: #8c8c8c;
+  border: 1px solid #8c8c8c;
+  border-radius: 4px;
+`;
 
 export const FormLink = styled(Link)`
   color: #3f51b5;
@@ -60,4 +85,36 @@ export const FormLink = styled(Link)`
   &:hover {
     text-decoration-line: underline;
   }
+`;
+
+export const Pannel = styled.div`
+  display: grid;
+`;
+
+export const PannelContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+`;
+
+export const ItemContainer = styled.div`
+  border: 1px solid blue;
+  border-radius: 4px;
+  padding: 10px 20px 20px;
+  width: 300px;
+  margin: 5px;
+`;
+
+export const ItemContainerHeader = styled.div`
+  text-align: left;
+  margin-bottom: 5px;
+  padding: 5px;
+`;
+
+export const ItemContainerArea = styled.div`
+  height: 160px;
+  overflow-y: auto;
+  border: 1px solid #6b6b6b;
+  border-radius: 4px;
+  background-color: #6b6b6b;
 `;

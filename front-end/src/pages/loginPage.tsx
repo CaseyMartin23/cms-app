@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { UserAuthContext } from "../userAuthContext";
 
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 
 import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
@@ -42,7 +42,10 @@ const LoginPage = () => {
 
       if (result) {
         const { error, loggedIn, user } = result;
-        if (error) setSubmissionError(error);
+        if (error) {
+          setSubmissionLoading(false);
+          setSubmissionError(error);
+        }
         if (onLogin && loggedIn && user) {
           setSubmissionLoading(false);
           onLogin(user);
@@ -61,6 +64,7 @@ const LoginPage = () => {
         </Typography>
         <form onSubmit={onSubmitHandler}>
           <TextField
+            color="primary"
             onChange={onChangeHandler}
             variant="outlined"
             margin="normal"

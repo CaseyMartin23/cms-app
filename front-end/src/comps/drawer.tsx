@@ -1,33 +1,57 @@
 import React from "react";
 
-import IconButton from "@material-ui/core/IconButton";
-import CancelIcon from "@material-ui/icons/Cancel";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
-import {
-  StyledDrawer,
-  DrawerToolbar,
-  DrawerItem,
-  Divider,
-} from "./styledComps";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import WorkIcon from "@material-ui/icons/Work";
+import FolderIcon from "@material-ui/icons/Folder";
+import ConfirmationNumberIcon from "@material-ui/icons/ConfirmationNumber";
 
-type DrawerPropsType = {
-  toggleDrawer(): void;
-  baseUrl: string;
-};
+import { StyledDrawer, DrawerLink } from "./styledComps";
 
-const Drawer: React.FC<DrawerPropsType> = ({ toggleDrawer, baseUrl }) => {
+const Drawer: React.FC = () => {
   return (
-    <StyledDrawer id="drawer">
-      <DrawerToolbar>
-        <IconButton onClick={toggleDrawer} color="inherit">
-          <CancelIcon />
-        </IconButton>
-      </DrawerToolbar>
-      <Divider />
-      <DrawerItem to={`${baseUrl}`}>Dashboard</DrawerItem>
-      <DrawerItem to={`${baseUrl}/workspaces`}>Workspaces</DrawerItem>
-      <DrawerItem to={`${baseUrl}/projects`}>Projects</DrawerItem>
-      <DrawerItem to={`${baseUrl}/tickets`}>Tickets</DrawerItem>
+    <StyledDrawer>
+      <List>
+        <DrawerLink to="/dashboard">
+          <ListItem button>
+            <ListItemIcon>
+              <DashboardIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItem>
+        </DrawerLink>
+
+        <DrawerLink to="/dashboard/workspaces">
+          <ListItem button>
+            <ListItemIcon>
+              <WorkIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Workspaces" />
+          </ListItem>
+        </DrawerLink>
+
+        <DrawerLink to="/dashboard/projects">
+          <ListItem button>
+            <ListItemIcon>
+              <FolderIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Projects" />
+          </ListItem>
+        </DrawerLink>
+
+        <DrawerLink to="/dashboard/tickets">
+          <ListItem button>
+            <ListItemIcon>
+              <ConfirmationNumberIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Tickets" />
+          </ListItem>
+        </DrawerLink>
+      </List>
     </StyledDrawer>
   );
 };

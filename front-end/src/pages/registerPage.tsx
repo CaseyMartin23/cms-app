@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 
 import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
@@ -43,7 +43,10 @@ const RegisterPage = () => {
 
       if (result) {
         const { error, registered } = result;
-        if (error) setSubmissionError(error);
+        if (error) {
+          setSubmissionLoading(false);
+          setSubmissionError(error);
+        }
         if (registered) {
           setSubmissionLoading(false);
           setIsRegistered(registered);
@@ -58,7 +61,7 @@ const RegisterPage = () => {
   return (
     <div>
       <Container component="main" maxWidth="xs">
-        <Typography component="h1" variant="h5">
+        <Typography style={{ padding: "5px" }} component="h1" variant="h5">
           Sign up
         </Typography>
         <form onSubmit={onSubmitHandler}>

@@ -53,7 +53,9 @@ const App = () => {
           setAuthorizedUser({});
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const UserAuthProviderValue = {
