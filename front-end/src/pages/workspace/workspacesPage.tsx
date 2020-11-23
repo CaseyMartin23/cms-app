@@ -20,10 +20,6 @@ type WorkspaceType = {
   ];
 };
 
-type WorkspaceEqualityType = {
-  [key: string]: string | number | [{ [key: string]: string | number }];
-};
-
 const WorkspacesPage = () => {
   const [openForm, setOpenForm] = useState(false);
   const [workspaces, setWorkspaces] = useState([]);
@@ -36,7 +32,10 @@ const WorkspacesPage = () => {
     firstWorkspaces: WorkspaceType[],
     secondWorkspaces: WorkspaceType[]
   ) => {
-    if (firstWorkspaces.length !== secondWorkspaces.length) return false;
+    const firstWorkspaceJson = JSON.stringify(firstWorkspaces);
+    const secondWorkspaceJson = JSON.stringify(secondWorkspaces);
+
+    if (firstWorkspaceJson !== secondWorkspaceJson) return false;
 
     return true;
   };
@@ -46,10 +45,8 @@ const WorkspacesPage = () => {
       const response = await fetch("/api/user-workspaces");
       const result = await response.json();
 
-      if (workspaces !== result) {
-        console.log("workspaces->", workspaces);
-        console.log("result->", result);
-        // setWorkspaces(result);
+      if (!compareUserWorkspacesEquality(result, workspaces)) {
+        setWorkspaces(result);
       }
     } catch (err) {
       console.error(err);
@@ -61,6 +58,7 @@ const WorkspacesPage = () => {
   };
 
   const onFormClose = () => {
+    getUserWorkspaces();
     setOpenForm(false);
   };
 
@@ -81,7 +79,7 @@ const WorkspacesPage = () => {
       <WorkspaceForm isOpen={openForm} onClose={onFormClose} />
       <Pannel>
         <PannelContainer>
-          {workspaces && workspaces.length < 1
+          {/* {workspaces && workspaces.length < 1
             ? "No Workspaces"
             : workspaces &&
               workspaces.map((workspace: WorkspaceType, index: number) => (
@@ -90,7 +88,90 @@ const WorkspacesPage = () => {
                   itemHeader={workspace.name}
                   subItemsList={workspace.projects}
                 />
-              ))}
+              ))} */}
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[
+              { id: 1, name: "projects" },
+              { id: 1, name: "projects" },
+            ]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
+          <ItemDisplay
+            // key={`${workspace.id}-${index}-${workspace.name}`}
+            itemHeader="{workspace.name}"
+            subItemsList={[{ id: 1, name: "projects" }]}
+          />
         </PannelContainer>
       </Pannel>
     </div>

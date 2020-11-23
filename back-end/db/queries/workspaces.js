@@ -17,15 +17,11 @@ module.exports = {
         .select("id", "name")
         .where("owned_by", userId);
 
-      console.log("All-User-Workspaces->", workspaces);
-
       const userWorkspaces = await Promise.all(
         workspaces.map(async (workspace) => {
           const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
             workspace.id
           );
-          console.log("workspaceProjects->", workspaceProjects);
-
           return {
             ...workspace,
             projects: workspaceProjects,
@@ -33,7 +29,6 @@ module.exports = {
         })
       );
 
-      console.log("userWorkspaces->", userWorkspaces);
       return userWorkspaces;
     } catch (err) {
       console.error(err);

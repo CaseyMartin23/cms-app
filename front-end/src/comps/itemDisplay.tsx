@@ -15,7 +15,7 @@ import {
 
 type ItemDisplayPropsType = {
   itemHeader: string;
-  subItemsList?: [{ id: number; name: string }];
+  subItemsList?: { id: number; name: string }[];
 };
 
 const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
