@@ -27,8 +27,8 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
       <div>
         {subItemsList && subItemsList.length > 0 ? (
           <List>
-            {subItemsList.map((subItem) => (
-              <ListItem key={`${subItem.id}`} button>
+            {subItemsList.map((subItem, index) => (
+              <ListItem key={`${index}-${subItem.id}-${subItem.name}`} button>
                 <ListItemIcon>
                   <FolderIcon />
                 </ListItemIcon>
