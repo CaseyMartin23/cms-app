@@ -95,6 +95,7 @@ export const PannelContainer = styled.div`
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
+  overflow: auto;
 `;
 
 export const ItemContainer = styled.div`
