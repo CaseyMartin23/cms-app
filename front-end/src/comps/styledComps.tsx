@@ -39,8 +39,8 @@ export const MainWindow = styled.div`
 `;
 
 export const ContentDisplay = styled.div`
+  height: 100%;
   overflow: auto;
-  padding: 10px;
 `;
 
 export const StyledDrawer = styled.div`
@@ -48,7 +48,7 @@ export const StyledDrawer = styled.div`
   background-color: #2e3138;
 `;
 
-export const DrawerLink = styled(Link)`
+export const StyledLink = styled(Link)`
   text-decoration: none;
   color: white;
 `;

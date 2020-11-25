@@ -10,47 +10,47 @@ import WorkIcon from "@material-ui/icons/Work";
 import FolderIcon from "@material-ui/icons/Folder";
 import ConfirmationNumberIcon from "@material-ui/icons/ConfirmationNumber";
 
-import { StyledDrawer, DrawerLink } from "./styledComps";
+import { StyledDrawer, StyledLink } from "./styledComps";
 
 const Drawer: React.FC = () => {
   return (
     <StyledDrawer>
       <List>
-        <DrawerLink to="/dashboard">
+        <StyledLink to="/dashboard">
           <ListItem button>
             <ListItemIcon>
               <DashboardIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-        </DrawerLink>
+        </StyledLink>
 
-        <DrawerLink to="/dashboard/workspaces">
+        <StyledLink to="/dashboard/workspaces">
           <ListItem button>
             <ListItemIcon>
               <WorkIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary="Workspaces" />
           </ListItem>
-        </DrawerLink>
+        </StyledLink>
 
-        <DrawerLink to="/dashboard/projects">
+        <StyledLink to="/dashboard/projects">
           <ListItem button>
             <ListItemIcon>
               <FolderIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary="Projects" />
           </ListItem>
-        </DrawerLink>
+        </StyledLink>
 
-        <DrawerLink to="/dashboard/tickets">
+        <StyledLink to="/dashboard/tickets">
           <ListItem button>
             <ListItemIcon>
               <ConfirmationNumberIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary="Tickets" />
           </ListItem>
-        </DrawerLink>
+        </StyledLink>
       </List>
     </StyledDrawer>
   );

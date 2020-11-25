@@ -5,7 +5,21 @@ const table = "workspaces";
 module.exports = {
   async getWorkspaceById(id) {
     try {
-      return await knex.from(table).select("id", "name").where("id", id);
+      const workspace = await knex
+        .from(table)
+        .select("id", "name")
+        .where("id", id);
+
+      const [workspaceAndProject] = await Promise.all(
+        workspace.map(async (workspace) => {
+          const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
+            workspace.id
+          );
+          return { ...workspace, projects: workspaceProjects };
+        })
+      );
+
+      return workspaceAndProject;
     } catch (err) {
       console.error(err);
     }
@@ -22,10 +36,7 @@ module.exports = {
           const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
             workspace.id
           );
-          return {
-            ...workspace,
-            projects: workspaceProjects,
-          };
+          return { ...workspace, projects: workspaceProjects };
         })
       );
 

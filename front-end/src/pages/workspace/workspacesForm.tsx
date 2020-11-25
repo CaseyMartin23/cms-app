@@ -74,7 +74,7 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
 
   const onCreateWorkspace = async () => {
     try {
-      const response = await fetch("/api/create-workspace", {
+      await fetch("/api/create-workspace", {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({
@@ -82,9 +82,6 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
           name: workspaceFormData.name.toString().trim(),
         }),
       });
-      const result = await response;
-
-      console.log("onCreateWorkspace-result->", result);
     } catch (err) {
       console.error(err);
     }

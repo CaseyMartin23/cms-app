@@ -1,6 +1,6 @@
 import React from "react";
 
-import NavBar from "./navBar";
+import Titlebar from "./titleBar";
 import Drawer from "./drawer";
 
 import { MainWindow, MainContent, ContentDisplay } from "./styledComps";
@@ -10,8 +10,10 @@ const Layout: React.FC = ({ children }) => {
     <MainWindow>
       <Drawer />
       <MainContent>
-        <NavBar />
-        <ContentDisplay>{children}</ContentDisplay>
+        <ContentDisplay>
+          <Titlebar />
+          {children}
+        </ContentDisplay>
       </MainContent>
     </MainWindow>
   );

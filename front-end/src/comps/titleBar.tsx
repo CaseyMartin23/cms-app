@@ -7,7 +7,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
-const NavBar: React.FC = () => {
+const Titlebar: React.FC = () => {
   const { onLogout } = React.useContext(UserAuthContext);
 
   return (
@@ -24,4 +24,4 @@ const NavBar: React.FC = () => {
   );
 };
 
-export default NavBar;
+export default Titlebar;
