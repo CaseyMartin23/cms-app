@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -61,6 +61,11 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
     setSubmissionLoading(false);
     onFormClose();
   };
+
+  useEffect(() => {
+    const workspaceNameInput = document.getElementById("workspace_name");
+    if (workspaceNameInput) workspaceNameInput.focus();
+  }, []);
 
   return (
     <div>

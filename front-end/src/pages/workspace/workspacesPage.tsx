@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 
 import { Switch, Route } from "react-router-dom";
 
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
+import PageTitlebar from "../../comps/pagesTitlebar";
 import ItemDisplay from "../../comps/itemDisplay";
+
 import WorkspaceForm from "./workspacesForm";
 import Workspace from "./workspace";
 
@@ -76,21 +75,7 @@ const WorkspacesPage = (props: any) => {
       <Switch>
         <Route exact path={`${match.path}`}>
           <div>
-            <Toolbar>
-              <Typography
-                style={{ flexGrow: 1, textAlign: "center" }}
-                variant="h4"
-              >
-                Workspaces
-              </Typography>
-              <Button
-                onClick={onToggleForm}
-                style={{ backgroundColor: "#3f51b5" }}
-                color="inherit"
-              >
-                Create Workspace
-              </Button>
-            </Toolbar>
+            <PageTitlebar title="Workspaces" toggleForm={onToggleForm} />
             {isLoadingWorkspaces && <LinearProgress />}
             {!isLoadingWorkspaces && workspaces.length < 1 && (
               <div>You do not have any Workspaces yet</div>
@@ -98,7 +83,9 @@ const WorkspacesPage = (props: any) => {
             {!isLoadingWorkspaces && fetchWorkspacesError && (
               <ErrorMessageDiv>{fetchWorkspacesError}</ErrorMessageDiv>
             )}
-            <WorkspaceForm isOpen={openForm} toggleForm={onToggleForm} />
+            {openForm && (
+              <WorkspaceForm isOpen={openForm} toggleForm={onToggleForm} />
+            )}
             <Pannel>
               <PannelContainer>
                 {workspaces &&
