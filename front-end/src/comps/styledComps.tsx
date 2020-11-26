@@ -44,7 +44,7 @@ export const ContentDisplay = styled.div`
 `;
 
 export const StyledDrawer = styled.div`
-  width: 250px;
+  width: 230px;
   background-color: #2e3138;
 `;
 
@@ -89,13 +89,13 @@ export const FormLink = styled(Link)`
 
 export const Pannel = styled.div`
   display: grid;
+  padding-left: 30px;
 `;
 
 export const PannelContainer = styled.div`
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
-  overflow: auto;
 `;
 
 export const ItemContainer = styled.div`
@@ -103,7 +103,7 @@ export const ItemContainer = styled.div`
   border-radius: 4px;
   padding: 10px 20px 20px;
   width: 300px;
-  margin: 5px;
+  margin: 8px;
 `;
 
 export const ItemContainerHeader = styled.div`
@@ -118,4 +118,9 @@ export const ItemContainerArea = styled.div`
   border: 1px solid #6b6b6b;
   border-radius: 4px;
   background-color: #6b6b6b;
+`;
+
+export const PaperBackground = styled.div`
+  height: 100%;
+  text-align: left;
 `;

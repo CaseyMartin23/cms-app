@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -11,53 +11,17 @@ import Dialog from "../../comps/dialog";
 import { ErrorMessageDiv } from "../../comps/styledComps";
 
 type WorkspacesFormPropsType = {
-  workspaceId?: number;
   isOpen: boolean;
-  onClose(): void;
-};
-
-type ExistingWorkspaceType = {
-  id: number;
-  name: string;
-  owned_by: string;
-  created_at: string;
+  toggleForm(): void;
 };
 
 const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
-  workspaceId,
   isOpen,
-  onClose,
+  toggleForm,
 }) => {
-  const [existingWorkspace, setExistingWorkspace] = useState<
-    ExistingWorkspaceType | undefined
-  >();
-  const [workspaceFormData, setWorkspaceFormData] = useState({
-    name: existingWorkspace ? existingWorkspace.name : "",
-  });
+  const [workspaceFormData, setWorkspaceFormData] = useState({ name: "" });
   const [submisssionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | undefined>();
-
-  useEffect(() => {
-    getExistingWorkspace();
-  }, [existingWorkspace]);
-
-  const getExistingWorkspace = async () => {
-    if (workspaceId) {
-      try {
-        const response = await fetch(`/api/workspace/${workspaceId}`);
-        const result = await response.json();
-
-        if (result) {
-          if (Array.isArray(result) && result.length > 0) {
-            const [workspace] = result;
-            setExistingWorkspace(workspace);
-          }
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
@@ -72,7 +36,15 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
     setWorkspaceFormData({ ...workspaceFormData, [name]: value });
   };
 
-  const onCreateWorkspace = async () => {
+  const onFormClose = () => {
+    setWorkspaceFormData({ name: "" });
+    toggleForm();
+  };
+
+  const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmissionLoading(true);
+
     try {
       await fetch("/api/create-workspace", {
         method: "POST",
@@ -85,27 +57,9 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const onFormClose = () => {
-    if (!existingWorkspace) setWorkspaceFormData({ name: "" });
-    onClose();
-  };
-
-  const onUpdateWorkspace = () => {};
-
-  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setSubmissionLoading(true);
-
-    if (existingWorkspace) {
-      onUpdateWorkspace();
-    } else {
-      onCreateWorkspace();
-    }
 
     setSubmissionLoading(false);
-    onClose();
+    onFormClose();
   };
 
   return (
@@ -113,12 +67,17 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
       <Dialog isOpen={isOpen}>
         <Container component="main" maxWidth="xs">
           <Typography style={{ padding: "5px" }} component="h1" variant="h5">
-            {workspaceId ? "Update Workspace" : "Create Workspace"}
+            Create Workspace
           </Typography>
-          <form onSubmit={onFormSubmit} style={{ width: "396px" }}>
+          <form
+            onSubmit={onFormSubmit}
+            style={{ width: "396px" }}
+            autoComplete="off"
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
+                  color="primary"
                   onChange={onChangeHandler}
                   value={workspaceFormData.name}
                   variant="outlined"
@@ -153,8 +112,9 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
                   style={{ width: "82px" }}
                   variant="contained"
                   color="primary"
+                  disabled={submisssionLoading}
                 >
-                  {workspaceId ? "save" : "create"}
+                  create
                 </Button>
               </Grid>
             </Grid>

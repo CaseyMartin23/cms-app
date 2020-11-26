@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import Typography from "@material-ui/core/Typography";
 
+import { PaperBackground } from "../../comps/styledComps";
+
 type WorkspaceType = {
   id: number;
   name: string;
@@ -11,30 +13,30 @@ type WorkspaceType = {
 const Workspace = (props: any) => {
   const [workspace, setWorkspace] = useState<WorkspaceType>();
   const { match } = props;
+  const workspaceId = match.params.workspaceId;
 
   useEffect(() => {
-    getWorkspace();
-  }, [workspace]);
+    const getWorkspace = async () => {
+      try {
+        const response = await fetch(`/api/workspace/${workspaceId}`);
+        const result = await response.json();
 
-  const getWorkspace = async () => {
-    try {
-      const response = await fetch(
-        `/api/workspace/${match.params.workspaceId}`
-      );
-      const result = await response.json();
-
-      if (result) {
-        setWorkspace(result);
+        if (result && JSON.stringify(workspace) !== JSON.stringify(result)) {
+          setWorkspace(result);
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    };
+    getWorkspace();
+  }, [workspaceId, workspace, setWorkspace]);
 
   return (
-    <div>
-      {workspace && <Typography variant="h5">{workspace.name}</Typography>}
-    </div>
+    <PaperBackground>
+      <div>
+        {workspace && <Typography variant="h5">{workspace.name}</Typography>}
+      </div>
+    </PaperBackground>
   );
 };
 
