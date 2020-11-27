@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from "react";
 
-import Typography from "@material-ui/core/Typography";
+import ItemDisplay from "../../comps/itemDisplay";
+import EditableHeader from "../../comps/editableHeader";
+import {
+  PaperBackground,
+  Pannel,
+  PannelContainer,
+  StyledLink,
+} from "../../comps/styledComps";
 
-import { PaperBackground } from "../../comps/styledComps";
+type WorkspaceProjectType = {
+  id: number;
+  name: string;
+  tickets: { id: number; name: string }[];
+};
 
 type WorkspaceType = {
   id: number;
   name: string;
-  projects: { id: number; name: string }[];
+  projects: WorkspaceProjectType[];
 };
 
 const Workspace = (props: any) => {
@@ -33,9 +44,26 @@ const Workspace = (props: any) => {
 
   return (
     <PaperBackground>
-      <div>
-        {workspace && <Typography variant="h5">{workspace.name}</Typography>}
-      </div>
+      {workspace && <EditableHeader title={workspace.name} />}
+      <Pannel>
+        <PannelContainer>
+          {workspace &&
+            workspace.projects.length > 0 &&
+            workspace.projects.map(
+              (project: WorkspaceProjectType, index: number) => (
+                <StyledLink
+                  key={`${project.id}-${index}-${project.name}`}
+                  to=""
+                >
+                  <ItemDisplay
+                    itemHeader={project.name}
+                    subItemsList={project.tickets}
+                  />
+                </StyledLink>
+              )
+            )}
+        </PannelContainer>
+      </Pannel>
     </PaperBackground>
   );
 };

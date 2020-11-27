@@ -124,3 +124,25 @@ export const PaperBackground = styled.div`
   height: 100%;
   text-align: left;
 `;
+
+export const PaperHeader = styled.div`
+  display: flex;
+  padding: 30px;
+`;
+
+export const SpanInput = styled.input`
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  padding: 0;
+  background: none;
+  border: none;
+  height: 100%;
+`;
+
+export const EditableSpan = styled.span`
+  padding-top: 9px;
+  padding-bottom: 9px;
+  width: 195px;
+  height: 36px;
+`;
