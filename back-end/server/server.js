@@ -9,6 +9,7 @@ const flash = require("express-flash");
 const path = require("path");
 
 const authenticationRoutes = require("./routes/authenticationApi");
+const userRoutes = require("./routes/userApi");
 const workspaceRoutes = require("./routes/workspacesApi");
 const projectRoutes = require("./routes/projectsApi");
 const ticketRoutes = require("./routes/ticketsApi");
@@ -39,6 +40,7 @@ app.use(passport.session());
 app.use(
   "/api",
   authenticationRoutes,
+  userRoutes,
   workspaceRoutes,
   projectRoutes,
   ticketRoutes

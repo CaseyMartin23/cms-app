@@ -9,6 +9,11 @@ module.exports = {
       return err;
     }
   },
+  async getNameById(id) {
+    try {
+      return await knex.from(table).select("name").where("id", id);
+    } catch (err) {}
+  },
   async getByEmail(email) {
     try {
       return await knex(table).where("email", email);

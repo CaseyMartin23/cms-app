@@ -18,6 +18,7 @@ type WorkspaceProjectType = {
 type WorkspaceType = {
   id: number;
   name: string;
+  owned_by: string;
   projects: WorkspaceProjectType[];
 };
 
@@ -42,9 +43,15 @@ const Workspace = (props: any) => {
     getWorkspace();
   }, [workspaceId, workspace, setWorkspace]);
 
+  useEffect(() => {
+    console.log("workspace->", workspace);
+  }, [workspace]);
+
   return (
     <PaperBackground>
-      {workspace && <EditableHeader title={workspace.name} />}
+      {workspace && (
+        <EditableHeader title={workspace.name} owned_by={workspace.owned_by} />
+      )}
       <Pannel>
         <PannelContainer>
           {workspace &&

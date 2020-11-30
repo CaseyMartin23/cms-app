@@ -7,7 +7,7 @@ module.exports = {
     try {
       const workspace = await knex
         .from(table)
-        .select("id", "name")
+        .select("id", "name", "owned_by")
         .where("id", id);
 
       const [workspaceAndProject] = await Promise.all(

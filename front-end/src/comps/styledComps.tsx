@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 import { Link } from "react-router-dom";
 
+import EditIcon from "@material-ui/icons/Edit";
+
 export const AppDiv = styled.div`
   display: grid;
   min-height: 100vh;
@@ -126,8 +128,10 @@ export const PaperBackground = styled.div`
 `;
 
 export const PaperHeader = styled.div`
-  display: flex;
-  padding: 30px;
+  background-color: #6b6b6b;
+  padding: 20px 30px;
+  height: 130px;
+  box-sizing: border-box;
 `;
 
 export const SpanInput = styled.input`
@@ -145,4 +149,9 @@ export const EditableSpan = styled.span`
   padding-bottom: 9px;
   width: 195px;
   height: 36px;
+`;
+
+export const HeaderFontStyle = styled.div`
+  font-size: 2em;
+  font-weight: bold;
 `;
