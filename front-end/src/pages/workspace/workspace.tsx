@@ -40,6 +40,7 @@ const Workspace = (props: any) => {
         console.error(err);
       }
     };
+
     getWorkspace();
   }, [workspaceId, workspace, setWorkspace]);
 

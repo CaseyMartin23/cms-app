@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+
 import EditIcon from "@material-ui/icons/Edit";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import {
   PaperHeader,
@@ -75,6 +78,9 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
             <Button type="submit">save</Button>
             <Button onClick={onSpanInputClose}>close</Button>
           </form>
+          <IconButton style={{ float: "right" }}>
+            <MoreVertIcon style={{ color: "white" }} />
+          </IconButton>
         </div>
       </HeaderFontStyle>
       <span>{owned_by}</span>

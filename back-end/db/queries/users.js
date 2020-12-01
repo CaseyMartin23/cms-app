@@ -11,8 +11,14 @@ module.exports = {
   },
   async getNameById(id) {
     try {
-      return await knex.from(table).select("name").where("id", id);
-    } catch (err) {}
+      const [username] = await knex
+        .from(table)
+        .select("first_name")
+        .where("id", id);
+      return username;
+    } catch (err) {
+      console.error(err);
+    }
   },
   async getByEmail(email) {
     try {

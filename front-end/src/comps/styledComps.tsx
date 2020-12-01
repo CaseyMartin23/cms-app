@@ -2,8 +2,6 @@ import styled from "styled-components";
 
 import { Link } from "react-router-dom";
 
-import EditIcon from "@material-ui/icons/Edit";
-
 export const AppDiv = styled.div`
   display: grid;
   min-height: 100vh;
