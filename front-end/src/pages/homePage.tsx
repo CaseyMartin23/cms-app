@@ -1,6 +1,8 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 
+import styled from "styled-components"
+
 import Layout from "../comps/layout";
 
 import Dashboard from "./dashboard";
@@ -8,7 +10,10 @@ import WorkspacesPage from "./workspace/workspacesPage";
 import ProjectsPage from "./project/projectsPage";
 import TicketsPage from "./ticket/ticketsPage";
 
-import { HomePageDiv } from "../comps/styledComps";
+const HomePageDiv = styled.div`
+  height: 100vh;
+  width: 100vw;
+`;
 
 const HomePage = (props: any) => {
   const { match } = props;

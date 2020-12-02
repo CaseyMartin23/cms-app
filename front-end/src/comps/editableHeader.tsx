@@ -1,17 +1,47 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import styled from "styled-components";
+
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 
 import EditIcon from "@material-ui/icons/Edit";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
-import {
-  PaperHeader,
-  SpanInput,
-  EditableSpan,
-  HeaderFontStyle,
-} from "./styledComps";
+const PaperHeader = styled.div`
+  background-color: #6b6b6b;
+  padding: 20px 30px;
+  height: 115px;
+  box-sizing: border-box;
+`;
+
+const SpanInput = styled.input`
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  padding: 0;
+  background: none;
+  border: none;
+  height: 100%;
+`;
+
+const EditableSpan = styled.span`
+  padding-top: 9px;
+  padding-bottom: 9px;
+  width: 195px;
+  height: 36px;
+`;
+
+const HeaderFontStyle = styled.div`
+  font-size: 2em;
+  font-weight: bold;
+`;
+
+const OwnerLabel = styled.div`
+  margin-top: 10px;
+  margin-bottom: 10px;
+  opacity: 0.7;
+`;
 
 type EditableHeaderPropsType = {
   title: string;
@@ -78,12 +108,15 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
             <Button type="submit">save</Button>
             <Button onClick={onSpanInputClose}>close</Button>
           </form>
-          <IconButton style={{ float: "right" }}>
-            <MoreVertIcon style={{ color: "white" }} />
-          </IconButton>
+          <div>
+            <IconButton style={{ float: "right" }}>
+              <MoreVertIcon style={{ color: "white" }} />
+            </IconButton>
+            <div></div>
+          </div>
         </div>
       </HeaderFontStyle>
-      <span>{owned_by}</span>
+      <OwnerLabel>Owned By: {owned_by}</OwnerLabel>
     </PaperHeader>
   );
 };

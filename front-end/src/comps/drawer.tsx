@@ -1,5 +1,7 @@
 import React from "react";
 
+import styled from "styled-components";
+
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -10,7 +12,18 @@ import WorkIcon from "@material-ui/icons/Work";
 import FolderIcon from "@material-ui/icons/Folder";
 import ConfirmationNumberIcon from "@material-ui/icons/ConfirmationNumber";
 
-import { StyledDrawer, StyledLink } from "./styledComps";
+import { StyledLink } from "./styledComps";
+
+const StyledDrawer = styled.div`
+  width: 230px;
+  background-color: #2e3138;
+`;
+
+// const Divider = styled.hr`
+//   height: 0;
+//   border: 0;
+//   border-top: 0.5px solid #5a5f6b;
+// `;
 
 const Drawer: React.FC = () => {
   return (

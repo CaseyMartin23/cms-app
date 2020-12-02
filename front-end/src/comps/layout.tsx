@@ -1,9 +1,24 @@
 import React from "react";
 
+import styled from "styled-components"
+
 import Titlebar from "./titleBar";
 import Drawer from "./drawer";
 
-import { MainWindow, MainContent, ContentDisplay } from "./styledComps";
+const MainContent = styled.div`
+  width: 100%;
+`;
+
+const MainWindow = styled.div`
+  display: flex;
+  height: 100%;
+  width: 100%;
+`;
+
+const ContentDisplay = styled.div`
+  height: 100%;
+  overflow: auto;
+`;
 
 const Layout: React.FC = ({ children }) => {
   return (

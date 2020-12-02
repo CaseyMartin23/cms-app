@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import styled from "styled-components";
+
 import { UserAuthProvider } from "./userAuthContext";
 import ProtectedRoute from "./comps/protectedRoute";
 import LoginRoute from "./comps/loginRoute";
@@ -10,7 +12,14 @@ import LoginPage from "./pages/loginPage";
 import RegisterPage from "./pages/registerPage";
 import NotFoundPage from "./pages/notFoundPage";
 
-import { AppDiv } from "./comps/styledComps";
+const AppDiv = styled.div`
+  display: grid;
+  min-height: 100vh;
+  text-align: center;
+  color: white;
+  align-items: center;
+  justify-items: center;
+`;
 
 const App = () => {
   const [authorizedUser, setAuthorizedUser] = useState({});
