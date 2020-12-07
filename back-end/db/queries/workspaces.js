@@ -62,6 +62,16 @@ module.exports = {
       console.error(err);
     }
   },
+  async updateWorkspaceName(updatedWorkspace) {
+    try {
+      const workspaceId = updatedWorkspace.id;
+      await knex(table)
+        .where("id", workspaceId)
+        .update("name", updatedWorkspace.name);
+    } catch (err) {
+      console.log(err);
+    }
+  },
   async deleteWorkspace(id) {
     try {
       await knex(table).where("id", id).del();

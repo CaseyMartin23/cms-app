@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { useParams } from "react-router-dom";
+
 import ItemDisplay from "../../comps/itemDisplay";
 import EditableHeader from "../../comps/editableHeader";
 import {
@@ -22,10 +24,38 @@ type WorkspaceType = {
   projects: WorkspaceProjectType[];
 };
 
-const Workspace = (props: any) => {
+type WorkspacePropsType = {
+  reloadWorkspaces: () => void;
+};
+
+const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
   const [workspace, setWorkspace] = useState<WorkspaceType>();
-  const { match } = props;
-  const workspaceId = match.params.workspaceId;
+  const { workspaceId } = useParams<{ workspaceId: string }>();
+
+  const onDeleteWorkspace = async () => {
+    try {
+      if (workspace) {
+        console.log("workspace to delete->", workspace);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onUpdateTitle = async (newTitle: string | undefined) => {
+    try {
+      if (workspace && newTitle && newTitle.toString().trim().length > 0) {
+        await fetch("/api/update-workspace-name", {
+          method: "PUT",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({ id: workspace.id, name: newTitle }),
+        });
+        reloadWorkspaces();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     const getWorkspace = async () => {
@@ -44,14 +74,19 @@ const Workspace = (props: any) => {
     getWorkspace();
   }, [workspaceId, workspace, setWorkspace]);
 
-  useEffect(() => {
-    console.log("workspace->", workspace);
-  }, [workspace]);
-
   return (
     <PaperBackground>
       {workspace && (
-        <EditableHeader title={workspace.name} owned_by={workspace.owned_by} />
+        <EditableHeader
+          editableItem={workspace}
+          onUpdateTitle={onUpdateTitle}
+          options={[
+            {
+              optionTitle: "Delete Workspace",
+              optionFunction: onDeleteWorkspace,
+            },
+          ]}
+        />
       )}
       <Pannel>
         <PannelContainer>

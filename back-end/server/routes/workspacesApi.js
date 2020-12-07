@@ -28,6 +28,17 @@ router.put("/update-workspace", async (req, res) => {
   }
 });
 
+router.put("/update-workspace-name", async (req, res) => {
+  try {
+    await queryWorkspaces.updateWorkspaceName(req.body).then((resp) => {
+      res.send(JSON.stringify(resp));
+    });
+  } catch (err) {
+    console.error(err);
+    res.send(JSON.stringify(err));
+  }
+});
+
 router.delete("/delete-workspace/:workspaceId", async (req, res) => {
   try {
     await queryWorkspaces
@@ -46,10 +57,10 @@ router.get("/workspace/:workspaceId", async (req, res) => {
     const workspace = await queryWorkspaces.getWorkspaceById(
       req.params.workspaceId
     );
-    const workspaceOwner = await queryUsers.getNameById(workspace.owned_by);
+    const workspaceOwner = await queryUsers.getEmailById(workspace.owned_by);
     const workspaceAndOwnerName = {
       ...workspace,
-      owned_by: workspaceOwner.first_name,
+      owned_by: workspaceOwner.email,
     };
     res.send(JSON.stringify(workspaceAndOwnerName));
   } catch (err) {

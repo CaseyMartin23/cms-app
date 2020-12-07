@@ -9,12 +9,9 @@ module.exports = {
       return err;
     }
   },
-  async getNameById(id) {
+  async getEmailById(id) {
     try {
-      const [username] = await knex
-        .from(table)
-        .select("first_name")
-        .where("id", id);
+      const [username] = await knex.from(table).select("email").where("id", id);
       return username;
     } catch (err) {
       console.error(err);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -41,34 +41,32 @@ const WorkspacesPage = (props: any) => {
     setOpenForm(!openForm);
   };
 
-  useEffect(() => {
-    const getUserWorkspaces = async () => {
-      setIsLoadingWorkspaces(true);
-      try {
-        const response = await fetch("/api/user-workspaces");
-        const result = await response.json();
+  const reloadWorkspaces = () => {
+    setWorkspaces([]);
+  };
 
-        if (result) {
-          if (JSON.stringify(result) !== JSON.stringify(workspaces)) {
-            setWorkspaces(result);
-          }
+  const getUserWorkspaces = useCallback(async () => {
+    setIsLoadingWorkspaces(true);
+    try {
+      const response = await fetch("/api/user-workspaces");
+      const result = await response.json();
+
+      if (result) {
+        if (JSON.stringify(result) !== JSON.stringify(workspaces)) {
+          setWorkspaces(result);
         }
-        setIsLoadingWorkspaces(false);
-      } catch (err) {
-        console.error(err);
-        setFetchWorkspacesError("Problem fetching your Workspaces");
-        setIsLoadingWorkspaces(false);
       }
-    };
+      setIsLoadingWorkspaces(false);
+    } catch (err) {
+      console.error(err);
+      setFetchWorkspacesError("Problem fetching your Workspaces");
+      setIsLoadingWorkspaces(false);
+    }
+  }, [workspaces]);
 
+  useEffect(() => {
     getUserWorkspaces();
-  }, [
-    workspaces,
-    setWorkspaces,
-    openForm,
-    setIsLoadingWorkspaces,
-    setFetchWorkspacesError,
-  ]);
+  }, [workspaces, openForm, getUserWorkspaces]);
 
   return (
     <div>
@@ -105,7 +103,9 @@ const WorkspacesPage = (props: any) => {
             </Pannel>
           </div>
         </Route>
-        <Route path={`${match.path}/:workspaceId`} component={Workspace} />
+        <Route path={`${match.path}/:workspaceId`}>
+          <Workspace reloadWorkspaces={reloadWorkspaces} />
+        </Route>
       </Switch>
     </div>
   );

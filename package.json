@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node back-end/server/server.js",
+    "build": "cd front-end && npm run build",
     "prod": "NODE_ENV=production npm start",
-    "preprod": "cd front-end && npm run build",
+    "preprod": "npm run build",
     "dev": "concurrently --kill-others-on-fail -n 'server,client' -c 'blue,cyan' \"npm run dev-backend\" \"npm run dev-frontend\"",
     "dev-backend": "nodemon back-end/server/server.js",
     "dev-frontend": "cd front-end && npm start"

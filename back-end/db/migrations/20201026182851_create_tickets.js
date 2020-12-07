@@ -7,6 +7,7 @@ exports.up = (knex) =>
     table.string("description").nullable();
     table.integer("ticket_time").nullable();
     table.integer("project").unsigned().references("projects.id").notNullable();
+    table.uuid("owned_by").unsigned().references("users.id").notNullable();
     table.string("ticket_repo").nullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());
   });

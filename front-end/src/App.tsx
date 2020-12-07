@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import { StylesProvider } from "@material-ui/core/styles";
 import styled from "styled-components";
 
 import { UserAuthProvider } from "./userAuthContext";
@@ -76,16 +77,18 @@ const App = () => {
 
   return (
     <Router>
-      <UserAuthProvider value={UserAuthProviderValue}>
-        <AppDiv className="App">
-          <Switch>
-            <LoginRoute exact path="/" component={LoginPage} />
-            <LoginRoute path="/register" component={RegisterPage} />
-            <ProtectedRoute path="/dashboard" component={HomePage} />
-            <Route component={NotFoundPage} />
-          </Switch>
-        </AppDiv>
-      </UserAuthProvider>
+      <StylesProvider injectFirst>
+        <UserAuthProvider value={UserAuthProviderValue}>
+          <AppDiv className="App">
+            <Switch>
+              <LoginRoute exact path="/" component={LoginPage} />
+              <LoginRoute path="/register" component={RegisterPage} />
+              <ProtectedRoute path="/dashboard" component={HomePage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </AppDiv>
+        </UserAuthProvider>
+      </StylesProvider>
     </Router>
   );
 };

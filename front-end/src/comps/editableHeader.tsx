@@ -3,10 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-
 import EditIcon from "@material-ui/icons/Edit";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+
+import MoreOptions, { OptionsType } from "./moreOptions";
 
 const PaperHeader = styled.div`
   background-color: #6b6b6b;
@@ -20,9 +19,20 @@ const SpanInput = styled.input`
   color: inherit;
   text-align: inherit;
   padding: 0;
+  /* padding-left: 5px; */
   background: none;
   border: none;
   height: 100%;
+  width: 300px;
+  &:focus {
+    outline: none;
+    border-bottom: solid #3f51b5 2px;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  margin: 5px;
+  box-shadow: none;
 `;
 
 const EditableSpan = styled.span`
@@ -38,25 +48,41 @@ const HeaderFontStyle = styled.div`
 `;
 
 const OwnerLabel = styled.div`
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   opacity: 0.7;
 `;
 
-type EditableHeaderPropsType = {
-  title: string;
+type EditableItemType = {
+  id: number;
   owned_by: string;
+  workspace?: number;
+  project_repo?: string;
+  name?: string;
+  title?: string;
+  description?: string;
+  ticket_time?: number;
+  project?: number;
+  ticket_repo?: string;
+};
+
+type EditableHeaderPropsType = {
+  editableItem: EditableItemType;
+  onUpdateTitle: (newTitle: string | undefined) => void;
+  options: OptionsType;
 };
 
 const EditableHeader: React.FC<EditableHeaderPropsType> = ({
-  title,
-  owned_by,
+  editableItem,
+  onUpdateTitle,
+  options,
 }) => {
+  const title = editableItem.title ? editableItem.title : editableItem.name;
   const [inputValue, setInputValue] = useState(title);
-  const inputRef = useRef<HTMLInputElement>(null);
   const [isEditable, setIsEditable] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const onWorkspaceNameDoubleClick = () => {
+  const onTitleDoubleClick = () => {
     setIsEditable(true);
   };
 
@@ -70,14 +96,16 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
     setInputValue(title);
   };
 
-  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    try {
+      onUpdateTitle(inputValue);
+    } catch (err) {
+      console.error(err);
+      setInputValue(title);
+    }
     setIsEditable(false);
   };
-
-  useEffect(() => {
-    console.log("inputValue->", inputValue);
-  }, [inputValue]);
 
   useEffect(() => {
     if (isEditable) {
@@ -90,33 +118,38 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
   return (
     <PaperHeader>
       <HeaderFontStyle>
-        <div>
-          <EditableSpan
-            hidden={isEditable}
-            onDoubleClick={onWorkspaceNameDoubleClick}
-          >
-            {inputValue}
-          </EditableSpan>
-          {!isEditable && <EditIcon opacity="0.4" />}
-          <form hidden={!isEditable} onSubmit={onFormSubmit}>
-            <SpanInput
-              ref={inputRef}
-              hidden={!isEditable}
-              value={inputValue}
-              onChange={onInputValueChange}
-            />
-            <Button type="submit">save</Button>
-            <Button onClick={onSpanInputClose}>close</Button>
-          </form>
-          <div>
-            <IconButton style={{ float: "right" }}>
-              <MoreVertIcon style={{ color: "white" }} />
-            </IconButton>
-            <div></div>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{ flexGrow: 1 }}>
+            <EditableSpan
+              hidden={isEditable}
+              onDoubleClick={onTitleDoubleClick}
+            >
+              {inputValue}
+            </EditableSpan>
+            {!isEditable && <EditIcon opacity="0.4" />}
+            <form hidden={!isEditable} onSubmit={onFormSubmit}>
+              <SpanInput
+                ref={inputRef}
+                hidden={!isEditable}
+                value={inputValue}
+                onChange={onInputValueChange}
+              />
+              <StyledButton type="submit" color="primary" variant="contained">
+                save
+              </StyledButton>
+              <StyledButton
+                onClick={onSpanInputClose}
+                color="secondary"
+                variant="contained"
+              >
+                close
+              </StyledButton>
+            </form>
           </div>
+          <MoreOptions options={options} />
         </div>
       </HeaderFontStyle>
-      <OwnerLabel>Owned By: {owned_by}</OwnerLabel>
+      <OwnerLabel>Owned By: {editableItem.owned_by}</OwnerLabel>
     </PaperHeader>
   );
 };
