@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 import { Link } from "react-router-dom";
 
+import Button from "@material-ui/core/Button";
+
 export const ErrorMessageDiv = styled.div`
   margin-top: 5px;
   margin-bottom: 5px;
@@ -41,4 +43,11 @@ export const PannelContainer = styled.div`
 export const PaperBackground = styled.div`
   height: 100%;
   text-align: left;
+`;
+
+export const StyledButton = styled(Button)`
+  box-shadow: none;
+  &:hover {
+    box-shadow: none;
+  }
 `;

@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 
 import styled from "styled-components";
 
-import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 
 import MoreOptions, { OptionsType } from "./moreOptions";
+
+import { StyledButton } from "./styledComps";
 
 const PaperHeader = styled.div`
   background-color: #6b6b6b;
@@ -19,7 +20,6 @@ const SpanInput = styled.input`
   color: inherit;
   text-align: inherit;
   padding: 0;
-  /* padding-left: 5px; */
   background: none;
   border: none;
   height: 100%;
@@ -28,11 +28,6 @@ const SpanInput = styled.input`
     outline: none;
     border-bottom: solid #3f51b5 2px;
   }
-`;
-
-const StyledButton = styled(Button)`
-  margin: 5px;
-  box-shadow: none;
 `;
 
 const EditableSpan = styled.span`
@@ -134,10 +129,16 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
                 value={inputValue}
                 onChange={onInputValueChange}
               />
-              <StyledButton type="submit" color="primary" variant="contained">
+              <StyledButton
+                style={{ margin: "5px" }}
+                type="submit"
+                color="primary"
+                variant="contained"
+              >
                 save
               </StyledButton>
               <StyledButton
+                style={{ margin: "5px" }}
                 onClick={onSpanInputClose}
                 color="secondary"
                 variant="contained"

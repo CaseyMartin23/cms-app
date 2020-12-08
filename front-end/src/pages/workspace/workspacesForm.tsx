@@ -4,11 +4,10 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 
 import Dialog from "../../comps/dialog";
 
-import { ErrorMessageDiv } from "../../comps/styledComps";
+import { ErrorMessageDiv, StyledButton } from "../../comps/styledComps";
 
 type WorkspacesFormPropsType = {
   isOpen: boolean;
@@ -104,23 +103,23 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
               style={{ marginTop: "15px", marginBottom: "15px" }}
             >
               <Grid item>
-                <Button
-                  onClick={onFormClose}
-                  style={{ width: "82px", marginRight: "10px" }}
-                  variant="contained"
-                  color="primary"
-                >
-                  close
-                </Button>
-                <Button
+                <StyledButton
                   type="submit"
-                  style={{ width: "82px" }}
+                  style={{ width: "82px", marginRight: "10px" }}
                   variant="contained"
                   color="primary"
                   disabled={submisssionLoading}
                 >
                   create
-                </Button>
+                </StyledButton>
+                <StyledButton
+                  onClick={onFormClose}
+                  style={{ width: "82px" }}
+                  variant="contained"
+                  color="secondary"
+                >
+                  close
+                </StyledButton>
               </Grid>
             </Grid>
           </form>

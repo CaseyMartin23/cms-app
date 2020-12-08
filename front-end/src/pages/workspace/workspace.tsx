@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 
 import ItemDisplay from "../../comps/itemDisplay";
 import EditableHeader from "../../comps/editableHeader";
+import DeleteItemForm from "../../comps/deleteItemForm";
+
 import {
   PaperBackground,
   Pannel,
@@ -30,12 +32,22 @@ type WorkspacePropsType = {
 
 const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
   const [workspace, setWorkspace] = useState<WorkspaceType>();
+  const [isDeleteFormOpen, setIsDeleteFormOpen] = useState(false);
+  const [redirect, setRedirect] = useState(false);
   const { workspaceId } = useParams<{ workspaceId: string }>();
+
+  const onDeleteFormToggle = () => setIsDeleteFormOpen(!isDeleteFormOpen);
 
   const onDeleteWorkspace = async () => {
     try {
       if (workspace) {
-        console.log("workspace to delete->", workspace);
+        await fetch(`/api/delete-workspace/${workspace.id}`, {
+          method: "DELETE",
+          headers: { "Content-type": "application/json" },
+        });
+        onDeleteFormToggle();
+        reloadWorkspaces();
+        setRedirect(true);
       }
     } catch (err) {
       console.log(err);
@@ -74,8 +86,15 @@ const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
     getWorkspace();
   }, [workspaceId, workspace, setWorkspace]);
 
+  if (redirect) return <Redirect to="/dashboard/workspaces" />;
   return (
     <PaperBackground>
+      <DeleteItemForm
+        isFormOpen={isDeleteFormOpen}
+        onDeleteItem={onDeleteWorkspace}
+        onToggleForm={onDeleteFormToggle}
+        title="Are you sure you want to delete this workspace?"
+      />
       {workspace && (
         <EditableHeader
           editableItem={workspace}
@@ -83,7 +102,7 @@ const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
           options={[
             {
               optionTitle: "Delete Workspace",
-              optionFunction: onDeleteWorkspace,
+              optionFunction: onDeleteFormToggle,
             },
           ]}
         />

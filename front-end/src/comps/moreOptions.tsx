@@ -22,7 +22,7 @@ const DropdownContent = styled.div`
 
 export type OptionsType = {
   optionTitle: string;
-  optionFunction(): Promise<void>;
+  optionFunction: () => void | Promise<void>;
 }[];
 
 type MoreOptionsPropsType = {
