@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { StylesProvider } from "@material-ui/core/styles";
 import styled from "styled-components";
 
-import { UserAuthProvider } from "./userAuthContext";
+import { UserAuthProvider } from "./context/userAuthContext";
 import ProtectedRoute from "./comps/protectedRoute";
 import LoginRoute from "./comps/loginRoute";
 
@@ -23,62 +23,10 @@ const AppDiv = styled.div`
 `;
 
 const App = () => {
-  const [authorizedUser, setAuthorizedUser] = useState({});
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  React.useEffect(() => {
-    getAuthorizedUser();
-  });
-
-  const getAuthorizedUser = async () => {
-    try {
-      const resp = await fetch("/api/isAuthed");
-      const result = await resp.json();
-
-      if (result) {
-        const { user } = result;
-        if (typeof user === "object" && Object.keys(user).length > 0) {
-          onLogin(user);
-        }
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const onLogin = (user: object) => {
-    setIsAuthenticated(true);
-    setAuthorizedUser(user);
-  };
-
-  const onLogout = async () => {
-    try {
-      const response = await fetch("/api/logout");
-      const result = await response.json();
-
-      if (result) {
-        const { loggedOut } = result;
-        if (loggedOut) {
-          setIsAuthenticated(false);
-          setAuthorizedUser({});
-        }
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const UserAuthProviderValue = {
-    authorizedUser,
-    onLogout,
-    onLogin,
-    isAuthenticated,
-  };
-
   return (
     <Router>
-      <StylesProvider injectFirst>
-        <UserAuthProvider value={UserAuthProviderValue}>
+      <UserAuthProvider>
+        <StylesProvider injectFirst>
           <AppDiv className="App">
             <Switch>
               <LoginRoute exact path="/" component={LoginPage} />
@@ -87,8 +35,8 @@ const App = () => {
               <Route component={NotFoundPage} />
             </Switch>
           </AppDiv>
-        </UserAuthProvider>
-      </StylesProvider>
+        </StylesProvider>
+      </UserAuthProvider>
     </Router>
   );
 };

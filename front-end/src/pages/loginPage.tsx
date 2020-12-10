@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { UserAuthContext } from "../userAuthContext";
+// import { UserAuthContext } from "../userAuthContext";
 
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -11,7 +11,7 @@ import Container from "@material-ui/core/Container";
 import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
 
 const LoginPage = () => {
-  const { onLogin } = React.useContext(UserAuthContext);
+  // const { onLogin } = React.useContext(UserAuthContext);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [loginFormData, setLoginFormData] = useState({
@@ -46,9 +46,9 @@ const LoginPage = () => {
           setSubmissionLoading(false);
           setSubmissionError(error);
         }
-        if (onLogin && loggedIn && user) {
+        if (loggedIn && user) {
           setSubmissionLoading(false);
-          onLogin(user);
+          // onLogin(user);
         }
       }
     } catch (err) {

@@ -1,17 +1,33 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-import { UserAuthContext } from "../userAuthContext";
+import { UserAuthContext } from "../context/userAuthContext";
 
 const ProtectedRoute = (props: any) => {
   const { component: Component, authRedirect, ...rest } = props;
-  const { isAuthenticated } = React.useContext(UserAuthContext);
+  const { userData } = React.useContext(UserAuthContext);
+
+  const isAuthenticated = () => {
+    console.log("ProtectedRoute-isAuthenticated-userData->", userData);
+    if (
+      (userData && !userData.user) ||
+      (userData && userData.user && Object.keys(userData.user).length < 1)
+    ) {
+      return false;
+    }
+
+    return true;
+  };
 
   return (
     <Route
       {...rest}
       render={(props) => {
-        return isAuthenticated ? <Component {...props} /> : <Redirect to="/" />;
+        return isAuthenticated() ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/" />
+        );
       }}
     />
   );
