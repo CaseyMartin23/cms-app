@@ -1,41 +1,24 @@
-const express = require("express");
+const router = require("express").Router();
 const bcrypt = require("bcrypt");
-const passport = require("passport");
-
+const jsonwebtoken = require("jsonwebtoken");
 const queryUsers = require("../../db/queries/users");
-
-const router = express.Router();
-
-router.get("/isAuthed", (req, res) => {
-  if (!req.user) {
-    res.send(JSON.stringify({ error: "User not authorized", user: undefined }));
-  } else {
-    res.send(
-      JSON.stringify({
-        error: undefined,
-        user: { id: req.user.id, email: req.user.email },
-      })
-    );
-  }
-});
 
 router.post("/register", async (req, res) => {
   const userRegisterInfo = req.body;
   try {
     const hashedPassword = await bcrypt.hash(userRegisterInfo.password, 10);
 
-    const userExists = await queryUsers.getByEmail(userRegisterInfo.email);
+    const [userExists] = await queryUsers.getByEmail(userRegisterInfo.email);
 
-    if (userExists.length > 0) {
+    if (userExists) {
       console.log("userExists->", userExists);
       throw new Error("User Already exists");
     } else {
       await queryUsers
         .createUser({ ...userRegisterInfo, password: hashedPassword })
         .then((resp) => {
-          res.send(
-            JSON.stringify({ ...resp, error: undefined, registered: true })
-          );
+          console.log("/register-resp->", resp);
+          res.status(200).json({ success: true });
         });
     }
   } catch (err) {
@@ -44,37 +27,36 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) return next(err);
-    if (!user)
-      return res.send(
-        JSON.stringify({
-          error: "Incorrect email/password",
-          loggedIn: false,
-        })
-      );
-    req.logIn(user, (err) => {
-      if (err) return next(err);
-      return res.send(
-        JSON.stringify({ error: undefined, loggedIn: true, user: user })
-      );
-    });
-  })(req, res, next);
-});
+router.post("/login", async (req, res, next) => {
+  const loginInfo = req.body;
+  try {
+    const [userWithEmail] = await queryUsers.getByEmail(loginInfo.email);
 
-router.get("/logout", (req, res) => {
-  req.logOut();
-  if (!req.user) {
-    req.session.destroy();
-    return res.send(JSON.stringify({ error: undefined, loggedOut: true }));
+    if (!userWithEmail || userWithEmail === undefined) {
+      return res
+        .status(401)
+        .json({ success: false, msg: "Couldn't find user by that email" });
+    }
+
+    if (await bcrypt.compare(loginInfo.password, userWithEmail.password)) {
+      const payload = { sub: userWithEmail.id, iat: Date.now() };
+      const PRIV_KEY = process.env.PRIV_KEY.replace(/\\n/g, "\n");
+      const token = jsonwebtoken.sign(payload, PRIV_KEY, {
+        expiresIn: "1d",
+        algorithm: "RS256",
+      });
+
+      return res
+        .status(200)
+        .json({ success: true, userData: { user: userWithEmail, token } });
+    } else {
+      return res
+        .status(401)
+        .json({ success: true, msg: "Incorrect password/email" });
+    }
+  } catch (err) {
+    next(err);
   }
-  return res.send(
-    JSON.stringify({
-      error: "Something went wrong with your logout",
-      loggedOut: false,
-    })
-  );
 });
 
 module.exports = router;

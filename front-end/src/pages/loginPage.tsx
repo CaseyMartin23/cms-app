@@ -40,17 +40,19 @@ const LoginPage = () => {
       });
       const result = await response.json();
 
+      console.log("LoginPage-onsubmitHandler-result->", result);
+
       if (result) {
-        const { error, loggedIn, user } = result;
-        if (error) {
-          setSubmissionLoading(false);
-          setSubmissionError(error);
+        const { success, msg, userData } = result;
+        if (!success && msg) {
+          // setSubmissionLoading(false);
+          setSubmissionError(msg);
         }
-        if (loggedIn && user) {
-          setSubmissionLoading(false);
+        if (success && userData) {
           // onLogin(user);
         }
       }
+      setSubmissionLoading(false);
     } catch (err) {
       console.error(err);
     }

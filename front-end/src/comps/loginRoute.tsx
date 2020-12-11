@@ -1,14 +1,14 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-import { UserAuthContext } from "../context/userAuthContext";
+import { useAuthedUser } from "../context/userAuthContext";
 
 const LoginRoute = (props: any) => {
   const { component: Component, authRedirect, ...rest } = props;
-  const { userData } = React.useContext(UserAuthContext);
+  const { userData } = useAuthedUser();
 
   const isAuthenticated = () => {
-    console.log("LoginRoute-isAuthenticated-userData->", userData);
+    // console.log("LoginRoute-isAuthenticated-userData->", userData);
     if (
       (userData && !userData.user) ||
       (userData && userData.user && Object.keys(userData.user).length < 1)

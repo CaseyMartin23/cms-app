@@ -1,50 +1,20 @@
 const express = require("express");
 require("dotenv").config({ silent: process.env.NODE_ENV === "production" });
 const morgan = require("morgan");
-const compression = require("compression");
 const passport = require("passport");
-const session = require("express-session");
-const sessionStore = require("connect-session-knex")(session);
-const flash = require("express-flash");
 const path = require("path");
 
-const authenticationRoutes = require("./routes/authenticationApi");
-const userRoutes = require("./routes/userApi");
-const workspaceRoutes = require("./routes/workspacesApi");
-const projectRoutes = require("./routes/projectsApi");
-const ticketRoutes = require("./routes/ticketsApi");
-const knex = require("../db/knex");
-const initializePassport = require("./passport/passport-config");
-initializePassport(passport);
+require("./passport/passport-config")(passport);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 const dev = app.get("env") !== "production";
-const store = new sessionStore({ knex });
 
 app.use(express.static("front-end/build"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(compression());
-app.use(flash());
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store,
-  })
-);
 app.use(passport.initialize());
-app.use(passport.session());
-app.use(
-  "/api",
-  authenticationRoutes,
-  userRoutes,
-  workspaceRoutes,
-  projectRoutes,
-  ticketRoutes
-);
+app.use(require("./routes"));
 
 if (!dev) {
   app.disable("x-powered-by");

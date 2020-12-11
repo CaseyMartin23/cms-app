@@ -12,7 +12,10 @@ import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
 const RegisterPage = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
-  const [submissionError, setSubmissionError] = useState();
+  const [submissionError, setSubmissionError] = useState<
+    string | Error | undefined
+  >();
+  const [verifyPassword, setVerifyPassword] = useState("");
   const [registerFormData, setRegisterFormData] = useState({
     first_name: "",
     last_name: "",
@@ -27,6 +30,15 @@ const RegisterPage = () => {
     const { name, value } = target;
 
     setRegisterFormData({ ...registerFormData, [name]: value });
+  };
+
+  const onVerifyPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const verifingPassword = event.target.value;
+    if (verifingPassword !== registerFormData.password)
+      setSubmissionError("Passwords do not match!");
+    setVerifyPassword(verifingPassword);
   };
 
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -118,6 +130,20 @@ const RegisterPage = () => {
                 label="Password"
                 type="password"
                 id="password"
+                autoComplete="current-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                onChange={onVerifyPasswordChange}
+                value={verifyPassword}
+                variant="outlined"
+                required
+                fullWidth
+                name="verify_password"
+                label="Verify Password"
+                type="password"
+                id="verify_password"
                 autoComplete="current-password"
               />
             </Grid>
