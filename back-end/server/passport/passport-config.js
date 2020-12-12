@@ -3,8 +3,6 @@ const ExtractJwt = require("passport-jwt").ExtractJwt;
 const queryUsers = require("../../db/queries/users");
 
 const authenticateUser = async (jwt_payload, done) => {
-  console.log("authenticateUser-jwt_payload->", jwt_payload);
-
   try {
     const [userWithId] = await queryUsers.getById(jwt_payload.sub);
 

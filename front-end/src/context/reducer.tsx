@@ -1,40 +1,35 @@
 export {};
 
-const authedUserString = localStorage.getItem("auth-user");
-
-const user = authedUserString ? JSON.parse(authedUserString).user : "";
-const token = authedUserString ? JSON.parse(authedUserString).token : "";
+type PayloadType = {
+  user: {
+    id: string;
+    email: string;
+  };
+  token: string;
+};
 
 export type AuthReducerActionType = {
   type: string;
-  error: null | Error | string;
-  payload: {
-    user: {
-      id: string;
-      email: string;
-    };
-    token: string;
-  };
+  payload: boolean | PayloadType;
 };
 
 type InitialStateType = {
   user: string | { id: string; email: string };
   token: string;
-  isLoading: boolean;
-  errorMessage: null | Error | string;
 };
+
+const authedUserString = localStorage.getItem("auth_user");
+
+const user = authedUserString ? JSON.parse(authedUserString).user : "";
+const token = authedUserString ? JSON.parse(authedUserString).token : "";
 
 export const initialState: InitialStateType = {
   user: user || "",
   token: token || "",
-  isLoading: false,
-  errorMessage: null,
 };
 
 export const actionTypes = {
-  login_request: "LOGIN_REQUEST",
   login_success: "LOGIN_SUCCESS",
-  login_error: "LOGIN_ERROR",
   logout: "LOGOUT",
 };
 
@@ -43,31 +38,23 @@ export const AuthReducer = (
   action: AuthReducerActionType
 ) => {
   switch (action.type) {
-    case actionTypes.login_request:
-      return {
-        ...initialState,
-        isLoading: true,
-      };
     case actionTypes.login_success:
-      return {
-        ...initialState,
-        user: action.payload.user,
-        token: action.payload.token,
-        isLoading: false,
-      };
-    case actionTypes.login_error:
-      return {
-        ...initialState,
-        isLoading: false,
-        errorMessage: action.error,
-      };
+      if (typeof action.payload !== "boolean")
+        return {
+          ...initialState,
+          user: action.payload.user,
+          token: action.payload.token,
+        };
+      return initialState;
+
     case actionTypes.logout:
       return {
         ...initialState,
         user: "",
         token: "",
       };
+
     default:
-      throw new Error(`Invaild action type: ${action.type}`);
+      return initialState;
   }
 };

@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Switch, Route } from "react-router-dom";
+
+import { addAuthHeaders } from "../../utils";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
 
@@ -45,28 +47,31 @@ const WorkspacesPage = (props: any) => {
     setWorkspaces([]);
   };
 
-  const getUserWorkspaces = useCallback(async () => {
-    setIsLoadingWorkspaces(true);
-    try {
-      const response = await fetch("/api/user-workspaces");
-      const result = await response.json();
-
-      if (result) {
-        if (JSON.stringify(result) !== JSON.stringify(workspaces)) {
-          setWorkspaces(result);
-        }
-      }
-      setIsLoadingWorkspaces(false);
-    } catch (err) {
-      console.error(err);
-      setFetchWorkspacesError("Problem fetching your Workspaces");
-      setIsLoadingWorkspaces(false);
-    }
-  }, [workspaces]);
-
   useEffect(() => {
+    const getUserWorkspaces = async () => {
+      setIsLoadingWorkspaces(true);
+
+      try {
+        const response = await fetch("/api/user-workspaces", {
+          headers: addAuthHeaders(),
+        });
+        const result = await response.json();
+
+        if (result) {
+          if (JSON.stringify(result) !== JSON.stringify(workspaces)) {
+            setWorkspaces(result);
+          }
+        }
+        setIsLoadingWorkspaces(false);
+      } catch (err) {
+        console.error(err);
+        setFetchWorkspacesError("Problem fetching your Workspaces");
+        setIsLoadingWorkspaces(false);
+      }
+    };
+
     getUserWorkspaces();
-  }, [workspaces, openForm, getUserWorkspaces]);
+  }, [workspaces, openForm]);
 
   return (
     <div>

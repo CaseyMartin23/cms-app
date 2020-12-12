@@ -36,8 +36,11 @@ const RegisterPage = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const verifingPassword = event.target.value;
-    if (verifingPassword !== registerFormData.password)
+    if (verifingPassword !== registerFormData.password) {
       setSubmissionError("Passwords do not match!");
+    } else {
+      setSubmissionError(undefined);
+    }
     setVerifyPassword(verifingPassword);
   };
 
@@ -46,6 +49,11 @@ const RegisterPage = () => {
     setSubmissionLoading(true);
 
     try {
+      if (verifyPassword !== registerFormData.password) {
+        setSubmissionError("Passwords do not match!");
+        setSubmissionLoading(false);
+        return;
+      }
       const response = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-type": "application/json" },
@@ -54,14 +62,14 @@ const RegisterPage = () => {
       const result = await response.json();
 
       if (result) {
-        const { error, registered } = result;
-        if (error) {
+        const { msg, success } = result;
+        if (msg) {
           setSubmissionLoading(false);
-          setSubmissionError(error);
+          setSubmissionError(msg);
         }
-        if (registered) {
+        if (success) {
           setSubmissionLoading(false);
-          setIsRegistered(registered);
+          setIsRegistered(success);
         }
       }
     } catch (err) {
@@ -69,7 +77,7 @@ const RegisterPage = () => {
     }
   };
 
-  if (isRegistered) return <Redirect to="/dashboard" />;
+  if (isRegistered) return <Redirect to="/" />;
   return (
     <div>
       <Container component="main" maxWidth="xs">

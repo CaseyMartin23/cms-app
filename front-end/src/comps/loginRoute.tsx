@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-import { useAuthedUser } from "../context/userAuthContext";
+import { useAuthedUserContext } from "../context/userAuthContext";
 
 const LoginRoute = (props: any) => {
   const { component: Component, authRedirect, ...rest } = props;
-  const { userData } = useAuthedUser();
+  const { userData } = useAuthedUserContext();
 
   const isAuthenticated = () => {
     // console.log("LoginRoute-isAuthenticated-userData->", userData);

@@ -10,32 +10,30 @@ type AuthedUserData = {
         email: string;
       };
   token: string;
-  isLoading: boolean;
-  errorMessage: string | Error | null;
 };
 
 type UserAuthContextValueType = {
-  setUserData: undefined | React.Dispatch<AuthReducerActionType>;
+  dispatch: undefined | React.Dispatch<AuthReducerActionType>;
   userData: undefined | AuthedUserData;
 };
 
 const UserAuthContextValue: UserAuthContextValueType = {
-  setUserData: undefined,
+  dispatch: undefined,
   userData: undefined,
 };
 
 const UserAuthContext = React.createContext(UserAuthContextValue);
 
-export const useAuthedUser = () => {
+export const useAuthedUserContext = () => {
   const context = useContext(UserAuthContext);
   if (!context) throw new Error("Cant access context outside of the Provider");
   return context;
 };
 
 export const UserAuthProvider: React.FC = ({ children }) => {
-  const [userData, setUserData] = useReducer(AuthReducer, initialState);
+  const [userData, dispatch] = useReducer(AuthReducer, initialState);
   return (
-    <UserAuthContext.Provider value={{ userData, setUserData }}>
+    <UserAuthContext.Provider value={{ userData, dispatch }}>
       {children}
     </UserAuthContext.Provider>
   );

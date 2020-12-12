@@ -27,12 +27,12 @@ module.exports = {
   async createUser(user) {
     try {
       await knex(table).insert(user);
-      return { response: "User creation successful" };
+      return { success: true };
     } catch (err) {
       console.error(err);
       return {
         error: err,
-        response: "User creation unsuccessful",
+        success: false,
       };
     }
   },

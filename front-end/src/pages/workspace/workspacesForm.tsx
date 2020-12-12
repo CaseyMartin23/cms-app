@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { addAuthHeaders } from "../../utils";
+
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -47,7 +49,7 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
     try {
       await fetch("/api/create-workspace", {
         method: "POST",
-        headers: { "Content-type": "application/json" },
+        headers: addAuthHeaders(),
         body: JSON.stringify({
           ...workspaceFormData,
           name: workspaceFormData.name.toString().trim(),

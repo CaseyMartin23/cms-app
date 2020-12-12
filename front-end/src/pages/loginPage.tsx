@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 
-// import { UserAuthContext } from "../userAuthContext";
+import { Redirect } from "react-router-dom";
+
+import { useAuthedUserContext } from "../context/userAuthContext";
+import { actionTypes } from "../context/reducer";
 
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -11,7 +14,8 @@ import Container from "@material-ui/core/Container";
 import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
 
 const LoginPage = () => {
-  // const { onLogin } = React.useContext(UserAuthContext);
+  const { dispatch } = useAuthedUserContext();
+  const [redirect, setRedirect] = useState(false);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState();
   const [loginFormData, setLoginFormData] = useState({
@@ -33,31 +37,34 @@ const LoginPage = () => {
     setSubmissionLoading(true);
 
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(loginFormData),
-      });
-      const result = await response.json();
+      if (dispatch) {
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify(loginFormData),
+        });
+        const result = await response.json();
 
-      console.log("LoginPage-onsubmitHandler-result->", result);
-
-      if (result) {
-        const { success, msg, userData } = result;
-        if (!success && msg) {
-          // setSubmissionLoading(false);
-          setSubmissionError(msg);
-        }
-        if (success && userData) {
-          // onLogin(user);
+        if (result) {
+          const { success, msg, auth_user } = result;
+          if (!success && msg) {
+            setSubmissionLoading(false);
+            setSubmissionError(msg);
+          }
+          if (success && auth_user) {
+            setSubmissionLoading(false);
+            setRedirect(true);
+            dispatch({ type: actionTypes.login_success, payload: auth_user });
+            localStorage.setItem("auth_user", JSON.stringify(auth_user));
+          }
         }
       }
-      setSubmissionLoading(false);
     } catch (err) {
       console.error(err);
     }
   };
 
+  if (redirect) return <Redirect to="/dashboard" />;
   return (
     <div>
       <Container component="main" maxWidth="xs">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { addAuthHeaders } from "../../utils";
 import { Redirect, useParams } from "react-router-dom";
 
 import ItemDisplay from "../../comps/itemDisplay";
@@ -43,7 +43,7 @@ const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
       if (workspace) {
         await fetch(`/api/delete-workspace/${workspace.id}`, {
           method: "DELETE",
-          headers: { "Content-type": "application/json" },
+          headers: addAuthHeaders(),
         });
         onDeleteFormToggle();
         reloadWorkspaces();
@@ -59,7 +59,7 @@ const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
       if (workspace && newTitle && newTitle.toString().trim().length > 0) {
         await fetch("/api/update-workspace-name", {
           method: "PUT",
-          headers: { "Content-type": "application/json" },
+          headers: addAuthHeaders(),
           body: JSON.stringify({ id: workspace.id, name: newTitle }),
         });
         reloadWorkspaces();
@@ -72,7 +72,9 @@ const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
   useEffect(() => {
     const getWorkspace = async () => {
       try {
-        const response = await fetch(`/api/workspace/${workspaceId}`);
+        const response = await fetch(`/api/workspace/${workspaceId}`, {
+          headers: addAuthHeaders(),
+        });
         const result = await response.json();
 
         if (result && JSON.stringify(workspace) !== JSON.stringify(result)) {
