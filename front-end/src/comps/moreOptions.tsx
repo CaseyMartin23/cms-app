@@ -9,11 +9,15 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
+const DropdownDiv = styled.div`
+  position: relative;
+`;
+
 const DropdownContent = styled.div`
   display: none;
   position: absolute;
+  right: 0;
   z-index: 1;
-  right: 50px;
   background-color: white;
   color: black;
   width: 180px;
@@ -32,7 +36,9 @@ type MoreOptionsPropsType = {
 const MoreOptions: React.FC<MoreOptionsPropsType> = ({ options }) => {
   const optionsContentRef = useRef<HTMLDivElement>(null);
 
-  const onMoreOptionsClick = () => {
+  const onMoreOptionsClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+
     if (optionsContentRef && optionsContentRef.current) {
       const optionContent = optionsContentRef.current.style;
 
@@ -45,7 +51,7 @@ const MoreOptions: React.FC<MoreOptionsPropsType> = ({ options }) => {
   };
 
   return (
-    <div>
+    <DropdownDiv>
       <IconButton onClick={onMoreOptionsClick}>
         <MoreVertIcon style={{ color: "white" }} />
       </IconButton>
@@ -57,8 +63,8 @@ const MoreOptions: React.FC<MoreOptionsPropsType> = ({ options }) => {
               <ListItem
                 key={`${index}-${option.optionTitle}`}
                 button
-                onClick={() => {
-                  onMoreOptionsClick();
+                onClick={(event) => {
+                  onMoreOptionsClick(event);
                   option.optionFunction();
                 }}
               >
@@ -67,7 +73,7 @@ const MoreOptions: React.FC<MoreOptionsPropsType> = ({ options }) => {
             ))}
         </List>
       </DropdownContent>
-    </div>
+    </DropdownDiv>
   );
 };
 

@@ -8,7 +8,6 @@ const ProtectedRoute = (props: any) => {
   const { userData } = useAuthedUserContext();
 
   const isAuthenticated = () => {
-    // console.log("ProtectedRoute-isAuthenticated-userData->", userData);
     if (
       (userData && !userData.user) ||
       (userData && userData.user && Object.keys(userData.user).length < 1)

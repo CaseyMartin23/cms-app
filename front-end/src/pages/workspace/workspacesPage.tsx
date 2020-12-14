@@ -15,7 +15,6 @@ import Workspace from "./workspace";
 import {
   Pannel,
   PannelContainer,
-  StyledLink,
   ErrorMessageDiv,
 } from "../../comps/styledComps";
 
@@ -37,7 +36,7 @@ const WorkspacesPage = (props: any) => {
     string | undefined
   >();
   const [workspaces, setWorkspaces] = useState([]);
-  const { match } = props;
+  const { match, history } = props;
 
   const onToggleForm = () => {
     setOpenForm(!openForm);
@@ -94,15 +93,17 @@ const WorkspacesPage = (props: any) => {
                 {workspaces &&
                   workspaces.length > 0 &&
                   workspaces.map((workspace: WorkspaceType, index: number) => (
-                    <StyledLink
+                    <div
                       key={`${workspace.id}-${index}-${workspace.name}`}
-                      to={`${match.url}/${workspace.id}`}
+                      onClick={() => {
+                        history.push(`${match.url}/${workspace.id}`);
+                      }}
                     >
                       <ItemDisplay
                         itemHeader={workspace.name}
                         subItemsList={workspace.projects}
                       />
-                    </StyledLink>
+                    </div>
                   ))}
               </PannelContainer>
             </Pannel>

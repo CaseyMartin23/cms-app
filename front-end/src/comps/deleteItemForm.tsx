@@ -53,7 +53,7 @@ const DeleteItemForm: React.FC<DeleteItemFormProps> = ({
               variant="contained"
               color="secondary"
             >
-              close
+              cancel
             </StyledButton>
           </Grid>
         </Grid>

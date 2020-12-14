@@ -8,7 +8,6 @@ const LoginRoute = (props: any) => {
   const { userData } = useAuthedUserContext();
 
   const isAuthenticated = () => {
-    // console.log("LoginRoute-isAuthenticated-userData->", userData);
     if (
       (userData && !userData.user) ||
       (userData && userData.user && Object.keys(userData.user).length < 1)

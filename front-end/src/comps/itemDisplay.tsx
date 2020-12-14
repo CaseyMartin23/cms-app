@@ -9,8 +9,10 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 import FolderIcon from "@material-ui/icons/Folder";
 
+import MoreOptions from "./moreOptions";
+
 const ItemContainer = styled.div`
-  border: 1px solid blue;
+  border: 2px solid #3f51b5;
   border-radius: 4px;
   padding: 10px 20px 20px;
   width: 300px;
@@ -19,8 +21,10 @@ const ItemContainer = styled.div`
 
 const ItemContainerHeader = styled.div`
   text-align: left;
-  margin-bottom: 5px;
   padding: 5px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 `;
 
 const ItemContainerArea = styled.div`
@@ -29,6 +33,13 @@ const ItemContainerArea = styled.div`
   border: 1px solid #6b6b6b;
   border-radius: 4px;
   background-color: #6b6b6b;
+`;
+
+const StyledHeading = styled.h3`
+  flex-grow: 1;
+  margin: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
 `;
 
 type ItemDisplayPropsType = {
@@ -63,7 +74,19 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
 
   return (
     <ItemContainer>
-      <ItemContainerHeader>{itemHeader}</ItemContainerHeader>
+      <ItemContainerHeader>
+        <StyledHeading>{itemHeader}</StyledHeading>
+        <MoreOptions
+          options={[
+            {
+              optionTitle: "Test Item",
+              optionFunction: () => {
+                console.log("Item got clicked!!");
+              },
+            },
+          ]}
+        />
+      </ItemContainerHeader>
       <ItemContainerArea>
         <ItemList />
       </ItemContainerArea>
