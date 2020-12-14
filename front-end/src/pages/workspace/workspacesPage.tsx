@@ -8,6 +8,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 
 import PageTitlebar from "../../comps/pagesTitlebar";
 import ItemDisplay from "../../comps/itemDisplay";
+import DeleteItemForm from "../../comps/deleteItemForm";
 
 import WorkspaceForm from "./workspacesForm";
 import Workspace from "./workspace";
@@ -30,16 +31,46 @@ type WorkspaceType = {
 };
 
 const WorkspacesPage = (props: any) => {
-  const [openForm, setOpenForm] = useState(false);
+  const [isWorkspaceFormOpen, setIsWorkspaceFormOpen] = useState(false);
+  const [isDeleteFormOpen, setIsDeleteFormOpen] = useState(false);
   const [isLoadingWorkspaces, setIsLoadingWorkspaces] = useState(false);
   const [fetchWorkspacesError, setFetchWorkspacesError] = useState<
     string | undefined
   >();
+  const [workspaceToDelete, setWorkspaceToDelete] = useState<number>();
   const [workspaces, setWorkspaces] = useState([]);
   const { match, history } = props;
 
-  const onToggleForm = () => {
-    setOpenForm(!openForm);
+  const onWorkspaceFormToggle = () => {
+    setIsWorkspaceFormOpen(!isWorkspaceFormOpen);
+  };
+
+  const onDeleteFormToggle = (workspaceId?: number) => {
+    setIsDeleteFormOpen(!isDeleteFormOpen);
+    setWorkspaceToDelete(workspaceId);
+  };
+
+  const onWorkspaceDelete = async () => {
+    try {
+      const response = await fetch(
+        `/api/delete-workspace/${workspaceToDelete}`,
+        {
+          method: "DELETE",
+          headers: addAuthHeaders(),
+        }
+      );
+      const result = await response.json();
+
+      if (result) {
+        const { success } = result;
+        if (success) {
+          reloadWorkspaces();
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    onDeleteFormToggle();
   };
 
   const reloadWorkspaces = () => {
@@ -70,14 +101,17 @@ const WorkspacesPage = (props: any) => {
     };
 
     getUserWorkspaces();
-  }, [workspaces, openForm]);
+  }, [workspaces, isWorkspaceFormOpen]);
 
   return (
     <div>
       <Switch>
         <Route exact path={`${match.path}`}>
           <div>
-            <PageTitlebar title="Workspaces" toggleForm={onToggleForm} />
+            <PageTitlebar
+              title="Workspaces"
+              toggleForm={onWorkspaceFormToggle}
+            />
             {isLoadingWorkspaces && <LinearProgress />}
             {!isLoadingWorkspaces && workspaces.length < 1 && (
               <div>You do not have any Workspaces yet</div>
@@ -85,8 +119,19 @@ const WorkspacesPage = (props: any) => {
             {!isLoadingWorkspaces && fetchWorkspacesError && (
               <ErrorMessageDiv>{fetchWorkspacesError}</ErrorMessageDiv>
             )}
-            {openForm && (
-              <WorkspaceForm isOpen={openForm} toggleForm={onToggleForm} />
+            {isWorkspaceFormOpen && (
+              <WorkspaceForm
+                isOpen={isWorkspaceFormOpen}
+                toggleForm={onWorkspaceFormToggle}
+              />
+            )}
+            {isDeleteFormOpen && (
+              <DeleteItemForm
+                isFormOpen={isDeleteFormOpen}
+                onDeleteItem={onWorkspaceDelete}
+                onToggleForm={onDeleteFormToggle}
+                title="Are you sure you want to delete this Workspace and all it's contents?"
+              />
             )}
             <Pannel>
               <PannelContainer>
@@ -102,6 +147,14 @@ const WorkspacesPage = (props: any) => {
                       <ItemDisplay
                         itemHeader={workspace.name}
                         subItemsList={workspace.projects}
+                        options={[
+                          {
+                            optionTitle: "Delete Workspace",
+                            optionFunction: () => {
+                              onDeleteFormToggle(workspace.id);
+                            },
+                          },
+                        ]}
                       />
                     </div>
                   ))}

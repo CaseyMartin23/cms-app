@@ -20,6 +20,7 @@ const ModalContent = styled.div`
   background-color: #8c8c8c;
   border: 1px solid #8c8c8c;
   border-radius: 4px;
+  max-width: 466px;
 `;
 
 type DialogPropsType = {
@@ -27,9 +28,13 @@ type DialogPropsType = {
 };
 
 const Dialog: React.FC<DialogPropsType> = ({ isOpen, children }) => {
+  const modalId =
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15);
+
   useEffect(() => {
     const toggleModal = () => {
-      const modal = document.getElementById("modal");
+      const modal = document.getElementById(modalId);
 
       if (modal && isOpen) {
         modal.style.display = "grid";
@@ -38,10 +43,10 @@ const Dialog: React.FC<DialogPropsType> = ({ isOpen, children }) => {
       }
     };
     toggleModal();
-  }, [isOpen]);
+  }, [isOpen, modalId]);
 
   return (
-    <Modal id="modal">
+    <Modal id={modalId}>
       <ModalContent>{children}</ModalContent>
     </Modal>
   );

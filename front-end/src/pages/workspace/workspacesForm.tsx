@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { addAuthHeaders } from "../../utils";
 
@@ -23,6 +23,7 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
   const [workspaceFormData, setWorkspaceFormData] = useState({ name: "" });
   const [submisssionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | undefined>();
+  const workspaceNameRef = useRef<HTMLInputElement>(null);
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
@@ -64,70 +65,71 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
   };
 
   useEffect(() => {
-    const workspaceNameInput = document.getElementById("workspace_name");
-    if (workspaceNameInput) workspaceNameInput.focus();
+    if (workspaceNameRef && workspaceNameRef.current) {
+      workspaceNameRef.current.focus();
+      console.log("should be focused!!");
+    }
   }, []);
 
   return (
-    <div>
-      <Dialog isOpen={isOpen}>
-        <Container component="main" maxWidth="xs">
-          <Typography style={{ padding: "5px" }} component="h1" variant="h5">
-            Create Workspace
-          </Typography>
-          <form
-            onSubmit={onFormSubmit}
-            style={{ width: "396px" }}
-            autoComplete="off"
+    <Dialog isOpen={isOpen}>
+      <Container component="main" maxWidth="xs">
+        <Typography style={{ padding: "5px" }} component="h1" variant="h5">
+          Create Workspace
+        </Typography>
+        <form
+          onSubmit={onFormSubmit}
+          style={{ width: "396px" }}
+          autoComplete="off"
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                ref={workspaceNameRef}
+                color="primary"
+                onChange={onChangeHandler}
+                value={workspaceFormData.name}
+                variant="outlined"
+                required
+                fullWidth
+                name="name"
+                label="Workspace Name"
+                type="text"
+                id="workspace_name"
+              />
+            </Grid>
+            {submissionError && (
+              <ErrorMessageDiv>{submissionError}</ErrorMessageDiv>
+            )}
+          </Grid>
+          <Grid
+            container
+            justify="flex-end"
+            style={{ marginTop: "15px", marginBottom: "15px" }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  color="primary"
-                  onChange={onChangeHandler}
-                  value={workspaceFormData.name}
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="name"
-                  label="Workspace Name"
-                  type="text"
-                  id="workspace_name"
-                />
-              </Grid>
-              {submissionError && (
-                <ErrorMessageDiv>{submissionError}</ErrorMessageDiv>
-              )}
+            <Grid item>
+              <StyledButton
+                type="submit"
+                style={{ width: "82px", marginRight: "10px" }}
+                variant="contained"
+                color="primary"
+                disabled={submisssionLoading}
+              >
+                create
+              </StyledButton>
+              <StyledButton
+                onClick={onFormClose}
+                style={{ width: "82px" }}
+                variant="contained"
+                color="secondary"
+              >
+                close
+              </StyledButton>
             </Grid>
-            <Grid
-              container
-              justify="flex-end"
-              style={{ marginTop: "15px", marginBottom: "15px" }}
-            >
-              <Grid item>
-                <StyledButton
-                  type="submit"
-                  style={{ width: "82px", marginRight: "10px" }}
-                  variant="contained"
-                  color="primary"
-                  disabled={submisssionLoading}
-                >
-                  create
-                </StyledButton>
-                <StyledButton
-                  onClick={onFormClose}
-                  style={{ width: "82px" }}
-                  variant="contained"
-                  color="secondary"
-                >
-                  close
-                </StyledButton>
-              </Grid>
-            </Grid>
-          </form>
-        </Container>
-      </Dialog>
-    </div>
+          </Grid>
+        </form>
+      </Container>
+    </Dialog>
   );
 };
 

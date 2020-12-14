@@ -75,7 +75,7 @@ module.exports = {
   async deleteWorkspace(id) {
     try {
       await knex(table).where("id", id).del();
-      return { response: "Workspace deletion successful" };
+      return { success: true };
     } catch (err) {
       console.error(err);
     }

@@ -44,11 +44,11 @@ router.delete("/delete-workspace/:workspaceId", async (req, res) => {
     await queryWorkspaces
       .deleteWorkspace(req.params.workspaceId)
       .then((resp) => {
-        res.send(JSON.stringify(resp));
+        res.status(200).json(resp);
       });
   } catch (err) {
     console.error(err);
-    res.send(JSON.stringify(err));
+    res.status(501).json({ success: false, msg: error.message });
   }
 });
 

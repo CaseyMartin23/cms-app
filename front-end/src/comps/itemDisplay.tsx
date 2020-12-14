@@ -45,11 +45,16 @@ const StyledHeading = styled.h3`
 type ItemDisplayPropsType = {
   itemHeader: string;
   subItemsList?: { id: number; name: string }[];
+  options: {
+    optionTitle: string;
+    optionFunction: () => void;
+  }[];
 };
 
 const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
   itemHeader,
   subItemsList,
+  options,
 }) => {
   const ItemList = () => {
     return (
@@ -76,16 +81,7 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
     <ItemContainer>
       <ItemContainerHeader>
         <StyledHeading>{itemHeader}</StyledHeading>
-        <MoreOptions
-          options={[
-            {
-              optionTitle: "Test Item",
-              optionFunction: () => {
-                console.log("Item got clicked!!");
-              },
-            },
-          ]}
-        />
+        <MoreOptions options={options} />
       </ItemContainerHeader>
       <ItemContainerArea>
         <ItemList />

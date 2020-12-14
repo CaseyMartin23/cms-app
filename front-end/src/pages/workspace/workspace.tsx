@@ -95,7 +95,7 @@ const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
         isFormOpen={isDeleteFormOpen}
         onDeleteItem={onDeleteWorkspace}
         onToggleForm={onDeleteFormToggle}
-        title="Are you sure you want to delete this workspace?"
+        title="Are you sure you want to delete this Workspace and all it's contents?"
       />
       {workspace && (
         <EditableHeader
@@ -122,6 +122,12 @@ const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
                   <ItemDisplay
                     itemHeader={project.name}
                     subItemsList={project.tickets}
+                    options={[
+                      {
+                        optionTitle: "",
+                        optionFunction: () => {},
+                      },
+                    ]}
                   />
                 </StyledLink>
               )

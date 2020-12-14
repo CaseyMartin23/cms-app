@@ -36,7 +36,7 @@ type MoreOptionsPropsType = {
 const MoreOptions: React.FC<MoreOptionsPropsType> = ({ options }) => {
   const optionsContentRef = useRef<HTMLDivElement>(null);
 
-  const onMoreOptionsClick = (event: React.MouseEvent) => {
+  const onOptionsToggle = (event: React.MouseEvent) => {
     event.stopPropagation();
 
     if (optionsContentRef && optionsContentRef.current) {
@@ -50,9 +50,17 @@ const MoreOptions: React.FC<MoreOptionsPropsType> = ({ options }) => {
     }
   };
 
+  const onOptionsItemClick = (
+    event: React.MouseEvent,
+    optionFunc: () => void
+  ) => {
+    onOptionsToggle(event);
+    optionFunc();
+  };
+
   return (
     <DropdownDiv>
-      <IconButton onClick={onMoreOptionsClick}>
+      <IconButton onClick={onOptionsToggle}>
         <MoreVertIcon style={{ color: "white" }} />
       </IconButton>
       <DropdownContent ref={optionsContentRef}>
@@ -63,10 +71,9 @@ const MoreOptions: React.FC<MoreOptionsPropsType> = ({ options }) => {
               <ListItem
                 key={`${index}-${option.optionTitle}`}
                 button
-                onClick={(event) => {
-                  onMoreOptionsClick(event);
-                  option.optionFunction();
-                }}
+                onClick={(event) =>
+                  onOptionsItemClick(event, option.optionFunction)
+                }
               >
                 <ListItemText primary={`${option.optionTitle}`} />
               </ListItem>

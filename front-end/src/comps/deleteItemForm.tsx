@@ -29,8 +29,10 @@ const DeleteItemForm: React.FC<DeleteItemFormProps> = ({
     <Dialog isOpen={isFormOpen}>
       <form onSubmit={onFormSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={12} style={{ marginTop: "5px", marginBottom: "5px" }}>
-            <Typography>{title}</Typography>
+          <Grid item xs={12} style={{ margin: "5px" }}>
+            <Typography noWrap={false} align="left">
+              {title}
+            </Typography>
           </Grid>
         </Grid>
         <Grid
