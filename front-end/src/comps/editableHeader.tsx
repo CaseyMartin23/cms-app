@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import EditIcon from "@material-ui/icons/Edit";
+import Typography from "@material-ui/core/Typography";
 
 import MoreOptions, { OptionsType } from "./moreOptions";
 
@@ -11,7 +12,7 @@ import { StyledButton } from "./styledComps";
 const PaperHeader = styled.div`
   background-color: #6b6b6b;
   padding: 20px 30px;
-  height: 115px;
+  height: 130px;
   box-sizing: border-box;
 `;
 
@@ -42,19 +43,26 @@ const HeaderFontStyle = styled.div`
   font-weight: bold;
 `;
 
-const OwnerLabel = styled.div`
-  margin-top: 5px;
-  margin-bottom: 5px;
+const ItemDetails = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  /* margin-top: 5px;
+  margin-bottom: 5px; */
   opacity: 0.7;
+`;
+
+const Detail = styled(Typography)`
+  margin-left: 5px;
+  margin-right: 5px;
 `;
 
 type EditableItemType = {
   id: number;
+  name: string;
   owned_by: string;
   workspace?: number;
   project_repo?: string;
-  name?: string;
-  title?: string;
   description?: string;
   ticket_time?: number;
   project?: number;
@@ -72,8 +80,7 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
   onUpdateTitle,
   options,
 }) => {
-  const title = editableItem.title ? editableItem.title : editableItem.name;
-  const [inputValue, setInputValue] = useState(title);
+  const [inputValue, setInputValue] = useState(editableItem.name);
   const [isEditable, setIsEditable] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -88,7 +95,7 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
 
   const onSpanInputClose = () => {
     setIsEditable(false);
-    setInputValue(title);
+    setInputValue(editableItem.name);
   };
 
   const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -97,7 +104,7 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
       onUpdateTitle(inputValue);
     } catch (err) {
       console.error(err);
-      setInputValue(title);
+      setInputValue(editableItem.name);
     }
     setIsEditable(false);
   };
@@ -150,7 +157,9 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
           <MoreOptions options={options} />
         </div>
       </HeaderFontStyle>
-      <OwnerLabel>Owned By: {editableItem.owned_by}</OwnerLabel>
+      <ItemDetails>
+        <Detail>owned by: {editableItem.owned_by}</Detail>
+      </ItemDetails>
     </PaperHeader>
   );
 };

@@ -21,8 +21,15 @@ export const StyledLink = styled(Link)`
   color: white;
 `;
 
+export const FormDiv = styled.div`
+  background-color: #6b6b6b;
+  padding: 20px;
+  border: 1px solid #6b6b6b;
+  border-radius: 5px;
+`;
+
 export const FormLink = styled(Link)`
-  color: #3f51b5;
+  color: white;
   text-decoration: none;
   &:hover {
     text-decoration-line: underline;
@@ -32,6 +39,8 @@ export const FormLink = styled(Link)`
 export const Pannel = styled.div`
   display: grid;
   padding-left: 30px;
+  padding-right: 40px;
+  padding-top: 30px;
 `;
 
 export const PannelContainer = styled.div`
@@ -48,6 +57,9 @@ export const PaperBackground = styled.div`
 export const StyledButton = styled(Button)`
   box-shadow: none;
   &:hover {
+    box-shadow: none;
+  }
+  &:focus {
     box-shadow: none;
   }
 `;

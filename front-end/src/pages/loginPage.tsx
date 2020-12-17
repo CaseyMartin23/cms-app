@@ -5,13 +5,17 @@ import { Redirect } from "react-router-dom";
 import { useAuthedUserContext } from "../context/userAuthContext";
 import { actionTypes } from "../context/reducer";
 
-import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 
-import { ErrorMessageDiv, FormLink } from "../comps/styledComps";
+import {
+  ErrorMessageDiv,
+  FormDiv,
+  FormLink,
+  StyledButton,
+} from "../comps/styledComps";
 
 const LoginPage = () => {
   const { dispatch } = useAuthedUserContext();
@@ -66,7 +70,7 @@ const LoginPage = () => {
 
   if (redirect) return <Redirect to="/dashboard" />;
   return (
-    <div>
+    <FormDiv>
       <Container component="main" maxWidth="xs">
         <Typography component="h1" variant="h5">
           Sign in
@@ -100,7 +104,7 @@ const LoginPage = () => {
           {submissionError && (
             <ErrorMessageDiv>{submissionError}</ErrorMessageDiv>
           )}
-          <Button
+          <StyledButton
             type="submit"
             style={{ marginTop: "15px", marginBottom: "15px" }}
             fullWidth
@@ -109,7 +113,7 @@ const LoginPage = () => {
             disabled={submissionLoading}
           >
             Sign In
-          </Button>
+          </StyledButton>
           <Grid container justify="flex-end">
             <Grid item>
               <FormLink to="/register">Don't have an account? Sign Up</FormLink>
@@ -117,7 +121,7 @@ const LoginPage = () => {
           </Grid>
         </form>
       </Container>
-    </div>
+    </FormDiv>
   );
 };
 

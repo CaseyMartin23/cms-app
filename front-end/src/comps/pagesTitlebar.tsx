@@ -17,7 +17,7 @@ const PageTitlebar: React.FC<PageTitlebarProps> = ({ title, toggleForm }) => {
   };
 
   return (
-    <Toolbar>
+    <Toolbar style={{ backgroundColor: "#6b6b6b", height: "70px" }}>
       <Typography style={{ flexGrow: 1, textAlign: "center" }} variant="h4">
         {title}
       </Typography>

@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 
-import { Switch, Route, RouteComponentProps } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  RouteComponentProps,
+  withRouter,
+} from "react-router-dom";
 
 import { addAuthHeaders } from "../../utils";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Typography from "@material-ui/core/Typography";
 
 import PageTitlebar from "../../comps/pagesTitlebar";
 import ItemDisplay from "../../comps/itemDisplay";
@@ -53,20 +59,17 @@ const WorkspacesPage: React.FC<WorkspacesPageType> = ({ match, history }) => {
 
   const onWorkspaceDelete = async () => {
     try {
-      const response = await fetch(
-        `/api/delete-workspace/${workspaceToDelete}`,
-        {
-          method: "DELETE",
-          headers: addAuthHeaders(),
-        }
-      );
-      const result = await response.json();
+      if (workspaceToDelete) {
+        const response = await fetch(
+          `/api/delete-workspace/${workspaceToDelete}`,
+          {
+            method: "DELETE",
+            headers: addAuthHeaders(),
+          }
+        );
+        const result = await response.json();
 
-      if (result) {
-        const { success } = result;
-        if (success) {
-          reloadWorkspaces();
-        }
+        if (result && result.success) reloadWorkspaces();
       }
     } catch (err) {
       console.error(err);
@@ -118,12 +121,6 @@ const WorkspacesPage: React.FC<WorkspacesPageType> = ({ match, history }) => {
               toggleForm={onWorkspaceFormToggle}
             />
             {isLoadingWorkspaces && <LinearProgress />}
-            {!isLoadingWorkspaces && workspaces.length < 1 && (
-              <div>You do not have any Workspaces yet</div>
-            )}
-            {!isLoadingWorkspaces && fetchWorkspacesError && (
-              <ErrorMessageDiv>{fetchWorkspacesError}</ErrorMessageDiv>
-            )}
             {isWorkspaceFormOpen && (
               <WorkspaceForm
                 isOpen={isWorkspaceFormOpen}
@@ -135,11 +132,23 @@ const WorkspacesPage: React.FC<WorkspacesPageType> = ({ match, history }) => {
                 isFormOpen={isDeleteFormOpen}
                 onDeleteItem={onWorkspaceDelete}
                 onToggleForm={onDeleteFormToggle}
-                title="Are you sure you want to delete this Workspace and all it's contents?"
+                title="Are you sure you want to DELETE this Workspace and ALL it's contents?"
               />
             )}
             <Pannel>
               <PannelContainer>
+                {!isLoadingWorkspaces && fetchWorkspacesError && (
+                  <ErrorMessageDiv>{fetchWorkspacesError}</ErrorMessageDiv>
+                )}
+                {!isLoadingWorkspaces &&
+                  !fetchWorkspacesError &&
+                  workspaces.length < 1 && (
+                    <div style={{ width: "100%" }}>
+                      <Typography variant="h6">
+                        You do not have any Workspaces yet
+                      </Typography>
+                    </div>
+                  )}
                 {workspaces &&
                   workspaces.length > 0 &&
                   workspaces.map((workspace: WorkspaceType, index: number) => (
@@ -177,4 +186,4 @@ const WorkspacesPage: React.FC<WorkspacesPageType> = ({ match, history }) => {
   );
 };
 
-export default WorkspacesPage;
+export default withRouter(WorkspacesPage);

@@ -38,7 +38,6 @@ interface WorkspacePropsType extends RouteComponentProps {
 
 const Workspace: React.FC<WorkspacePropsType> = ({
   reloadWorkspaces,
-  match,
   history,
 }) => {
   const [workspace, setWorkspace] = useState<WorkspaceType>();

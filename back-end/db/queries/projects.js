@@ -1,5 +1,6 @@
 const knex = require("../knex");
 const table = "projects";
+const queryTickets = require("./tickets");
 
 module.exports = {
   async getProjectsById(id) {
@@ -12,10 +13,21 @@ module.exports = {
   },
   async getProjectsByUserId(userId) {
     try {
-      return await knex
+      const projects = await knex
         .from(table)
         .select("id", "name")
         .where("owned_by", userId);
+
+      const userProjects = await Promise.all(
+        projects.map(async (project) => {
+          const projectTickets = await queryTickets.getTicketByProjectId(
+            project.id
+          );
+          return { ...project, tickets: projectTickets };
+        })
+      );
+
+      return userProjects;
     } catch (err) {
       console.error(err);
       return { success: false, msg: err.message };
