@@ -3,9 +3,37 @@ const table = "projects";
 const queryTickets = require("./tickets");
 
 module.exports = {
-  async getProjectsById(id) {
+  async getProjectById(id) {
     try {
-      return await knex(table).where("id", id);
+      const projects = await knex
+        .from(table)
+        .select("id", "name", "workspace", "owned_by", "project_repo")
+        .where("id", id);
+
+      const [projectAndTickets] = await Promise.all(
+        projects.map(async (project) => {
+          const projectTickets = await queryTickets.getTicketByProjectId(
+            project.id
+          );
+          const [workspace] = await knex
+            .from("workspaces")
+            .select("name")
+            .where("id", project.workspace);
+
+          const [ownedBy] = await knex
+            .from("users")
+            .select("email")
+            .where("id", project.owned_by);
+          return {
+            ...project,
+            owned_by: ownedBy.email,
+            workspace: workspace.name,
+            tickets: projectTickets,
+          };
+        })
+      );
+
+      return projectAndTickets;
     } catch (err) {
       console.error(err);
       return { success: false, msg: err.message };

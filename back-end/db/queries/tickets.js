@@ -13,7 +13,7 @@ module.exports = {
     try {
       return await knex
         .from(table)
-        .select("id", "title")
+        .select("id", "name")
         .where("project", projectId);
     } catch (err) {
       console.error(err);

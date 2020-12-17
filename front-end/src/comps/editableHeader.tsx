@@ -61,11 +61,11 @@ type EditableItemType = {
   id: number;
   name: string;
   owned_by: string;
-  workspace?: number;
+  workspace?: string;
+  project?: string;
   project_repo?: string;
   description?: string;
   ticket_time?: number;
-  project?: number;
   ticket_repo?: string;
 };
 

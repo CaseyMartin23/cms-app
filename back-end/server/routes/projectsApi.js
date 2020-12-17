@@ -12,7 +12,7 @@ router.post("/create-project", async (req, res) => {
     res.status(200).json(createdProject);
   } catch (err) {
     console.error(err);
-    res.status(501).json({ success: false, msg: err.message });
+    res.status(500).json({ success: false, msg: err.message });
   }
 });
 
@@ -22,7 +22,7 @@ router.put("/update-project", async (req, res) => {
     res.status(200).json(projectUpdated);
   } catch (err) {
     console.error(err);
-    res.send(501).json(err);
+    res.send(500).json(err);
   }
 });
 
@@ -34,17 +34,17 @@ router.delete("/delete-project/:projectId", async (req, res) => {
     res.status(200).json(projectDeleted);
   } catch (err) {
     console.error(err);
-    res.send(501).json({ success: false, msg: err.message });
+    res.send(500).json({ success: false, msg: err.message });
   }
 });
 
 router.get("/project/:projectId", async (req, res) => {
   try {
-    const project = await queryProjects.getProjectsById(req.params.projectId);
+    const project = await queryProjects.getProjectById(req.params.projectId);
     res.status(200).json({ success: true, project });
   } catch (err) {
     console.error(err);
-    res.send(501).json({ success: false, msg: err.message });
+    res.send(500).json({ success: false, msg: err.message });
   }
 });
 
@@ -55,7 +55,7 @@ router.get("/user-projects", async (req, res) => {
     res.status(200).json({ success: true, user_projects: projects });
   } catch (err) {
     console.error(err);
-    res.send(501).json({ success: false, msg: err.message });
+    res.send(500).json({ success: false, msg: err.message });
   }
 });
 
@@ -67,7 +67,7 @@ router.get("/workspace-projects/:workspaceId", async (req, res) => {
     res.status(200).json(workspaceProjects);
   } catch (err) {
     console.error(err);
-    res.send(501).json(err);
+    res.send(500).json(err);
   }
 });
 
