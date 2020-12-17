@@ -67,7 +67,6 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
   useEffect(() => {
     if (workspaceNameRef && workspaceNameRef.current) {
       workspaceNameRef.current.focus();
-      console.log("should be focused!!");
     }
   }, []);
 

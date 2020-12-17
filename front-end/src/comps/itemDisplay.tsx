@@ -43,8 +43,10 @@ const StyledHeading = styled.h3`
 `;
 
 type ItemDisplayPropsType = {
+  type: string;
   itemHeader: string;
   subItemsList?: { id: number; name: string }[];
+  goToSubItem: (id: string | number) => void;
   options: {
     optionTitle: string;
     optionFunction: () => void;
@@ -52,17 +54,39 @@ type ItemDisplayPropsType = {
 };
 
 const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
+  type,
   itemHeader,
   subItemsList,
+  goToSubItem,
   options,
 }) => {
+  const NoSubItems = () => {
+    let noSubItemsTitle = "";
+    if (type === "Workspace") {
+      noSubItemsTitle = "No Projects in this Workspace";
+    } else {
+      noSubItemsTitle = "No Tickets in this Project";
+    }
+    return (
+      <div style={{ marginTop: "20px", textAlign: "center" }}>
+        {noSubItemsTitle}
+      </div>
+    );
+  };
+
   const ItemList = () => {
     return (
       <div>
         {subItemsList && subItemsList.length > 0 ? (
           <List>
             {subItemsList.map((subItem, index) => (
-              <ListItem key={`${index}-${subItem.id}-${subItem.name}`} button>
+              <ListItem
+                key={`${index}-${subItem.id}-${subItem.name}`}
+                button
+                onClick={() => {
+                  goToSubItem(subItem.id);
+                }}
+              >
                 <ListItemIcon>
                   <FolderIcon />
                 </ListItemIcon>
@@ -71,7 +95,7 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
             ))}
           </List>
         ) : (
-          "No projects in this workspace"
+          <NoSubItems />
         )}
       </div>
     );

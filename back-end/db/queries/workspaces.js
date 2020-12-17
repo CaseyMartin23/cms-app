@@ -24,6 +24,17 @@ module.exports = {
       console.error(err);
     }
   },
+  async getWorkspaceNamesAndIdByUserId(userId) {
+    try {
+      const workspaces = await knex
+        .from(table)
+        .select("id", "name")
+        .where("owned_by", userId);
+      return { success: true, user_workspaces: workspaces };
+    } catch (err) {
+      console.error(err);
+    }
+  },
   async getWorkspacesByUserId(userId) {
     try {
       const workspaces = await knex

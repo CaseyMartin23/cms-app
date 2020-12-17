@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
+
 import { addAuthHeaders } from "../../utils";
-import { Redirect, useParams } from "react-router-dom";
+
+import {
+  Redirect,
+  useParams,
+  RouteComponentProps,
+  withRouter,
+} from "react-router-dom";
 
 import ItemDisplay from "../../comps/itemDisplay";
 import EditableHeader from "../../comps/editableHeader";
@@ -10,7 +17,6 @@ import {
   PaperBackground,
   Pannel,
   PannelContainer,
-  StyledLink,
 } from "../../comps/styledComps";
 
 type WorkspaceProjectType = {
@@ -26,11 +32,15 @@ type WorkspaceType = {
   projects: WorkspaceProjectType[];
 };
 
-type WorkspacePropsType = {
+interface WorkspacePropsType extends RouteComponentProps {
   reloadWorkspaces: () => void;
-};
+}
 
-const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
+const Workspace: React.FC<WorkspacePropsType> = ({
+  reloadWorkspaces,
+  match,
+  history,
+}) => {
   const [workspace, setWorkspace] = useState<WorkspaceType>();
   const [isDeleteFormOpen, setIsDeleteFormOpen] = useState(false);
   const [redirect, setRedirect] = useState(false);
@@ -69,6 +79,10 @@ const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
     }
   };
 
+  const goToTicket = (id: string | number) => {
+    history.push(`/dashboard/tickets/${id}`);
+  };
+
   useEffect(() => {
     const getWorkspace = async () => {
       try {
@@ -98,44 +112,49 @@ const Workspace: React.FC<WorkspacePropsType> = ({ reloadWorkspaces }) => {
         title="Are you sure you want to delete this Workspace and all it's contents?"
       />
       {workspace && (
-        <EditableHeader
-          editableItem={workspace}
-          onUpdateTitle={onUpdateTitle}
-          options={[
-            {
-              optionTitle: "Delete Workspace",
-              optionFunction: onDeleteFormToggle,
-            },
-          ]}
-        />
+        <div>
+          <EditableHeader
+            editableItem={workspace}
+            onUpdateTitle={onUpdateTitle}
+            options={[
+              {
+                optionTitle: "Delete Workspace",
+                optionFunction: onDeleteFormToggle,
+              },
+            ]}
+          />
+          <Pannel>
+            <PannelContainer>
+              {workspace.projects.length > 0 &&
+                workspace.projects.map(
+                  (project: WorkspaceProjectType, index: number) => (
+                    <div
+                      key={`${project.id}-${index}-${project.name}`}
+                      onClick={() =>
+                        history.push(`/dashboard/projects/${project.id}`)
+                      }
+                    >
+                      <ItemDisplay
+                        type="Project"
+                        itemHeader={project.name}
+                        subItemsList={project.tickets}
+                        goToSubItem={goToTicket}
+                        options={[
+                          {
+                            optionTitle: "",
+                            optionFunction: () => {},
+                          },
+                        ]}
+                      />
+                    </div>
+                  )
+                )}
+            </PannelContainer>
+          </Pannel>
+        </div>
       )}
-      <Pannel>
-        <PannelContainer>
-          {workspace &&
-            workspace.projects.length > 0 &&
-            workspace.projects.map(
-              (project: WorkspaceProjectType, index: number) => (
-                <StyledLink
-                  key={`${project.id}-${index}-${project.name}`}
-                  to=""
-                >
-                  <ItemDisplay
-                    itemHeader={project.name}
-                    subItemsList={project.tickets}
-                    options={[
-                      {
-                        optionTitle: "",
-                        optionFunction: () => {},
-                      },
-                    ]}
-                  />
-                </StyledLink>
-              )
-            )}
-        </PannelContainer>
-      </Pannel>
     </PaperBackground>
   );
 };
 
-export default Workspace;
+export default withRouter(Workspace);

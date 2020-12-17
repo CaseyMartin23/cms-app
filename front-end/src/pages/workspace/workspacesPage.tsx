@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, RouteComponentProps } from "react-router-dom";
 
 import { addAuthHeaders } from "../../utils";
 
@@ -30,7 +30,9 @@ type WorkspaceType = {
   ];
 };
 
-const WorkspacesPage = (props: any) => {
+interface WorkspacesPageType extends RouteComponentProps {}
+
+const WorkspacesPage: React.FC<WorkspacesPageType> = ({ match, history }) => {
   const [isWorkspaceFormOpen, setIsWorkspaceFormOpen] = useState(false);
   const [isDeleteFormOpen, setIsDeleteFormOpen] = useState(false);
   const [isLoadingWorkspaces, setIsLoadingWorkspaces] = useState(false);
@@ -39,7 +41,6 @@ const WorkspacesPage = (props: any) => {
   >();
   const [workspaceToDelete, setWorkspaceToDelete] = useState<number>();
   const [workspaces, setWorkspaces] = useState([]);
-  const { match, history } = props;
 
   const onWorkspaceFormToggle = () => {
     setIsWorkspaceFormOpen(!isWorkspaceFormOpen);
@@ -75,6 +76,10 @@ const WorkspacesPage = (props: any) => {
 
   const reloadWorkspaces = () => {
     setWorkspaces([]);
+  };
+
+  const goToRoute = (id: string | number) => {
+    history.push(`${match.url}/${id}`);
   };
 
   useEffect(() => {
@@ -141,12 +146,14 @@ const WorkspacesPage = (props: any) => {
                     <div
                       key={`${workspace.id}-${index}-${workspace.name}`}
                       onClick={() => {
-                        history.push(`${match.url}/${workspace.id}`);
+                        goToRoute(workspace.id);
                       }}
                     >
                       <ItemDisplay
+                        type="Workspace"
                         itemHeader={workspace.name}
                         subItemsList={workspace.projects}
+                        goToSubItem={goToRoute}
                         options={[
                           {
                             optionTitle: "Delete Workspace",

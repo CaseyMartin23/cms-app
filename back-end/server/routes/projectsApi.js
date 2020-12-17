@@ -5,54 +5,70 @@ const queryProjects = require("../../db/queries/projects");
 
 router.post("/create-project", async (req, res) => {
   try {
-    await queryProjects.createProject(req.body).then((resp) => {
-      res.send(JSON.stringify(resp));
+    const createdProject = await queryProjects.createProject({
+      ...req.body,
+      owned_by: req.user.id,
     });
+    res.status(200).json(createdProject);
   } catch (err) {
     console.error(err);
-    res.send(JSON.stringify(err));
+    res.status(501).json({ success: false, msg: err.message });
   }
 });
 
 router.put("/update-project", async (req, res) => {
   try {
-    await queryProjects.updateProject(req.body).then((resp) => {
-      res.send(JSON.stringify(resp));
-    });
+    const projectUpdated = await queryProjects.updateProject(req.body);
+    res.status(200).json(projectUpdated);
   } catch (err) {
     console.error(err);
-    res.send(JSON.stringify(err));
+    res.send(501).json(err);
   }
 });
 
 router.delete("/delete-project/:projectId", async (req, res) => {
   try {
-    await queryProjects.deleteProject(req.params.projectId).then((resp) => {
-      res.send(JSON.stringify(resp));
-    });
+    const projectDeleted = await queryProjects.deleteProject(
+      req.params.projectId
+    );
+    res.status(200).json(projectDeleted);
   } catch (err) {
     console.error(err);
-    res.send(JSON.stringify(err));
+    res.send(501).json({ success: false, msg: err.message });
   }
 });
 
 router.get("/project/:projectId", async (req, res) => {
-  const project = await queryProjects.getProjectsById(req.params.projectId);
-  res.send(JSON.stringify(project));
+  try {
+    const project = await queryProjects.getProjectsById(req.params.projectId);
+    res.status(200).json({ success: true, project });
+  } catch (err) {
+    console.error(err);
+    res.send(501).json({ success: false, msg: err.message });
+  }
 });
 
-router.get("/user-projects/:userId", async (req, res) => {
-  const userProjects = await queryProjects.getProjectsByUserId(
-    req.params.userId
-  );
-  res.send(JSON.stringify(userProjects));
+router.get("/user-projects", async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const projects = await queryProjects.getProjectsByUserId(userId);
+    res.status(200).json({ success: true, user_projects: projects });
+  } catch (err) {
+    console.error(err);
+    res.send(501).json({ success: false, msg: err.message });
+  }
 });
 
 router.get("/workspace-projects/:workspaceId", async (req, res) => {
-  const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
-    req.params.workspaceId
-  );
-  res.send(JSON.stringify(workspaceProjects));
+  try {
+    const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
+      req.params.workspaceId
+    );
+    res.status(200).json(workspaceProjects);
+  } catch (err) {
+    console.error(err);
+    res.send(501).json(err);
+  }
 });
 
 module.exports = router;

@@ -76,4 +76,17 @@ router.get("/user-workspaces", async (req, res) => {
   res.send(JSON.stringify(userWorkspaces));
 });
 
+router.get("/users-workspaces-ids-names", async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const workspaces = await queryWorkspaces.getWorkspaceNamesAndIdByUserId(
+      userId
+    );
+    res.status(200).json(workspaces);
+  } catch (err) {
+    console.error(err);
+    res.status(501).json({ success: false, msg: err.message });
+  }
+});
+
 module.exports = router;
