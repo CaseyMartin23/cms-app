@@ -19,12 +19,6 @@ const StyledDrawer = styled.div`
   background-color: #2e3138;
 `;
 
-// const Divider = styled.hr`
-//   height: 0;
-//   border: 0;
-//   border-top: 0.5px solid #5a5f6b;
-// `;
-
 const Drawer: React.FC = () => {
   return (
     <StyledDrawer>

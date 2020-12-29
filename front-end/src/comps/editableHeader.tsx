@@ -126,7 +126,9 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
               hidden={isEditable}
               onDoubleClick={onTitleDoubleClick}
             >
-              {inputValue}
+              {inputValue.length > 29
+                ? `${inputValue.slice(0, 30)}...`
+                : inputValue}
             </EditableSpan>
             {!isEditable && <EditIcon opacity="0.4" />}
             <form hidden={!isEditable} onSubmit={onFormSubmit}>

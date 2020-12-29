@@ -104,7 +104,11 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
   return (
     <ItemContainer>
       <ItemContainerHeader>
-        <StyledHeading>{itemHeader}</StyledHeading>
+        <StyledHeading>
+          {itemHeader.length > 21
+            ? `${itemHeader.slice(0, 22)}...`
+            : itemHeader}
+        </StyledHeading>
         <MoreOptions options={options} />
       </ItemContainerHeader>
       <ItemContainerArea>

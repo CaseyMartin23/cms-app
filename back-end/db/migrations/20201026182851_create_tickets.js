@@ -6,6 +6,7 @@ exports.up = (knex) =>
     table.string("name", 75).notNullable();
     table.string("description").nullable();
     table.integer("ticket_time").nullable();
+    table.string("state").notNullable();
     table.integer("project").unsigned().references("projects.id").notNullable();
     table.uuid("owned_by").unsigned().references("users.id").notNullable();
     table.string("ticket_repo").nullable();

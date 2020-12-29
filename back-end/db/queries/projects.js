@@ -1,6 +1,7 @@
 const knex = require("../knex");
 const table = "projects";
 const queryTickets = require("./tickets");
+const queryWorkspaces = require("./workspaces");
 
 module.exports = {
   async getProjectById(id) {
@@ -43,7 +44,7 @@ module.exports = {
     try {
       const projects = await knex
         .from(table)
-        .select("id", "name")
+        .select("id", "name", "workspace")
         .where("owned_by", userId);
 
       const userProjects = await Promise.all(
@@ -51,11 +52,42 @@ module.exports = {
           const projectTickets = await queryTickets.getTicketByProjectId(
             project.id
           );
-          return { ...project, tickets: projectTickets };
+          const [projectWorkspaceName] = await knex
+            .from("workspaces")
+            .select("id", "name")
+            .where("id", project.workspace);
+
+          return {
+            ...project,
+            tickets: projectTickets,
+            workspace: projectWorkspaceName,
+          };
         })
       );
 
-      return userProjects;
+      const sortProjectsByWorkspace = () => {
+        const sortedProjects = userProjects.sort(
+          (currentProject, previousProject) => {
+            if (
+              currentProject.workspace.name.toLowerCase() <
+              previousProject.workspace.name.toLowerCase()
+            ) {
+              return -1;
+            }
+            if (
+              currentProject.workspace.name.toLowerCase() >
+              previousProject.workspace.name.toLowerCase()
+            ) {
+              return 1;
+            }
+
+            return 0;
+          }
+        );
+        return sortedProjects;
+      };
+
+      return sortProjectsByWorkspace();
     } catch (err) {
       console.error(err);
       return { success: false, msg: err.message };
