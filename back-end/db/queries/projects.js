@@ -1,7 +1,6 @@
 const knex = require("../knex");
 const table = "projects";
 const queryTickets = require("./tickets");
-const queryWorkspaces = require("./workspaces");
 
 module.exports = {
   async getProjectById(id) {

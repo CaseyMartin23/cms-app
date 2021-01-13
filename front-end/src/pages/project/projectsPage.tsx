@@ -61,6 +61,11 @@ type ProjectType = {
   tickets: { id: number; name: string }[];
 };
 
+type ProjectWorkspaceType = {
+  id: number;
+  name: string;
+};
+
 type ProjectWorkspaceTitleProps = {
   workspaceTitle: string;
 };
@@ -130,16 +135,22 @@ const ProjectsPage: React.FC<ProjectsPagePropsType> = ({ match, history }) => {
 
   useEffect(() => {
     const getAllProjectWorkspaces = (allProjects: ProjectType[]) => {
-      const listOfWorkspaces = allProjects
-        .map((project: ProjectType) => project.workspace)
-        .filter(
-          (
-            workspace: { id: number; name: string },
-            index: number,
-            array: { id: number; name: string }[]
-          ) => array.indexOf(workspace) === index
-        );
-      setProjectsWorkspaces(listOfWorkspaces);
+      const listOfWorkspaces = allProjects.map(
+        (project: ProjectType) => project.workspace
+      );
+
+      const filteredWorkspaces = listOfWorkspaces.reduce(
+        (acc: ProjectWorkspaceType[], current: ProjectWorkspaceType) => {
+          const itemExists = acc.find(
+            (item: ProjectWorkspaceType) => item.id === current.id
+          );
+
+          return itemExists ? acc : acc.concat([current]);
+        },
+        []
+      );
+
+      setProjectsWorkspaces(filteredWorkspaces);
     };
 
     const getAllUserProjects = async () => {
@@ -174,11 +185,6 @@ const ProjectsPage: React.FC<ProjectsPagePropsType> = ({ match, history }) => {
 
     getAllUserProjects();
   }, [projects, isProjectFormOpen]);
-
-  useEffect(() => {
-    console.log("projects->", projects);
-    console.log("projectsWorkspaces->", projectsWorkspaces);
-  }, [projects, projectsWorkspaces]);
 
   return (
     <div>
@@ -218,25 +224,26 @@ const ProjectsPage: React.FC<ProjectsPagePropsType> = ({ match, history }) => {
                   projects &&
                   projectsWorkspaces.length > 0 &&
                   projectsWorkspaces.map(
-                    (workspace: { id: number; name: string }, idx: number) => (
-                      <ProjectWorkspace
-                        id="project-workspace"
-                        key={`${workspace.id}-${idx}-${workspace.name}`}
-                      >
-                        <ProjectWorkspaceTitle
-                          workspaceTitle={workspace.name}
-                        />
-                        <div>
-                          {projects.length > 0 &&
-                            projects.map(
-                              (project: ProjectType, index: number) => {
-                                if (
+                    (workspace: { id: number; name: string }, idx: number) => {
+                      return (
+                        <ProjectWorkspace
+                          id="project-workspace"
+                          key={`${workspace.id}-${idx}-${workspace.name}`}
+                        >
+                          <ProjectWorkspaceTitle
+                            workspaceTitle={workspace.name}
+                          />
+                          <div>
+                            {projects.length > 0 &&
+                              projects.map(
+                                (project: ProjectType, index: number) =>
                                   project.workspace.name === workspace.name &&
-                                  project.workspace.id === workspace.id
-                                )
-                                  return (
+                                  project.workspace.id === workspace.id && (
                                     <div
-                                      style={{ display: "inline-block" }}
+                                      style={{
+                                        display: "inline-block",
+                                        float: "left",
+                                      }}
                                       key={`${project.id}-${index}-${project.name}`}
                                       onClick={() => {
                                         goToRoute(project.id);
@@ -257,12 +264,12 @@ const ProjectsPage: React.FC<ProjectsPagePropsType> = ({ match, history }) => {
                                         ]}
                                       />
                                     </div>
-                                  );
-                              }
-                            )}
-                        </div>
-                      </ProjectWorkspace>
-                    )
+                                  )
+                              )}
+                          </div>
+                        </ProjectWorkspace>
+                      );
+                    }
                   )}
               </PannelContainer>
             </Pannel>
