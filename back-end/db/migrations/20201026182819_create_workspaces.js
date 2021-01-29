@@ -2,7 +2,13 @@ exports.up = (knex) =>
   knex.schema.createTable("workspaces", (table) => {
     table.increments("id").notNullable();
     table.string("name", 75).notNullable();
-    table.uuid("owned_by").unsigned().references("users.id").notNullable();
+    table
+      .uuid("owned_by")
+      .unsigned()
+      .references("users.id")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE")
+      .notNullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());
   });
 

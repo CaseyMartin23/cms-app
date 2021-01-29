@@ -64,29 +64,14 @@ module.exports = {
         })
       );
 
-      const sortProjectsByWorkspace = () => {
-        const sortedProjects = userProjects.sort(
-          (currentProject, previousProject) => {
-            if (
-              currentProject.workspace.name.toLowerCase() <
-              previousProject.workspace.name.toLowerCase()
-            ) {
-              return -1;
-            }
-            if (
-              currentProject.workspace.name.toLowerCase() >
-              previousProject.workspace.name.toLowerCase()
-            ) {
-              return 1;
-            }
+      return userProjects.sort((currentProject, previousProject) => {
+        const currentWorkspaceName = currentProject.workspace.name.toLowerCase();
+        const previousWorkspaceName = previousProject.workspace.name.toLowerCase();
 
-            return 0;
-          }
-        );
-        return sortedProjects;
-      };
-
-      return sortProjectsByWorkspace();
+        if (currentWorkspaceName < previousWorkspaceName) return -1;
+        if (currentWorkspaceName > previousWorkspaceName) return 1;
+        return 0;
+      });
     } catch (err) {
       console.error(err);
       return { success: false, msg: err.message };
@@ -111,8 +96,7 @@ module.exports = {
   },
   async updateProject(newProject) {
     try {
-      const projectId = newProject.id;
-      await knex(table).where("id", projectId).update(newProject);
+      await knex(table).where("id", newProject.id).update(newProject);
       return { success: true };
     } catch (err) {
       console.error(err);

@@ -1,5 +1,3 @@
-const { table } = require("../knex");
-
 exports.up = (knex) =>
   knex.schema.createTable("tickets", (table) => {
     table.increments("id").notNullable();
@@ -7,8 +5,20 @@ exports.up = (knex) =>
     table.string("description").nullable();
     table.integer("ticket_time").nullable();
     table.string("state").notNullable();
-    table.integer("project").unsigned().references("projects.id").notNullable();
-    table.uuid("owned_by").unsigned().references("users.id").notNullable();
+    table
+      .integer("project")
+      .unsigned()
+      .references("projects.id")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE")
+      .notNullable();
+    table
+      .uuid("owned_by")
+      .unsigned()
+      .references("users.id")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE")
+      .notNullable();
     table.string("ticket_repo").nullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());
   });

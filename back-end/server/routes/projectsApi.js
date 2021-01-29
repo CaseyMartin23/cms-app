@@ -50,8 +50,7 @@ router.get("/project/:projectId", async (req, res) => {
 
 router.get("/user-projects", async (req, res) => {
   try {
-    const userId = req.user.id;
-    const projects = await queryProjects.getProjectsByUserId(userId);
+    const projects = await queryProjects.getProjectsByUserId(req.user.id);
     res.status(200).json({ success: true, user_projects: projects });
   } catch (err) {
     console.error(err);

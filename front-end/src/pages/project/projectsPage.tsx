@@ -70,9 +70,7 @@ type ProjectWorkspaceTitleProps = {
   workspaceTitle: string;
 };
 
-interface ProjectsPagePropsType extends RouteComponentProps {}
-
-const ProjectsPage: React.FC<ProjectsPagePropsType> = ({ match, history }) => {
+const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
   const [projects, setProjects] = useState<ProjectType[]>([]);
   const [projectsWorkspaces, setProjectsWorkspaces] = useState<
     { id: number; name: string }[]
@@ -173,6 +171,7 @@ const ProjectsPage: React.FC<ProjectsPagePropsType> = ({ match, history }) => {
           ) {
             getAllProjectWorkspaces(user_projects);
             setProjects(user_projects);
+            console.log(user_projects);
           }
         }
         setIsLoadingPropjects(false);
@@ -187,99 +186,102 @@ const ProjectsPage: React.FC<ProjectsPagePropsType> = ({ match, history }) => {
   }, [projects, isProjectFormOpen]);
 
   return (
-    <div>
-      <Switch>
-        <Route exact path={`${match.url}`}>
-          <div>
-            <PageTitlebar title="Projects" toggleForm={onProjectFormToggle} />
-            {isLoadingProjects && <LinearProgress />}
-            {isProjectFormOpen && (
-              <ProjectForm
-                isOpen={isProjectFormOpen}
-                toggleForm={onProjectFormToggle}
-              />
-            )}
-            <DeleteItemForm
-              onDeleteItem={onDeleteProject}
-              onToggleForm={toggleDeleteForm}
-              isFormOpen={isDeleteFormOpen}
-              title="Are you sure you want to DELETE this Project and ALL it's contents?"
+    <Switch>
+      <Route exact path={`${match.url}`}>
+        <div>
+          <PageTitlebar title="Projects" toggleForm={onProjectFormToggle} />
+          {isLoadingProjects && <LinearProgress />}
+          {/* 
+          ******* 
+          REMEMBER TO FIX FOCUS BUG ON PROJECTFORM !!!! 
+          ******* 
+          */}
+          {isProjectFormOpen && (
+            <ProjectForm
+              isOpen={isProjectFormOpen}
+              toggleForm={onProjectFormToggle}
             />
-            <Pannel>
-              <PannelContainer>
-                {!isLoadingProjects && fetchProjectsError && (
-                  <ErrorMessageDiv>{fetchProjectsError}</ErrorMessageDiv>
+          )}
+          <DeleteItemForm
+            onDeleteItem={onDeleteProject}
+            onToggleForm={toggleDeleteForm}
+            isFormOpen={isDeleteFormOpen}
+            title="Are you sure you want to DELETE this Project and ALL it's contents?"
+          />
+          <Pannel>
+            <PannelContainer>
+              {!isLoadingProjects && fetchProjectsError && (
+                <ErrorMessageDiv>{fetchProjectsError}</ErrorMessageDiv>
+              )}
+              {!isLoadingProjects &&
+                !fetchProjectsError &&
+                projects.length < 1 && (
+                  <div style={{ width: "100%" }}>
+                    <Typography variant="h6">
+                      You do not have any Workspaces yet
+                    </Typography>
+                  </div>
                 )}
-                {!isLoadingProjects &&
-                  !fetchProjectsError &&
-                  projects.length < 1 && (
-                    <div style={{ width: "100%" }}>
-                      <Typography variant="h6">
-                        You do not have any Workspaces yet
-                      </Typography>
-                    </div>
-                  )}
 
-                {projectsWorkspaces &&
-                  projects &&
-                  projectsWorkspaces.length > 0 &&
-                  projectsWorkspaces.map(
-                    (workspace: { id: number; name: string }, idx: number) => {
-                      return (
-                        <ProjectWorkspace
-                          id="project-workspace"
-                          key={`${workspace.id}-${idx}-${workspace.name}`}
-                        >
-                          <ProjectWorkspaceTitle
-                            workspaceTitle={workspace.name}
-                          />
-                          <div>
-                            {projects.length > 0 &&
-                              projects.map(
-                                (project: ProjectType, index: number) =>
-                                  project.workspace.name === workspace.name &&
-                                  project.workspace.id === workspace.id && (
-                                    <div
-                                      style={{
-                                        display: "inline-block",
-                                        float: "left",
-                                      }}
-                                      key={`${project.id}-${index}-${project.name}`}
-                                      onClick={() => {
-                                        goToRoute(project.id);
-                                      }}
-                                    >
-                                      <ItemDisplay
-                                        type="Project"
-                                        itemHeader={project.name}
-                                        subItemsList={project.tickets}
-                                        goToSubItem={goToRoute}
-                                        options={[
-                                          {
-                                            optionTitle: "Delete Project",
-                                            optionFunction: () => {
-                                              toggleDeleteForm(project.id);
-                                            },
+              {projectsWorkspaces &&
+                projects &&
+                projectsWorkspaces.length > 0 &&
+                projectsWorkspaces.map(
+                  (workspace: { id: number; name: string }, idx: number) => {
+                    return (
+                      <ProjectWorkspace
+                        id="project-workspace"
+                        key={`${workspace.id}-${idx}-${workspace.name}`}
+                      >
+                        <ProjectWorkspaceTitle
+                          workspaceTitle={workspace.name}
+                        />
+                        <div>
+                          {projects.length > 0 &&
+                            projects.map(
+                              (project: ProjectType, index: number) =>
+                                project.workspace.name === workspace.name &&
+                                project.workspace.id === workspace.id && (
+                                  <div
+                                    style={{
+                                      display: "inline-block",
+                                      float: "left",
+                                    }}
+                                    key={`${project.id}-${index}-${project.name}`}
+                                    onClick={() => {
+                                      goToRoute(project.id);
+                                    }}
+                                  >
+                                    <ItemDisplay
+                                      type="Project"
+                                      itemHeader={project.name}
+                                      subItemsList={project.tickets}
+                                      goToSubItem={goToRoute}
+                                      options={[
+                                        {
+                                          optionTitle: "Delete Project",
+                                          optionFunction: () => {
+                                            toggleDeleteForm(project.id);
                                           },
-                                        ]}
-                                      />
-                                    </div>
-                                  )
-                              )}
-                          </div>
-                        </ProjectWorkspace>
-                      );
-                    }
-                  )}
-              </PannelContainer>
-            </Pannel>
-          </div>
-        </Route>
-        <Route path={`${match.url}/:projectId`}>
-          <Project />
-        </Route>
-      </Switch>
-    </div>
+                                        },
+                                      ]}
+                                    />
+                                  </div>
+                                )
+                            )}
+                        </div>
+                      </ProjectWorkspace>
+                    );
+                  }
+                )}
+            </PannelContainer>
+          </Pannel>
+        </div>
+      </Route>
+      <Route path={`${match.url}/:projectId`}>
+        <Project />
+      </Route>
+    </Switch>
   );
 };
 

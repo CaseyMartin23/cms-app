@@ -1,8 +1,18 @@
 exports.up = (knex) =>
   knex.schema.createTable("assigned_tickets", (table) => {
     table.increments("id").notNullable();
-    table.integer("ticket_id").unsigned().references("tickets.id");
-    table.uuid("user_id").unsigned().references("users.id");
+    table
+      .integer("ticket_id")
+      .unsigned()
+      .references("tickets.id")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
+    table
+      .uuid("user_id")
+      .unsigned()
+      .references("users.id")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
     table.timestamp("assigned_at").defaultTo(knex.fn.now());
   });
 

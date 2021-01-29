@@ -51,7 +51,11 @@ module.exports = {
         })
       );
 
-      return userWorkspaces;
+      return userWorkspaces.sort((currentWorkspace, previousWorkspace) => {
+        if (currentWorkspace.name < previousWorkspace.name) return -1;
+        if (currentWorkspace.name > previousWorkspace.name) return 1;
+        return 0;
+      });
     } catch (err) {
       console.error(err);
     }
