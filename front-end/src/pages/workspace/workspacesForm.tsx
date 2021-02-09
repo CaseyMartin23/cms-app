@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
 import { addAuthHeaders } from "../../utils";
 
@@ -23,7 +23,6 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
   const [workspaceFormData, setWorkspaceFormData] = useState({ name: "" });
   const [submisssionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | undefined>();
-  const workspaceNameRef = useRef<HTMLInputElement>(null);
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
@@ -64,12 +63,6 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
     onFormClose();
   };
 
-  useEffect(() => {
-    if (workspaceNameRef && workspaceNameRef.current) {
-      workspaceNameRef.current.focus();
-    }
-  }, []);
-
   return (
     <Dialog isOpen={isOpen}>
       <Container component="main" maxWidth="xs">
@@ -84,7 +77,7 @@ const WorkspacesForm: React.FC<WorkspacesFormPropsType> = ({
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                ref={workspaceNameRef}
+                autoFocus
                 color="primary"
                 onChange={onChangeHandler}
                 value={workspaceFormData.name}

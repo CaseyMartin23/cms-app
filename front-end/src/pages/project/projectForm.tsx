@@ -95,15 +95,15 @@ const ProjectForm: React.FC<ProjectFormPropsType> = ({
 
         if (result) {
           const { success, msg, user_workspaces } = result;
-          if (!success && msg) {
-            setSubmitError(msg);
-          }
           if (
             success &&
             user_workspaces &&
             JSON.stringify(user_workspaces) !== JSON.stringify(workspaces)
           ) {
             setWorkspaces(user_workspaces);
+          }
+          if (!success && msg) {
+            setSubmitError(msg);
           }
         }
       } catch (err) {

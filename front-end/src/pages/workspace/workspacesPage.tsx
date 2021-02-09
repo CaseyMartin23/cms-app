@@ -86,7 +86,6 @@ const WorkspacesPage: React.FC<RouteComponentProps> = ({ match, history }) => {
   useEffect(() => {
     const getUserWorkspaces = async () => {
       setIsLoadingWorkspaces(true);
-
       try {
         const response = await fetch("/api/user-workspaces", {
           headers: addAuthHeaders(),
@@ -94,16 +93,24 @@ const WorkspacesPage: React.FC<RouteComponentProps> = ({ match, history }) => {
         const result = await response.json();
 
         if (result) {
-          if (JSON.stringify(result) !== JSON.stringify(workspaces)) {
-            setWorkspaces(result);
+          const { success, msg, userWorkspaces } = result;
+
+          if (
+            success &&
+            userWorkspaces &&
+            JSON.stringify(userWorkspaces) !== JSON.stringify(workspaces)
+          ) {
+            setWorkspaces(userWorkspaces);
+          }
+          if (!success && msg) {
+            setFetchWorkspacesError(msg);
           }
         }
-        setIsLoadingWorkspaces(false);
       } catch (err) {
         console.error(err);
         setFetchWorkspacesError("Problem fetching your Workspaces");
-        setIsLoadingWorkspaces(false);
       }
+      setIsLoadingWorkspaces(false);
     };
 
     getUserWorkspaces();
@@ -115,12 +122,10 @@ const WorkspacesPage: React.FC<RouteComponentProps> = ({ match, history }) => {
         <div>
           <PageTitlebar title="Workspaces" toggleForm={onWorkspaceFormToggle} />
           {isLoadingWorkspaces && <LinearProgress />}
-          {isWorkspaceFormOpen && (
-            <WorkspaceForm
-              isOpen={isWorkspaceFormOpen}
-              toggleForm={onWorkspaceFormToggle}
-            />
-          )}
+          <WorkspaceForm
+            isOpen={isWorkspaceFormOpen}
+            toggleForm={onWorkspaceFormToggle}
+          />
           {isDeleteFormOpen && (
             <DeleteItemForm
               isFormOpen={isDeleteFormOpen}

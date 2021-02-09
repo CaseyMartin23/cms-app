@@ -1,98 +1,90 @@
 const knex = require("../knex");
 const queryProjects = require("./projects");
+const queryUsers = require("./users");
 const table = "workspaces";
 
 module.exports = {
   async getWorkspaceById(id) {
-    try {
-      const workspace = await knex
-        .from(table)
-        .select("id", "name", "owned_by")
-        .where("id", id);
+    const workspace = await knex
+      .from(table)
+      .select("id", "name", "owned_by")
+      .where("id", id);
 
-      const [workspaceAndProject] = await Promise.all(
-        workspace.map(async (workspace) => {
-          const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
-            workspace.id
-          );
-          return { ...workspace, projects: workspaceProjects };
-        })
-      );
+    const [workspaceAndProject] = await Promise.all(
+      workspace.map(async (workspace) => {
+        const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
+          workspace.id
+        );
+        const workspaceOwner = await queryUsers.getEmailById(
+          workspace.owned_by
+        );
 
-      return workspaceAndProject;
-    } catch (err) {
-      console.error(err);
-    }
+        return {
+          ...workspace,
+          projects: workspaceProjects,
+          owned_by: workspaceOwner,
+        };
+      })
+    );
+
+    return workspaceAndProject;
   },
   async getWorkspaceNamesAndIdByUserId(userId) {
-    try {
-      const workspaces = await knex
-        .from(table)
-        .select("id", "name")
-        .where("owned_by", userId);
-      return { success: true, user_workspaces: workspaces };
-    } catch (err) {
-      console.error(err);
-    }
+    const workspaces = await knex
+      .from(table)
+      .select("id", "name")
+      .where("owned_by", userId);
+
+    return workspaces.sort((currentWorkspace, previousWorkspace) => {
+      const currentWorkspaceName = currentWorkspace.name.toLowerCase();
+      const previousWorkspaceName = previousWorkspace.name.toLowerCase();
+
+      if (currentWorkspaceName < previousWorkspaceName) return -1;
+      if (currentWorkspaceName > previousWorkspaceName) return 1;
+      return 0;
+    });
   },
   async getWorkspacesByUserId(userId) {
-    try {
-      const workspaces = await knex
-        .from(table)
-        .select("id", "name")
-        .where("owned_by", userId);
+    const workspaces = await knex
+      .from(table)
+      .select("id", "name")
+      .where("owned_by", userId);
 
-      const userWorkspaces = await Promise.all(
-        workspaces.map(async (workspace) => {
-          const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
-            workspace.id
-          );
-          return { ...workspace, projects: workspaceProjects };
-        })
-      );
+    const userWorkspaces = await Promise.all(
+      workspaces.map(async (workspace) => {
+        const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
+          workspace.id
+        );
+        return { ...workspace, projects: workspaceProjects };
+      })
+    );
 
-      return userWorkspaces.sort((currentWorkspace, previousWorkspace) => {
-        if (currentWorkspace.name < previousWorkspace.name) return -1;
-        if (currentWorkspace.name > previousWorkspace.name) return 1;
-        return 0;
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    return userWorkspaces.sort((currentWorkspace, previousWorkspace) => {
+      const currentWorkspaceName = currentWorkspace.name.toLowerCase();
+      const previousWorkspaceName = previousWorkspace.name.toLowerCase();
+
+      if (currentWorkspaceName < previousWorkspaceName) return -1;
+      if (currentWorkspaceName > previousWorkspaceName) return 1;
+      return 0;
+    });
   },
   async createWorkspace(workspace) {
-    try {
-      await knex(table).insert(workspace);
-      return { response: "Workspace creation successful" };
-    } catch (err) {
-      console.error(err);
-    }
+    await knex(table).insert(workspace);
+    return { response: "Workspace creation successful" };
   },
   async updateWorkspace(newWorkspace) {
-    try {
-      const workspaceId = newWorkspace.id;
-      await knex(table).where("id", workspaceId).update(newWorkspace);
-      return { response: "Workspace update successful" };
-    } catch (err) {
-      console.error(err);
-    }
+    await knex(table).where("id", newWorkspace.id).update(newWorkspace);
+    return { response: "Workspace update successful" };
   },
   async updateWorkspaceName(updatedWorkspace) {
-    try {
-      const workspaceId = updatedWorkspace.id;
-      await knex(table)
-        .where("id", workspaceId)
-        .update("name", updatedWorkspace.name);
-    } catch (err) {
-      console.log(err);
-    }
+    await knex(table)
+      .where("id", updatedWorkspace.id)
+      .update("name", updatedWorkspace.name);
+
+    return { response: "Workspace name update successful" };
   },
   async deleteWorkspace(id) {
-    try {
-      await knex(table).where("id", id).del();
-      return { success: true };
-    } catch (err) {
-      console.error(err);
-    }
+    await knex(table).where("id", id).del();
+    return { response: "Workspace deletion successful" };
   },
 };

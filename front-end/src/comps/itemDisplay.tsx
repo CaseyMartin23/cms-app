@@ -11,13 +11,7 @@ import FolderIcon from "@material-ui/icons/Folder";
 
 import MoreOptions from "./moreOptions";
 
-const ItemContainer = styled.div`
-  border: 2px solid #3f51b5;
-  border-radius: 4px;
-  padding: 10px 20px 20px;
-  width: 300px;
-  margin: 8px;
-`;
+import { ItemContainer } from "./styledComps";
 
 const ItemContainerHeader = styled.div`
   text-align: left;

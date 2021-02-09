@@ -1,41 +1,39 @@
 const express = require("express");
-const router = express.Router();
-
 const queryWorkspaces = require("../../db/queries/workspaces");
-const queryUsers = require("../../db/queries/users");
+const router = express.Router();
 
 router.post("/create-workspace", async (req, res) => {
   try {
     await queryWorkspaces
       .createWorkspace({ ...req.body, owned_by: req.user.id })
       .then((resp) => {
-        res.send(JSON.stringify(resp));
+        res.status(200).json({ ...resp, success: true });
       });
   } catch (err) {
     console.error(err);
-    res.send(JSON.stringify(err));
+    res.status(500).json({ success: false, msg: err.message });
   }
 });
 
 router.put("/update-workspace", async (req, res) => {
   try {
     await queryWorkspaces.updateWorkspace(req.body).then((resp) => {
-      res.send(JSON.stringify(resp));
+      res.status(200).json({ ...resp, success: true });
     });
   } catch (err) {
     console.error(err);
-    res.send(JSON.stringify(err));
+    res.status(500).json({ success: false, msg: err.message });
   }
 });
 
 router.put("/update-workspace-name", async (req, res) => {
   try {
     await queryWorkspaces.updateWorkspaceName(req.body).then((resp) => {
-      res.send(JSON.stringify(resp));
+      res.status().json({ ...resp, success: true });
     });
   } catch (err) {
     console.error(err);
-    res.send(JSON.stringify(err));
+    res.status(500).json({ success: false, msg: err.message });
   }
 });
 
@@ -44,7 +42,7 @@ router.delete("/delete-workspace/:workspaceId", async (req, res) => {
     await queryWorkspaces
       .deleteWorkspace(req.params.workspaceId)
       .then((resp) => {
-        res.status(200).json(resp);
+        res.status(200).json({ ...resp, success: true });
       });
   } catch (err) {
     console.error(err);
@@ -57,32 +55,32 @@ router.get("/workspace/:workspaceId", async (req, res) => {
     const workspace = await queryWorkspaces.getWorkspaceById(
       req.params.workspaceId
     );
-    const workspaceOwner = await queryUsers.getEmailById(workspace.owned_by);
-    const workspaceAndOwnerName = {
-      ...workspace,
-      owned_by: workspaceOwner.email,
-    };
-    res.send(JSON.stringify(workspaceAndOwnerName));
+
+    res.status(200).json({ success: true, user_workspace: workspace });
   } catch (err) {
-    console.log(err);
-    res.send(JSON.stringify(err));
+    console.error(err);
+    res.status(500).json({ success: false, msg: err.message });
   }
 });
 
 router.get("/user-workspaces", async (req, res) => {
-  const userWorkspaces = await queryWorkspaces.getWorkspacesByUserId(
-    req.user.id
-  );
-  res.send(JSON.stringify(userWorkspaces));
+  try {
+    const userWorkspaces = await queryWorkspaces.getWorkspacesByUserId(
+      req.user.id
+    );
+    res.status(200).json({ success: true, userWorkspaces });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, msg: err.message });
+  }
 });
 
 router.get("/users-workspaces-ids-names", async (req, res) => {
   try {
-    const userId = req.user.id;
     const workspaces = await queryWorkspaces.getWorkspaceNamesAndIdByUserId(
-      userId
+      req.user.id
     );
-    res.status(200).json(workspaces);
+    res.status(200).json({ success: true, user_workspaces: workspaces });
   } catch (err) {
     console.error(err);
     res.status(501).json({ success: false, msg: err.message });

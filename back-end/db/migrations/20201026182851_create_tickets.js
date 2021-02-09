@@ -4,7 +4,7 @@ exports.up = (knex) =>
     table.string("name", 75).notNullable();
     table.string("description").nullable();
     table.integer("ticket_time").nullable();
-    table.string("state").notNullable();
+    table.string("state").defaultTo("OPEN");
     table
       .integer("project")
       .unsigned()

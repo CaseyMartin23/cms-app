@@ -9,6 +9,8 @@ import {
   withRouter,
 } from "react-router-dom";
 
+import LinearProgress from "@material-ui/core/LinearProgress";
+
 import ItemDisplay from "../../comps/itemDisplay";
 import EditableHeader from "../../comps/editableHeader";
 import DeleteItemForm from "../../comps/deleteItemForm";
@@ -17,6 +19,7 @@ import {
   PaperBackground,
   Pannel,
   PannelContainer,
+  ErrorMessageDiv,
 } from "../../comps/styledComps";
 
 type WorkspaceProjectType = {
@@ -42,7 +45,9 @@ const Workspace: React.FC<WorkspacePropsType> = ({
 }) => {
   const [workspace, setWorkspace] = useState<WorkspaceType>();
   const [isDeleteFormOpen, setIsDeleteFormOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const [onError, setOnError] = useState<string>("");
   const { workspaceId } = useParams<{ workspaceId: string }>();
 
   const onDeleteFormToggle = () => setIsDeleteFormOpen(!isDeleteFormOpen);
@@ -63,7 +68,7 @@ const Workspace: React.FC<WorkspacePropsType> = ({
     }
   };
 
-  const onUpdateTitle = async (newTitle: string | undefined) => {
+  const onUpdateTitle = async (newTitle: string) => {
     try {
       if (workspace && newTitle && newTitle.toString().trim().length > 0) {
         await fetch("/api/update-workspace-name", {
@@ -84,18 +89,30 @@ const Workspace: React.FC<WorkspacePropsType> = ({
 
   useEffect(() => {
     const getWorkspace = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(`/api/workspace/${workspaceId}`, {
           headers: addAuthHeaders(),
         });
         const result = await response.json();
 
-        if (result && JSON.stringify(workspace) !== JSON.stringify(result)) {
-          setWorkspace(result);
+        if (result) {
+          const { success, msg, user_workspace } = result;
+          if (
+            success &&
+            user_workspace &&
+            JSON.stringify(user_workspace) !== JSON.stringify(workspace)
+          ) {
+            setWorkspace(user_workspace);
+          }
+          if (!success && msg) {
+            setOnError(msg);
+          }
         }
       } catch (err) {
         console.error(err);
       }
+      setIsLoading(true);
     };
 
     getWorkspace();
@@ -108,8 +125,10 @@ const Workspace: React.FC<WorkspacePropsType> = ({
         isFormOpen={isDeleteFormOpen}
         onDeleteItem={onDeleteWorkspace}
         onToggleForm={onDeleteFormToggle}
-        title="Are you sure you want to delete this Workspace and all it's contents?"
+        title="Are you sure you want to Delete this WORKSPACE and ALL it's contents?"
       />
+      {!workspace && !onError && isLoading && <LinearProgress />}
+      {!workspace && onError && <ErrorMessageDiv>{onError}</ErrorMessageDiv>}
       {workspace && (
         <div>
           <EditableHeader

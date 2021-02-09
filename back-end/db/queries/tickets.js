@@ -44,7 +44,7 @@ module.exports = {
     try {
       return await knex
         .from(table)
-        .select("id", "name")
+        .select("id", "name", "description", "state")
         .where("project", projectId);
     } catch (err) {
       console.error(err);

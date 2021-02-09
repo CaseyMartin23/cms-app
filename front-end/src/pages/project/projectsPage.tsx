@@ -15,6 +15,7 @@ import { addAuthHeaders } from "../../utils";
 
 import Project from "./project";
 import ProjectForm from "./projectForm";
+import ProjectWorkspaceTitle from "./projectWorkspaceTitle";
 
 import DeleteItemForm from "../../comps/deleteItemForm";
 import PageTitlebar from "../../comps/pagesTitlebar";
@@ -28,30 +29,7 @@ import {
 const ProjectWorkspace = styled.div`
   width: 100%;
   margin-top: 5px;
-  margin-bottom: 5px;
-  background-color: #3a3f4a;
-  border: 1px solid #3a3f4a;
-  border-radius: 5px;
-`;
-
-const WorkspaceTitleFlexDiv = styled.div`
-  display: flex;
-  padding: 8px;
-  color: white;
-`;
-
-type WorkspaceTitleHrProps = {
-  flexGrow: number;
-};
-
-const WorkspaceTitleHr = styled.hr`
-  border: 0;
-  height: 0;
-  background-color: #3f51b5;
-  border-bottom: 1px solid;
-  border-top: 1px solid;
-  flex-grow: ${(props: WorkspaceTitleHrProps) =>
-    props.flexGrow && props.flexGrow};
+  margin-bottom: 15px;
 `;
 
 type ProjectType = {
@@ -64,10 +42,6 @@ type ProjectType = {
 type ProjectWorkspaceType = {
   id: number;
   name: string;
-};
-
-type ProjectWorkspaceTitleProps = {
-  workspaceTitle: string;
 };
 
 const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
@@ -117,20 +91,6 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
     toggleDeleteForm();
   };
 
-  const ProjectWorkspaceTitle: React.FC<ProjectWorkspaceTitleProps> = ({
-    workspaceTitle,
-  }) => (
-    <WorkspaceTitleFlexDiv>
-      <WorkspaceTitleHr flexGrow={2} />
-      <Typography style={{ flexGrow: 1 }}>
-        {workspaceTitle.length > 29
-          ? `${workspaceTitle.slice(0, 30)}...`
-          : workspaceTitle}
-      </Typography>
-      <WorkspaceTitleHr flexGrow={7} />
-    </WorkspaceTitleFlexDiv>
-  );
-
   useEffect(() => {
     const getAllProjectWorkspaces = (allProjects: ProjectType[]) => {
       const listOfWorkspaces = allProjects.map(
@@ -148,7 +108,16 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
         []
       );
 
-      setProjectsWorkspaces(filteredWorkspaces);
+      setProjectsWorkspaces(
+        filteredWorkspaces.sort((currWorkspace, prevWorkspace) => {
+          const currWorkspaceName = currWorkspace.name.toLowerCase();
+          const prevWorkspaceName = prevWorkspace.name.toLowerCase();
+
+          if (currWorkspaceName < prevWorkspaceName) return -1;
+          if (currWorkspaceName > prevWorkspaceName) return 1;
+          return 0;
+        })
+      );
     };
 
     const getAllUserProjects = async () => {
@@ -160,18 +129,17 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
         const result = await response.json();
 
         if (result) {
-          const { success, msg, user_projects } = result;
-          if (!success && msg) {
-            setFetchProjectsError(msg);
-          }
+          const { success, msg, userProjects } = result;
           if (
             success &&
-            user_projects &&
-            JSON.stringify(user_projects) !== JSON.stringify(projects)
+            userProjects &&
+            JSON.stringify(userProjects) !== JSON.stringify(projects)
           ) {
-            getAllProjectWorkspaces(user_projects);
-            setProjects(user_projects);
-            console.log(user_projects);
+            getAllProjectWorkspaces(userProjects);
+            setProjects(userProjects);
+          }
+          if (!success && msg) {
+            setFetchProjectsError(msg);
           }
         }
         setIsLoadingPropjects(false);
@@ -191,11 +159,6 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
         <div>
           <PageTitlebar title="Projects" toggleForm={onProjectFormToggle} />
           {isLoadingProjects && <LinearProgress />}
-          {/* 
-          ******* 
-          REMEMBER TO FIX FOCUS BUG ON PROJECTFORM !!!! 
-          ******* 
-          */}
           {isProjectFormOpen && (
             <ProjectForm
               isOpen={isProjectFormOpen}
@@ -218,7 +181,7 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
                 projects.length < 1 && (
                   <div style={{ width: "100%" }}>
                     <Typography variant="h6">
-                      You do not have any Workspaces yet
+                      You do not have any Projects yet
                     </Typography>
                   </div>
                 )}
@@ -279,7 +242,7 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
         </div>
       </Route>
       <Route path={`${match.url}/:projectId`}>
-        <Project />
+        <Project reloadProjects={reloadProjects} />
       </Route>
     </Switch>
   );

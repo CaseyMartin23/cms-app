@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from "react";
 
-import { useParams } from "react-router-dom";
+import { useParams, RouteComponentProps, withRouter } from "react-router-dom";
 
 import { addAuthHeaders } from "../../utils";
 
 import DeleteItemForm from "../../comps/deleteItemForm";
 import EditableHeader from "../../comps/editableHeader";
+
+import TicketDisplay from "../ticket/ticketDisplay";
+
 import {
   Pannel,
   PannelContainer,
   PaperBackground,
 } from "../../comps/styledComps";
+
+type ProjectTicketType = {
+  id: number;
+  name: string;
+  description?: string;
+  state: string;
+};
 
 type ProjectType = {
   id: number;
@@ -18,10 +28,14 @@ type ProjectType = {
   workspace: string;
   owned_by: string;
   project_repo: string;
-  tickets: { id: number; name: string }[];
+  tickets: ProjectTicketType[];
 };
 
-const Project = () => {
+interface ProjectPropsType extends RouteComponentProps {
+  reloadProjects: () => void;
+}
+
+const Project: React.FC<ProjectPropsType> = ({ reloadProjects }) => {
   const { projectId } = useParams<{ projectId: string }>();
   const [project, setProject] = useState<ProjectType>();
   const [isLoading, setIsLoading] = useState(false);
@@ -32,9 +46,34 @@ const Project = () => {
 
   const onProjectDelete = async () => {};
 
-  const toggleDeleteForm = () => {};
+  const toggleDeleteForm = () => setIsDeleteFormOpen(!isDeleteFormOpen);
 
-  const onProjectNameUpdate = async (newName: string | undefined) => {};
+  const onProjectNameUpdate = async (newName: string) => {
+    try {
+      if (project) {
+        const response = await fetch(
+          `/api/update-project-name/${project.id}/${newName}`,
+          {
+            method: "PUT",
+            headers: addAuthHeaders(),
+          }
+        );
+        const result = await response.json();
+
+        if (result) {
+          console.log(result);
+          const { success, response, msg } = result;
+          if (success && response) {
+          }
+          if (!success && msg) {
+            console.error(msg);
+          }
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     const getProject = async () => {
@@ -46,12 +85,17 @@ const Project = () => {
         const result = await response.json();
 
         if (result) {
-          const { success, msg, project } = result;
+          const { success, msg, userProject } = result;
+          console.log("userProject->", userProject);
+          if (
+            success &&
+            userProject &&
+            JSON.stringify(userProject) !== JSON.stringify(project)
+          ) {
+            setProject(userProject);
+          }
           if (!success && msg) {
             setFetchProjectError(msg);
-          }
-          if (success && project) {
-            setProject(project);
           }
         }
         setIsLoading(false);
@@ -81,10 +125,12 @@ const Project = () => {
           />
           <Pannel>
             <PannelContainer>
-              {project.tickets.length > 1 &&
+              {project.tickets.length > 0 &&
                 project.tickets.map(
-                  (ticket: { id: number; name: string }, index: number) => (
-                    <div key={`${ticket.id}-${index}-${ticket.name}`}></div>
+                  (ticket: ProjectTicketType, index: number) => (
+                    <div key={`${ticket.id}-${index}-${ticket.name}`}>
+                      <TicketDisplay ticket={ticket} />
+                    </div>
                   )
                 )}
             </PannelContainer>
@@ -95,4 +141,4 @@ const Project = () => {
   );
 };
 
-export default Project;
+export default withRouter(Project);

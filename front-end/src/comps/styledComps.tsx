@@ -63,3 +63,11 @@ export const StyledButton = styled(Button)`
     box-shadow: none;
   }
 `;
+
+export const ItemContainer = styled.div`
+  border: 2px solid #3f51b5;
+  border-radius: 4px;
+  padding: 10px 20px 20px;
+  width: 300px;
+  margin: 8px;
+`;

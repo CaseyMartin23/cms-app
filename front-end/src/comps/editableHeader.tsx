@@ -71,7 +71,7 @@ type EditableItemType = {
 
 type EditableHeaderPropsType = {
   editableItem: EditableItemType;
-  onUpdateTitle: (newTitle: string | undefined) => void;
+  onUpdateTitle: (newTitle: string) => void;
   options: OptionsType;
 };
 

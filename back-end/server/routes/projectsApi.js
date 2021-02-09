@@ -9,7 +9,7 @@ router.post("/create-project", async (req, res) => {
       ...req.body,
       owned_by: req.user.id,
     });
-    res.status(200).json(createdProject);
+    res.status(200).json({ ...createdProject, success: true });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, msg: err.message });
@@ -19,10 +19,24 @@ router.post("/create-project", async (req, res) => {
 router.put("/update-project", async (req, res) => {
   try {
     const projectUpdated = await queryProjects.updateProject(req.body);
-    res.status(200).json(projectUpdated);
+    res.status(200).json({ ...projectUpdated, success: true });
   } catch (err) {
     console.error(err);
-    res.send(500).json(err);
+    res.send(500).json({ success: false, msg: err.message });
+  }
+});
+
+router.put("/update-project-name/:projectId/:newName", async (req, res) => {
+  try {
+    const { projectId, newName } = req.params;
+    const projectNameUpdated = await queryProjects.updateProjectName(
+      projectId,
+      newName
+    );
+    res.status(200).json({ ...projectNameUpdated, success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, msg: err.message });
   }
 });
 
@@ -31,7 +45,7 @@ router.delete("/delete-project/:projectId", async (req, res) => {
     const projectDeleted = await queryProjects.deleteProject(
       req.params.projectId
     );
-    res.status(200).json(projectDeleted);
+    res.status(200).json({ ...projectDeleted, success: true });
   } catch (err) {
     console.error(err);
     res.send(500).json({ success: false, msg: err.message });
@@ -40,8 +54,10 @@ router.delete("/delete-project/:projectId", async (req, res) => {
 
 router.get("/project/:projectId", async (req, res) => {
   try {
-    const project = await queryProjects.getProjectById(req.params.projectId);
-    res.status(200).json({ success: true, project });
+    const userProject = await queryProjects.getProjectById(
+      req.params.projectId
+    );
+    res.status(200).json({ success: true, userProject });
   } catch (err) {
     console.error(err);
     res.send(500).json({ success: false, msg: err.message });
@@ -50,23 +66,11 @@ router.get("/project/:projectId", async (req, res) => {
 
 router.get("/user-projects", async (req, res) => {
   try {
-    const projects = await queryProjects.getProjectsByUserId(req.user.id);
-    res.status(200).json({ success: true, user_projects: projects });
+    const userProjects = await queryProjects.getProjectsByUserId(req.user.id);
+    res.status(200).json({ success: true, userProjects });
   } catch (err) {
     console.error(err);
     res.send(500).json({ success: false, msg: err.message });
-  }
-});
-
-router.get("/workspace-projects/:workspaceId", async (req, res) => {
-  try {
-    const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
-      req.params.workspaceId
-    );
-    res.status(200).json(workspaceProjects);
-  } catch (err) {
-    console.error(err);
-    res.send(500).json(err);
   }
 });
 

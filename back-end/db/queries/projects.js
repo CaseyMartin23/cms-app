@@ -1,115 +1,89 @@
 const knex = require("../knex");
-const table = "projects";
 const queryTickets = require("./tickets");
+const table = "projects";
 
 module.exports = {
   async getProjectById(id) {
-    try {
-      const projects = await knex
-        .from(table)
-        .select("id", "name", "workspace", "owned_by", "project_repo")
-        .where("id", id);
+    const projects = await knex
+      .from(table)
+      .select("id", "name", "workspace", "owned_by", "project_repo")
+      .where("id", id);
 
-      const [projectAndTickets] = await Promise.all(
-        projects.map(async (project) => {
-          const projectTickets = await queryTickets.getTicketByProjectId(
-            project.id
-          );
-          const [workspace] = await knex
-            .from("workspaces")
-            .select("name")
-            .where("id", project.workspace);
+    const [projectAndTickets] = await Promise.all(
+      projects.map(async (project) => {
+        const projectTickets = await queryTickets.getTicketByProjectId(
+          project.id
+        );
+        const [workspace] = await knex
+          .from("workspaces")
+          .select("name")
+          .where("id", project.workspace);
 
-          const [ownedBy] = await knex
-            .from("users")
-            .select("email")
-            .where("id", project.owned_by);
-          return {
-            ...project,
-            owned_by: ownedBy.email,
-            workspace: workspace.name,
-            tickets: projectTickets,
-          };
-        })
-      );
+        const [ownedBy] = await knex
+          .from("users")
+          .select("email")
+          .where("id", project.owned_by);
+        return {
+          ...project,
+          owned_by: ownedBy.email,
+          workspace: workspace.name,
+          tickets: projectTickets,
+        };
+      })
+    );
 
-      return projectAndTickets;
-    } catch (err) {
-      console.error(err);
-      return { success: false, msg: err.message };
-    }
+    return projectAndTickets;
   },
   async getProjectsByUserId(userId) {
-    try {
-      const projects = await knex
-        .from(table)
-        .select("id", "name", "workspace")
-        .where("owned_by", userId);
+    const projects = await knex
+      .from(table)
+      .select("id", "name", "workspace")
+      .where("owned_by", userId);
 
-      const userProjects = await Promise.all(
-        projects.map(async (project) => {
-          const projectTickets = await queryTickets.getTicketByProjectId(
-            project.id
-          );
-          const [projectWorkspaceName] = await knex
-            .from("workspaces")
-            .select("id", "name")
-            .where("id", project.workspace);
+    const userProjects = await Promise.all(
+      projects.map(async (project) => {
+        const projectTickets = await queryTickets.getTicketByProjectId(
+          project.id
+        );
+        const [projectWorkspaceName] = await knex
+          .from("workspaces")
+          .select("id", "name")
+          .where("id", project.workspace);
 
-          return {
-            ...project,
-            tickets: projectTickets,
-            workspace: projectWorkspaceName,
-          };
-        })
-      );
+        return {
+          ...project,
+          tickets: projectTickets,
+          workspace: projectWorkspaceName,
+        };
+      })
+    );
 
-      return userProjects.sort((currentProject, previousProject) => {
-        const currentWorkspaceName = currentProject.workspace.name.toLowerCase();
-        const previousWorkspaceName = previousProject.workspace.name.toLowerCase();
+    return userProjects.sort((currentProject, previousProject) => {
+      const currentWorkspaceName = currentProject.name.toLowerCase();
+      const previousWorkspaceName = previousProject.name.toLowerCase();
 
-        if (currentWorkspaceName < previousWorkspaceName) return -1;
-        if (currentWorkspaceName > previousWorkspaceName) return 1;
-        return 0;
-      });
-    } catch (err) {
-      console.error(err);
-      return { success: false, msg: err.message };
-    }
+      if (currentWorkspaceName < previousWorkspaceName) return -1;
+      if (currentWorkspaceName > previousWorkspaceName) return 1;
+      return 0;
+    });
   },
   async getProjectsByWorkspaceId(workspaceId) {
-    try {
-      return await knex(table).where("workspace", workspaceId);
-    } catch (err) {
-      console.error(err);
-      return { success: false, msg: err.message };
-    }
+    return await knex(table).where("workspace", workspaceId);
   },
   async createProject(project) {
-    try {
-      await knex(table).insert(project);
-      return { success: true };
-    } catch (err) {
-      console.error(err);
-      return { success: false, msg: err.message };
-    }
+    await knex(table).insert(project);
+    return { response: "Project creation successful" };
   },
   async updateProject(newProject) {
-    try {
-      await knex(table).where("id", newProject.id).update(newProject);
-      return { success: true };
-    } catch (err) {
-      console.error(err);
-      return { success: false, msg: err.message };
-    }
+    await knex(table).where("id", newProject.id).update(newProject);
+    return { response: "Project update successful" };
+  },
+  async updateProjectName(projectId, newName) {
+    await knex(table).where("id", projectId).update("name", newName);
+    return { response: "Project name update successful" };
   },
   async deleteProject(projectId) {
-    try {
-      await knex(table).where("id", projectId).del();
-      return { success: true };
-    } catch (err) {
-      console.error(err);
-      return { success: false, msg: err.message };
-    }
+    await knex(table).where("id", projectId).del();
+    return { response: "Project deletion successful" };
   },
 };

@@ -12,7 +12,7 @@ module.exports = {
   async getEmailById(id) {
     try {
       const [username] = await knex.from(table).select("email").where("id", id);
-      return username;
+      return username.email;
     } catch (err) {
       console.error(err);
     }
