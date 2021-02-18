@@ -2,41 +2,63 @@ import React from "react";
 
 import styled from "styled-components";
 
+import Button from "@material-ui/core/Button";
+
 import { ItemContainer } from "../../comps/styledComps";
 
 const TicketContainer = styled(ItemContainer)`
   padding: 0;
+  border: 0px;
 `;
 
+const backgroundColor = "#485ed6";
+
 const TicketTitleDiv = styled.div`
+  margin-bottom: 3px;
   height: 60px;
   width: 100%;
   padding: 15px;
+  background-color: ${backgroundColor};
+  border: 0px solid;
+  border-radius: 4px 4px 0px 0px;
   box-sizing: border-box;
   font-size: 23px;
   font-weight: 400;
-  border-bottom: solid white 1px;
 `;
 
 const TicketDescrDiv = styled.div`
+  margin-bottom: 3px;
   height: 90px;
   width: 100%;
   padding: 10px;
+  background-color: ${backgroundColor};
   box-sizing: border-box;
-  font-size: 13px;
-  font-weight: 400;
-  border-bottom: solid white 1px;
+  font-size: 15px;
+  font-weight: 500;
+`;
+
+const StyledButton = styled(Button)`
+  color: #fff;
+  font-weight: 500;
+  border: 2px solid #21c400;
 `;
 
 const TicketStateDiv = styled.div`
   height: 50px;
-  padding: 15px;
+  padding: 6px;
+  background-color: ${backgroundColor};
   box-sizing: border-box;
-  /* float: right; */
+  border: 0px solid;
+  border-radius: 0px 0px 4px 4px;
 `;
 
 type TicketDisplayProps = {
-  ticket: { id: number; name: string; description?: string; state: string };
+  ticket: {
+    id: number;
+    name: string;
+    description?: string;
+    state: string;
+  };
 };
 
 const TicketDisplay: React.FC<TicketDisplayProps> = ({ ticket }) => {
@@ -47,7 +69,9 @@ const TicketDisplay: React.FC<TicketDisplayProps> = ({ ticket }) => {
         {ticket.description ? ticket.description : "No description"}
       </TicketDescrDiv>
       <TicketStateDiv>
-        <button style={{ float: "right" }}>{ticket.state}</button>
+        <StyledButton variant="outlined" style={{ float: "right" }}>
+          {ticket.state}
+        </StyledButton>
       </TicketStateDiv>
     </TicketContainer>
   );
