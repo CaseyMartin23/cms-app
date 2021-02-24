@@ -13,6 +13,10 @@ import MoreOptions from "./moreOptions";
 
 import { ItemContainer } from "./styledComps";
 
+const StyledItemContainer = styled(ItemContainer)`
+  background-color: #2e3138;
+`;
+
 const ItemContainerHeader = styled.div`
   text-align: left;
   padding: 5px;
@@ -24,9 +28,9 @@ const ItemContainerHeader = styled.div`
 const ItemContainerArea = styled.div`
   height: 160px;
   overflow-y: auto;
-  border: 1px solid #6b6b6b;
+  border: 1px solid #546beb;
   border-radius: 4px;
-  background-color: #6b6b6b;
+  background-color: #546beb;
 `;
 
 const StyledHeading = styled.h3`
@@ -96,7 +100,7 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
   };
 
   return (
-    <ItemContainer>
+    <StyledItemContainer>
       <ItemContainerHeader>
         <StyledHeading>
           {itemHeader.length > 21
@@ -108,7 +112,7 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
       <ItemContainerArea>
         <ItemList />
       </ItemContainerArea>
-    </ItemContainer>
+    </StyledItemContainer>
   );
 };
 

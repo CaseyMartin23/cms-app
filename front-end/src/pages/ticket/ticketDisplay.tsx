@@ -11,14 +11,14 @@ const TicketContainer = styled(ItemContainer)`
   border: 0px;
 `;
 
-const backgroundColor = "#485ed6";
+const backgroundColor = "#2e3138";
 
 const TicketTitleDiv = styled.div`
   margin-bottom: 3px;
-  height: 60px;
+  height: 50px;
   width: 100%;
-  padding: 15px;
-  background-color: ${backgroundColor};
+  padding: 10px;
+  background-color: #485ed6;
   border: 0px solid;
   border-radius: 4px 4px 0px 0px;
   box-sizing: border-box;
@@ -28,7 +28,7 @@ const TicketTitleDiv = styled.div`
 
 const TicketDescrDiv = styled.div`
   margin-bottom: 3px;
-  height: 90px;
+  height: 150px;
   width: 100%;
   padding: 10px;
   background-color: ${backgroundColor};
@@ -38,7 +38,7 @@ const TicketDescrDiv = styled.div`
 `;
 
 const StyledButton = styled(Button)`
-  color: #fff;
+  color: #21c400;
   font-weight: 500;
   border: 2px solid #21c400;
 `;

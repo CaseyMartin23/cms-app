@@ -25,6 +25,20 @@ exports.seed = (knex) => {
           project: 1,
           owned_by: userIdList[0],
         },
+        {
+          name: "ticket2",
+          description:
+            "Test ticket!\nFor test user username@gmail.com\nabout project1",
+          project: 1,
+          owned_by: userIdList[0],
+        },
+        {
+          name: "ticket3",
+          description:
+            "Test ticket!\nFor test user username@gmail.com\nabout project1",
+          project: 1,
+          owned_by: userIdList[0],
+        },
       ])
     );
 };

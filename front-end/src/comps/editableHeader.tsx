@@ -10,7 +10,7 @@ import MoreOptions, { OptionsType } from "./moreOptions";
 import { StyledButton } from "./styledComps";
 
 const PaperHeader = styled.div`
-  background-color: #6b6b6b;
+  background-color: #464646;
   padding: 20px 30px;
   height: 130px;
   box-sizing: border-box;
@@ -47,8 +47,6 @@ const ItemDetails = styled.div`
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
-  /* margin-top: 5px;
-  margin-bottom: 5px; */
   opacity: 0.7;
 `;
 

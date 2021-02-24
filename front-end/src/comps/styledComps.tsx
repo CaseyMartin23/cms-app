@@ -65,7 +65,7 @@ export const StyledButton = styled(Button)`
 `;
 
 export const ItemContainer = styled.div`
-  border: 2px solid #3f51b5;
+  border: 0px solid;
   border-radius: 4px;
   padding: 10px 20px 20px;
   width: 300px;
