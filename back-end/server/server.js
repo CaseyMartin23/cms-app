@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const passport = require("passport");
 const path = require("path");
 
-require("./passport/passport-config")(passport);
+require("./passport-config")(passport);
 
 const app = express();
 const PORT = process.env.PORT || 8080;

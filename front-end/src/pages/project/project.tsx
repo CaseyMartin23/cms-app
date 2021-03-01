@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 
 import { useParams, RouteComponentProps, withRouter } from "react-router-dom";
 
+import LinearProgress from "@material-ui/core/LinearProgress";
+
+import { ErrorMessageDiv } from "../../comps/styledComps";
+
 import { addAuthHeaders } from "../../utils";
 
 import DeleteItemForm from "../../comps/deleteItemForm";
@@ -106,7 +110,7 @@ const Project: React.FC<ProjectPropsType> = ({ reloadProjects }) => {
     };
 
     getProject();
-  }, [projectId, setProject, setIsLoading, setFetchProjectError]);
+  }, [projectId, project, setProject, setIsLoading, setFetchProjectError]);
 
   return (
     <PaperBackground>
@@ -123,6 +127,7 @@ const Project: React.FC<ProjectPropsType> = ({ reloadProjects }) => {
             onUpdateTitle={onProjectNameUpdate}
             options={[]}
           />
+          {!project && !fetchProjectError && isLoading && <LinearProgress />}
           <Pannel>
             <PannelContainer>
               {project.tickets.length > 0 &&
@@ -133,6 +138,9 @@ const Project: React.FC<ProjectPropsType> = ({ reloadProjects }) => {
                     </div>
                   )
                 )}
+              {!project && !isLoading && fetchProjectError && (
+                <ErrorMessageDiv>{fetchProjectError}</ErrorMessageDiv>
+              )}
             </PannelContainer>
           </Pannel>
         </div>

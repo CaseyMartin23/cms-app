@@ -36,10 +36,10 @@ router.delete("/delete-ticket", async (req, res) => {
   }
 });
 
-router.get("/get-user-tickets", async (req, res) => {
+router.get("/user-tickets", async (req, res) => {
   try {
-    const userTicket = queryTicket.getTicketsByUserId(req.user.id);
-    console.log(userTicket);
+    const userTickets = await queryTicket.getTicketsByUserId(req.user.id);
+    res.status(200).json({ user_tickets: userTickets, success: true });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, msg: err.message });

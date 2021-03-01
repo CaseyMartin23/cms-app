@@ -1,6 +1,6 @@
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const queryUsers = require("../../db/queries/users");
+const queryUsers = require("../db/queries/users");
 
 const authenticateUser = async (jwt_payload, done) => {
   try {

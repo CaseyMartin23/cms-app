@@ -93,23 +93,21 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
 
   useEffect(() => {
     const getAllProjectWorkspaces = (allProjects: ProjectType[]) => {
-      const listOfWorkspaces = allProjects.map(
-        (project: ProjectType) => project.workspace
-      );
+      const listOfWorkspaces = allProjects
+        .map((project: ProjectType) => project.workspace)
+        .reduce(
+          (acc: ProjectWorkspaceType[], current: ProjectWorkspaceType) => {
+            const itemExists = acc.find(
+              (item: ProjectWorkspaceType) => item.id === current.id
+            );
 
-      const filteredWorkspaces = listOfWorkspaces.reduce(
-        (acc: ProjectWorkspaceType[], current: ProjectWorkspaceType) => {
-          const itemExists = acc.find(
-            (item: ProjectWorkspaceType) => item.id === current.id
-          );
-
-          return itemExists ? acc : acc.concat([current]);
-        },
-        []
-      );
+            return itemExists ? acc : acc.concat([current]);
+          },
+          []
+        );
 
       setProjectsWorkspaces(
-        filteredWorkspaces.sort((currWorkspace, prevWorkspace) => {
+        listOfWorkspaces.sort((currWorkspace, prevWorkspace) => {
           const currWorkspaceName = currWorkspace.name.toLowerCase();
           const prevWorkspaceName = prevWorkspace.name.toLowerCase();
 

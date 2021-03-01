@@ -10,35 +10,33 @@ module.exports = {
     }
   },
   async getTicketsByUserId(userId) {
-    try {
-      const tickets = await knex
-        .from(table)
-        .select("id", "name", "description", "state", "project")
-        .where("id", userId);
-      const userTickets = await Promise.all(
-        tickets.map(async (ticket) => {
-          const [ticketProjectName] = await knex
-            .from("projects")
-            .select("id", "name")
-            .where("id", ticket.project);
-          return {
-            ...tickets,
-            project: ticketProjectName,
-          };
-        })
-      );
-      return userTickets.sort((currentTicket, previousTicket) => {
-        const currentProjectName = currentTicket.project.name.toLowerCase();
-        const previousProjectName = previousTicket.project.name.toLowerCase();
+    const tickets = await knex
+      .from(table)
+      .select("id", "name", "description", "state", "project")
+      .where("owned_by", userId);
 
-        if (currentProjectName < previousProjectName) return -1;
-        if (currentProjectName > previousProjectName) return 1;
-        return 0;
-      });
-    } catch (err) {
-      console.error(err);
-      return { success: false, msg: err.message };
-    }
+    const userTickets = await Promise.all(
+      tickets.map(async (ticket) => {
+        const [ticketProjectName] = await knex
+          .from("projects")
+          .select("id", "name")
+          .where("id", ticket.project);
+
+        return {
+          ...ticket,
+          project: ticketProjectName,
+        };
+      })
+    );
+
+    return userTickets.sort((currentTicket, previousTicket) => {
+      const currentProjectName = currentTicket.project.name.toLowerCase();
+      const previousProjectName = previousTicket.project.name.toLowerCase();
+
+      if (currentProjectName < previousProjectName) return -1;
+      if (currentProjectName > previousProjectName) return 1;
+      return 0;
+    });
   },
   async getTicketByProjectId(projectId) {
     try {

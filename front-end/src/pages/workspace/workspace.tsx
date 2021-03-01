@@ -127,7 +127,6 @@ const Workspace: React.FC<WorkspacePropsType> = ({
         onToggleForm={onDeleteFormToggle}
         title="Are you sure you want to Delete this WORKSPACE and ALL it's contents?"
       />
-      {!workspace && !onError && isLoading && <LinearProgress />}
       {!workspace && onError && <ErrorMessageDiv>{onError}</ErrorMessageDiv>}
       {workspace && (
         <div>
@@ -141,6 +140,7 @@ const Workspace: React.FC<WorkspacePropsType> = ({
               },
             ]}
           />
+          {!workspace && !onError && isLoading && <LinearProgress />}
           <Pannel>
             <PannelContainer>
               {workspace.projects.length > 0 &&

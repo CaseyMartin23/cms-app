@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Switch,
@@ -7,11 +7,20 @@ import {
   withRouter,
 } from "react-router-dom";
 
+import { addAuthHeaders } from "../../utils";
+
+import Typography from "@material-ui/core/Typography";
+import LinearProgress from "@material-ui/core/LinearProgress";
+
 import PageTitlebar from "../../comps/pagesTitlebar";
 import TicketForm from "./ticketForm";
 import Ticket from "./ticket";
 
-import { Pannel, PannelContainer } from "../../comps/styledComps";
+import {
+  Pannel,
+  PannelContainer,
+  ErrorMessageDiv,
+} from "../../comps/styledComps";
 
 type TicketType = {
   id: number;
@@ -24,8 +33,76 @@ type TicketType = {
   };
 };
 
+type TicketProjectType = {
+  id: number;
+  name: string;
+};
+
 const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
   const [tickets, setTickets] = useState<TicketType[]>([]);
+  const [ticketProjects, setTicketProjects] = useState<TicketProjectType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorFetchingTickets, setErrorFetchingTickets] = useState<
+    string | Error
+  >("");
+
+  useEffect(() => {
+    const getTicketProjects = (allTickets: TicketType[]) => {
+      const listOfProjects = allTickets
+        .map((ticket) => ticket.project)
+        .reduce((accu: TicketProjectType[], current: TicketProjectType) => {
+          const itemExists = accu.find(
+            (item: TicketProjectType) => item.id === current.id
+          );
+
+          return itemExists ? accu : accu.concat([current]);
+        }, []);
+
+      setTicketProjects(
+        listOfProjects.sort((currentProject, prevProject) => {
+          const currentProjectName = currentProject.name.toLowerCase();
+          const prevProjectName = prevProject.name.toLowerCase();
+
+          if (currentProjectName < prevProjectName) return -1;
+          if (currentProjectName > prevProjectName) return 1;
+          return 0;
+        })
+      );
+
+      console.log("getTicketProjects-listOfProjects->", listOfProjects);
+    };
+
+    const getAllTickets = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/api/user-tickets", {
+          headers: addAuthHeaders(),
+        });
+        const result = await response.json();
+
+        if (result) {
+          const { success, user_tickets, msg } = result;
+
+          if (
+            success &&
+            user_tickets &&
+            JSON.stringify(user_tickets) !== JSON.stringify(tickets)
+          ) {
+            getTicketProjects(user_tickets);
+            setTickets(user_tickets);
+          }
+
+          if (!success && msg) {
+            setErrorFetchingTickets(msg);
+          }
+        }
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getAllTickets();
+  }, [tickets]);
 
   return (
     <Switch>
@@ -33,8 +110,20 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
         <div>
           <PageTitlebar title="Tickets" toggleForm={() => {}} />
           <TicketForm isOpen={false} />
+          {!tickets && !errorFetchingTickets && isLoading && <LinearProgress />}
           <Pannel>
-            <PannelContainer>{}</PannelContainer>
+            {!tickets && !isLoading && errorFetchingTickets && (
+              <ErrorMessageDiv>{errorFetchingTickets}</ErrorMessageDiv>
+            )}
+            <PannelContainer>
+              {!isLoading && !errorFetchingTickets && tickets.length < 1 && (
+                <div style={{ width: "100%" }}>
+                  <Typography variant="h6">
+                    You do not have any Tickets yet
+                  </Typography>
+                </div>
+              )}
+            </PannelContainer>
           </Pannel>
         </div>
       </Route>
