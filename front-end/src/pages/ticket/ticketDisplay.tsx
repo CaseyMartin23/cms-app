@@ -18,6 +18,7 @@ const TicketTitleDiv = styled.div`
   height: 50px;
   width: 100%;
   padding: 10px;
+  text-align: left;
   background-color: #485ed6;
   border: 0px solid;
   border-radius: 4px 4px 0px 0px;
@@ -31,6 +32,7 @@ const TicketDescrDiv = styled.div`
   height: 150px;
   width: 100%;
   padding: 10px;
+  text-align: left;
   background-color: ${backgroundColor};
   box-sizing: border-box;
   font-size: 15px;

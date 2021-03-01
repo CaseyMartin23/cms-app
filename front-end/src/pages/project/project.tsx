@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-import { useParams, RouteComponentProps, withRouter } from "react-router-dom";
+import {
+  useParams,
+  RouteComponentProps,
+  withRouter,
+  Redirect,
+} from "react-router-dom";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
 
@@ -44,11 +49,26 @@ const Project: React.FC<ProjectPropsType> = ({ reloadProjects }) => {
   const [project, setProject] = useState<ProjectType>();
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteFormOpen, setIsDeleteFormOpen] = useState(false);
+  const [redirect, setRedirect] = useState(false);
   const [fetchProjectError, setFetchProjectError] = useState<
     string | undefined
   >();
 
-  const onProjectDelete = async () => {};
+  const onProjectDelete = async () => {
+    try {
+      if (project) {
+        await fetch(`/api/delete-project/${project.id}`, {
+          method: "DELETE",
+          headers: addAuthHeaders(),
+        });
+        toggleDeleteForm();
+        reloadProjects();
+        setRedirect(true);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const toggleDeleteForm = () => setIsDeleteFormOpen(!isDeleteFormOpen);
 
@@ -112,6 +132,7 @@ const Project: React.FC<ProjectPropsType> = ({ reloadProjects }) => {
     getProject();
   }, [projectId, project, setProject, setIsLoading, setFetchProjectError]);
 
+  if (redirect) return <Redirect to="/dashboard/projects" />;
   return (
     <PaperBackground>
       <DeleteItemForm
@@ -125,7 +146,12 @@ const Project: React.FC<ProjectPropsType> = ({ reloadProjects }) => {
           <EditableHeader
             editableItem={project}
             onUpdateTitle={onProjectNameUpdate}
-            options={[]}
+            options={[
+              {
+                optionTitle: "Delete Project",
+                optionFunction: toggleDeleteForm,
+              },
+            ]}
           />
           {!project && !fetchProjectError && isLoading && <LinearProgress />}
           <Pannel>

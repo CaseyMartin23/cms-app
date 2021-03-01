@@ -71,3 +71,14 @@ export const ItemContainer = styled.div`
   width: 300px;
   margin: 8px;
 `;
+
+export const ItemParentDiv = styled.div`
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 15px;
+`;
+
+export const ItemDiv = styled.div`
+  display: block;
+  float: left;
+`;

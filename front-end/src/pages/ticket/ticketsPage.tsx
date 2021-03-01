@@ -13,13 +13,18 @@ import Typography from "@material-ui/core/Typography";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 import PageTitlebar from "../../comps/pagesTitlebar";
+import ItemParentTitleDisplay from "../../comps/itemParentTitleDisplay";
+
 import TicketForm from "./ticketForm";
+import TicketDisplay from "./ticketDisplay";
 import Ticket from "./ticket";
 
 import {
   Pannel,
   PannelContainer,
   ErrorMessageDiv,
+  ItemParentDiv,
+  ItemDiv,
 } from "../../comps/styledComps";
 
 type TicketType = {
@@ -68,8 +73,6 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
           return 0;
         })
       );
-
-      console.log("getTicketProjects-listOfProjects->", listOfProjects);
     };
 
     const getAllTickets = async () => {
@@ -112,10 +115,10 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
           <TicketForm isOpen={false} />
           {!tickets && !errorFetchingTickets && isLoading && <LinearProgress />}
           <Pannel>
-            {!tickets && !isLoading && errorFetchingTickets && (
-              <ErrorMessageDiv>{errorFetchingTickets}</ErrorMessageDiv>
-            )}
             <PannelContainer>
+              {!tickets && !isLoading && errorFetchingTickets && (
+                <ErrorMessageDiv>{errorFetchingTickets}</ErrorMessageDiv>
+              )}
               {!isLoading && !errorFetchingTickets && tickets.length < 1 && (
                 <div style={{ width: "100%" }}>
                   <Typography variant="h6">
@@ -123,6 +126,30 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
                   </Typography>
                 </div>
               )}
+
+              {ticketProjects &&
+                ticketProjects.length > 0 &&
+                ticketProjects.map(
+                  (project: TicketProjectType, index: number) => (
+                    <ItemParentDiv
+                      key={`${project.id}-${index}-${project.name}`}
+                    >
+                      <ItemParentTitleDisplay itemParentTitle={project.name} />
+                      {tickets &&
+                        tickets.map(
+                          (ticket: TicketType, index: number) =>
+                            ticket.project.id === project.id &&
+                            ticket.project.name === project.name && (
+                              <ItemDiv
+                                key={`${ticket.id}-${index}-${ticket.name}`}
+                              >
+                                <TicketDisplay ticket={ticket} />
+                              </ItemDiv>
+                            )
+                        )}
+                    </ItemParentDiv>
+                  )
+                )}
             </PannelContainer>
           </Pannel>
         </div>
