@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import Button from "@material-ui/core/Button";
 
+import MoreOptions from "../../comps/moreOptions";
 import { ItemContainer } from "../../comps/styledComps";
 
 const TicketContainer = styled(ItemContainer)`
@@ -14,6 +15,7 @@ const TicketContainer = styled(ItemContainer)`
 const backgroundColor = "#2e3138";
 
 const TicketTitleDiv = styled.div`
+  display: flex;
   margin-bottom: 3px;
   height: 50px;
   width: 100%;
@@ -23,6 +25,10 @@ const TicketTitleDiv = styled.div`
   border: 0px solid;
   border-radius: 4px 4px 0px 0px;
   box-sizing: border-box;
+`;
+
+const TicketTitle = styled.div`
+  flex-grow: 1;
   font-size: 23px;
   font-weight: 400;
 `;
@@ -39,19 +45,21 @@ const TicketDescrDiv = styled.div`
   font-weight: 500;
 `;
 
-const StyledButton = styled(Button)`
-  color: #21c400;
-  font-weight: 500;
-  border: 2px solid #21c400;
-`;
-
 const TicketStateDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
   height: 50px;
   padding: 6px;
   background-color: ${backgroundColor};
   box-sizing: border-box;
   border: 0px solid;
   border-radius: 0px 0px 4px 4px;
+`;
+
+const StyledButton = styled(Button)`
+  color: #21c400;
+  font-weight: 500;
+  border: 2px solid #21c400;
 `;
 
 type TicketDisplayProps = {
@@ -66,14 +74,19 @@ type TicketDisplayProps = {
 const TicketDisplay: React.FC<TicketDisplayProps> = ({ ticket }) => {
   return (
     <TicketContainer>
-      <TicketTitleDiv>{ticket.name}</TicketTitleDiv>
+      <TicketTitleDiv>
+        <TicketTitle>
+          {ticket.name.length > 21
+            ? `${ticket.name.slice(0, 22)}...`
+            : ticket.name}
+        </TicketTitle>
+        <MoreOptions options={[]} />
+      </TicketTitleDiv>
       <TicketDescrDiv>
         {ticket.description ? ticket.description : "No description"}
       </TicketDescrDiv>
       <TicketStateDiv>
-        <StyledButton variant="outlined" style={{ float: "right" }}>
-          {ticket.state}
-        </StyledButton>
+        <StyledButton variant="outlined">{ticket.state}</StyledButton>
       </TicketStateDiv>
     </TicketContainer>
   );

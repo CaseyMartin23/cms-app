@@ -44,6 +44,22 @@ const MoreOptions: React.FC<MoreOptionsPropsType> = ({ options }) => {
 
       if (optionContent.display === "") {
         optionContent.display = "block";
+
+        const onOutterClick = (event: MouseEvent) => {
+          if (
+            event &&
+            event.target &&
+            event.target instanceof Node &&
+            optionsContentRef.current &&
+            !optionsContentRef.current.contains(event.target)
+          ) {
+            optionContent.display = "";
+          }
+
+          document.removeEventListener("click", onOutterClick);
+        };
+
+        document.addEventListener("click", onOutterClick);
       } else {
         optionContent.display = "";
       }
@@ -54,13 +70,13 @@ const MoreOptions: React.FC<MoreOptionsPropsType> = ({ options }) => {
     event: React.MouseEvent,
     optionFunc: () => void
   ) => {
-    onOptionsToggle(event);
     optionFunc();
+    onOptionsToggle(event);
   };
 
   return (
     <DropdownDiv>
-      <IconButton onClick={onOptionsToggle}>
+      <IconButton style={{ padding: "4px" }} onClick={onOptionsToggle}>
         <MoreVertIcon style={{ color: "white" }} />
       </IconButton>
       <DropdownContent ref={optionsContentRef}>

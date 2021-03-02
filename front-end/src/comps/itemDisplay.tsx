@@ -23,6 +23,7 @@ const ItemContainerHeader = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
+  margin-bottom: 10px;
 `;
 
 const ItemContainerArea = styled.div`
@@ -36,7 +37,7 @@ const ItemContainerArea = styled.div`
 const StyledHeading = styled.h3`
   flex-grow: 1;
   margin: 0;
-  padding-top: 10px;
+  padding-top: 5px;
   padding-bottom: 10px;
 `;
 
