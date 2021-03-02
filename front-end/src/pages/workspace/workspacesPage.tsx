@@ -7,7 +7,7 @@ import {
   withRouter,
 } from "react-router-dom";
 
-import { addAuthHeaders } from "../../utils";
+import { addAuthHeaders, arrayOfObjectsAreEqual } from "../../utils";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
@@ -44,7 +44,7 @@ const WorkspacesPage: React.FC<RouteComponentProps> = ({ match, history }) => {
     string | undefined
   >();
   const [workspaceToDelete, setWorkspaceToDelete] = useState<number>();
-  const [workspaces, setWorkspaces] = useState([]);
+  const [workspaces, setWorkspaces] = useState<WorkspaceType[]>([]);
 
   const onWorkspaceFormToggle = () => {
     setIsWorkspaceFormOpen(!isWorkspaceFormOpen);
@@ -98,7 +98,7 @@ const WorkspacesPage: React.FC<RouteComponentProps> = ({ match, history }) => {
           if (
             success &&
             userWorkspaces &&
-            JSON.stringify(userWorkspaces) !== JSON.stringify(workspaces)
+            !arrayOfObjectsAreEqual(userWorkspaces, workspaces)
           ) {
             setWorkspaces(userWorkspaces);
           }
@@ -106,11 +106,12 @@ const WorkspacesPage: React.FC<RouteComponentProps> = ({ match, history }) => {
             setFetchWorkspacesError(msg);
           }
         }
+        setIsLoadingWorkspaces(false);
       } catch (err) {
         console.error(err);
         setFetchWorkspacesError("Problem fetching your Workspaces");
+        setIsLoadingWorkspaces(false);
       }
-      setIsLoadingWorkspaces(false);
     };
 
     getUserWorkspaces();

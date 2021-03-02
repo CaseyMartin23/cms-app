@@ -9,7 +9,7 @@ import {
 import Typography from "@material-ui/core/Typography";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-import { addAuthHeaders } from "../../utils";
+import { addAuthHeaders, arrayOfObjectsAreEqual } from "../../utils";
 
 import Project from "./project";
 import ProjectForm from "./projectForm";
@@ -113,8 +113,8 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
     };
 
     const getAllUserProjects = async () => {
-      setIsLoadingPropjects(true);
       try {
+        setIsLoadingPropjects(true);
         const response = await fetch("/api/user-projects", {
           headers: addAuthHeaders(),
         });
@@ -125,7 +125,7 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
           if (
             success &&
             userProjects &&
-            JSON.stringify(userProjects) !== JSON.stringify(projects)
+            !arrayOfObjectsAreEqual(userProjects, projects)
           ) {
             getAllProjectWorkspaces(userProjects);
             setProjects(userProjects);
@@ -137,8 +137,8 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
         setIsLoadingPropjects(false);
       } catch (err) {
         console.error(err);
-        setIsLoadingPropjects(false);
         setFetchProjectsError("Problem fetching your Projects");
+        setIsLoadingPropjects(false);
       }
     };
 

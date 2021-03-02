@@ -74,25 +74,14 @@ const Project: React.FC<ProjectPropsType> = ({ reloadProjects }) => {
 
   const onProjectNameUpdate = async (newName: string) => {
     try {
-      if (project) {
-        const response = await fetch(
-          `/api/update-project-name/${project.id}/${newName}`,
-          {
-            method: "PUT",
-            headers: addAuthHeaders(),
-          }
-        );
-        const result = await response.json();
+      if (project && newName && newName.toString().trim().length > 0) {
+        await fetch("/api/update-project-name/", {
+          method: "PUT",
+          headers: addAuthHeaders(),
+          body: JSON.stringify({ projectId: project.id, newName }),
+        });
 
-        if (result) {
-          console.log(result);
-          const { success, response, msg } = result;
-          if (success && response) {
-          }
-          if (!success && msg) {
-            console.error(msg);
-          }
-        }
+        reloadProjects();
       }
     } catch (err) {
       console.error(err);
@@ -110,7 +99,6 @@ const Project: React.FC<ProjectPropsType> = ({ reloadProjects }) => {
 
         if (result) {
           const { success, msg, userProject } = result;
-          console.log("userProject->", userProject);
           if (
             success &&
             userProject &&

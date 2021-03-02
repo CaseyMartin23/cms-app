@@ -68,7 +68,10 @@ module.exports = {
     });
   },
   async getProjectsByWorkspaceId(workspaceId) {
-    return await knex(table).where("workspace", workspaceId);
+    return await knex
+      .from(table)
+      .select("id", "name")
+      .where("workspace", workspaceId);
   },
   async createProject(project) {
     await knex(table).insert(project);

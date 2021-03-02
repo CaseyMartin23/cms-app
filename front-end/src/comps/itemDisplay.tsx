@@ -78,20 +78,29 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
       <div>
         {subItemsList && subItemsList.length > 0 ? (
           <List>
-            {subItemsList.map((subItem, index) => (
-              <ListItem
-                key={`${index}-${subItem.id}-${subItem.name}`}
-                button
-                onClick={() => {
-                  goToSubItem(subItem.id);
-                }}
-              >
-                <ListItemIcon>
-                  <FolderIcon />
-                </ListItemIcon>
-                <ListItemText primary={subItem.name} />
-              </ListItem>
-            ))}
+            {subItemsList
+              .sort((currentSub, prevSub) => {
+                const currentSubName = currentSub.name.toLocaleLowerCase();
+                const prevSubName = prevSub.name.toLocaleLowerCase();
+
+                if (currentSubName < prevSubName) return -1;
+                if (currentSubName > prevSubName) return 1;
+                return 0;
+              })
+              .map((subItem, index) => (
+                <ListItem
+                  key={`${index}-${subItem.id}-${subItem.name}`}
+                  button
+                  onClick={() => {
+                    goToSubItem(subItem.id);
+                  }}
+                >
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={subItem.name} />
+                </ListItem>
+              ))}
           </List>
         ) : (
           <NoSubItems />

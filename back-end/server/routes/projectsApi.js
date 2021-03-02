@@ -26,9 +26,9 @@ router.put("/update-project", async (req, res) => {
   }
 });
 
-router.put("/update-project-name/:projectId/:newName", async (req, res) => {
+router.put("/update-project-name/", async (req, res) => {
   try {
-    const { projectId, newName } = req.params;
+    const { projectId, newName } = req.body;
     const projectNameUpdated = await queryProjects.updateProjectName(
       projectId,
       newName

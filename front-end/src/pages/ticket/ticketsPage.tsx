@@ -7,7 +7,7 @@ import {
   withRouter,
 } from "react-router-dom";
 
-import { addAuthHeaders } from "../../utils";
+import { addAuthHeaders, arrayOfObjectsAreEqual } from "../../utils";
 
 import Typography from "@material-ui/core/Typography";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -76,8 +76,8 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
     };
 
     const getAllTickets = async () => {
-      setIsLoading(true);
       try {
+        setIsLoading(true);
         const response = await fetch("/api/user-tickets", {
           headers: addAuthHeaders(),
         });
@@ -89,7 +89,7 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
           if (
             success &&
             user_tickets &&
-            JSON.stringify(user_tickets) !== JSON.stringify(tickets)
+            !arrayOfObjectsAreEqual(user_tickets, tickets)
           ) {
             getTicketProjects(user_tickets);
             setTickets(user_tickets);
@@ -102,6 +102,7 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
         setIsLoading(false);
       } catch (err) {
         console.error(err);
+        setIsLoading(false);
       }
     };
     getAllTickets();
@@ -113,7 +114,7 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
         <div>
           <PageTitlebar title="Tickets" toggleForm={() => {}} />
           <TicketForm isOpen={false} />
-          {!tickets && !errorFetchingTickets && isLoading && <LinearProgress />}
+          {isLoading && <LinearProgress />}
           <Pannel>
             <PannelContainer>
               {!tickets && !isLoading && errorFetchingTickets && (
