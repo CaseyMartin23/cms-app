@@ -46,10 +46,15 @@ type TicketProjectType = {
 const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
   const [tickets, setTickets] = useState<TicketType[]>([]);
   const [ticketProjects, setTicketProjects] = useState<TicketProjectType[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [errorFetchingTickets, setErrorFetchingTickets] = useState<
     string | Error
   >("");
+
+  const toggleTicketForm = () => {
+    setIsFormOpen(!isFormOpen);
+  };
 
   useEffect(() => {
     const getTicketProjects = (allTickets: TicketType[]) => {
@@ -112,8 +117,8 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
     <Switch>
       <Route exact path={`${match.path}`}>
         <div>
-          <PageTitlebar title="Tickets" toggleForm={() => {}} />
-          <TicketForm isOpen={false} />
+          <PageTitlebar title="Tickets" toggleForm={toggleTicketForm} />
+          <TicketForm isOpen={isFormOpen} toggleForm={toggleTicketForm} />
           {isLoading && <LinearProgress />}
           <Pannel>
             <PannelContainer>

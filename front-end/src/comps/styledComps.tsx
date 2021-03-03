@@ -82,3 +82,10 @@ export const ItemDiv = styled.div`
   display: block;
   float: left;
 `;
+
+export const StyledForm = styled.form`
+  width: 396px;
+  color: #fff;
+
+  /* & > .M */
+`;

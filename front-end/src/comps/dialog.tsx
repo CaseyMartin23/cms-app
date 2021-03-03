@@ -17,8 +17,8 @@ const Modal = styled.div`
 const ModalContent = styled.div`
   padding: 10px;
   margin: auto;
-  background-color: #6b6b6b;
-  border: 1px solid #6b6b6b;
+  background-color: #2e3138;
+  border: 1px solid #2e3138;
   border-radius: 4px;
   max-width: 466px;
 `;

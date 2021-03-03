@@ -16,16 +16,6 @@ router.post("/create-project", async (req, res) => {
   }
 });
 
-router.put("/update-project", async (req, res) => {
-  try {
-    const projectUpdated = await queryProjects.updateProject(req.body);
-    res.status(200).json({ ...projectUpdated, success: true });
-  } catch (err) {
-    console.error(err);
-    res.send(500).json({ success: false, msg: err.message });
-  }
-});
-
 router.put("/update-project-name/", async (req, res) => {
   try {
     const { projectId, newName } = req.body;

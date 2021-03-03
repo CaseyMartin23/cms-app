@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+
+import styled from "styled-components";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -7,50 +9,88 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
+import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import MenuItem from "@material-ui/core/MenuItem";
 
 import Dialog from "../../comps/dialog";
+import {
+  ErrorMessageDiv,
+  StyledForm,
+  StyledButton,
+} from "../../comps/styledComps";
 
-import { ErrorMessageDiv, StyledButton } from "../../comps/styledComps";
+const StyledTextArea = styled(TextareaAutosize)`
+  width: 94%;
+  outline: none;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  padding: 10px;
+  color: #fff;
+  background-color: inherit;
+
+  ::placeholder {
+    color: #fff;
+  }
+`;
 
 type TicketFormProps = {
   isOpen: boolean;
+  toggleForm(): void;
 };
 
-const TicketForm: React.FC<TicketFormProps> = ({ isOpen }) => {
+const TicketForm: React.FC<TicketFormProps> = ({ isOpen, toggleForm }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    project: 0,
+    ticket_repo: "",
+  });
+
   return (
     <Dialog isOpen={isOpen}>
       <Container component="main" maxWidth="xs">
         <Typography style={{ padding: "5px" }} component="h1" variant="h5">
-          Create Project
+          Create Ticket
         </Typography>
-        <form onSubmit={() => {}} style={{ width: "396px" }} autoComplete="off">
+        <StyledForm onSubmit={() => {}} autoComplete="off">
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 color="primary"
                 onChange={() => {}}
-                value=""
+                value={formData.name}
                 variant="outlined"
                 required
                 fullWidth
                 name="name"
-                label="Project Name"
+                label="Ticket Name"
                 type="text"
-                id="project_name"
+                id="ticket_name"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <StyledTextArea
+                color="primary"
+                onChange={() => {}}
+                // value={formData.description}
+                rowsMin={8}
+                rowsMax={8}
+                name="description"
+                placeholder="Ticket Description (Optional)"
+                id="ticket_description"
               />
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth required variant="outlined">
-                <InputLabel id="select-outlined-label">Workspace</InputLabel>
+                <InputLabel id="select-outlined-label">Project</InputLabel>
                 <Select
                   style={{ textAlign: "left" }}
                   labelId="select-outlined-label"
                   id="select-outlined"
-                  value=""
+                  value={formData.project}
                   onChange={() => {}}
-                  name="workspace"
-                  label="Workspace"
+                  name="project"
+                  label="project"
                 >
                   <MenuItem key="" value=""></MenuItem>
                 </Select>
@@ -63,10 +103,10 @@ const TicketForm: React.FC<TicketFormProps> = ({ isOpen }) => {
                 value=""
                 variant="outlined"
                 fullWidth
-                name="project_repo"
-                label="Project repository (Optional)"
+                name="ticket_repo"
+                label="Ticket repository (Optional)"
                 type="text"
-                id="project_repo"
+                id="ticket_repo"
               />
             </Grid>
             <ErrorMessageDiv></ErrorMessageDiv>
@@ -87,7 +127,7 @@ const TicketForm: React.FC<TicketFormProps> = ({ isOpen }) => {
                 create
               </StyledButton>
               <StyledButton
-                onClick={() => {}}
+                onClick={toggleForm}
                 style={{ width: "82px" }}
                 variant="contained"
                 color="secondary"
@@ -96,7 +136,7 @@ const TicketForm: React.FC<TicketFormProps> = ({ isOpen }) => {
               </StyledButton>
             </Grid>
           </Grid>
-        </form>
+        </StyledForm>
       </Container>
     </Dialog>
   );
