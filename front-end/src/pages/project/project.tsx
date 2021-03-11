@@ -7,11 +7,9 @@ import {
   Redirect,
 } from "react-router-dom";
 
-import LinearProgress from "@material-ui/core/LinearProgress";
-
-import { ErrorMessageDiv } from "../../comps/styledComps";
-
 import { addAuthHeaders } from "../../utils";
+
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import DeleteItemForm from "../../comps/deleteItemForm";
 import EditableHeader from "../../comps/editableHeader";
@@ -22,6 +20,7 @@ import {
   Pannel,
   PannelContainer,
   PaperBackground,
+  ErrorMessageDiv,
 } from "../../comps/styledComps";
 
 type ProjectTicketType = {

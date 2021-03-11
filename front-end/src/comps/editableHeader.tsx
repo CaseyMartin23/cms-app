@@ -11,8 +11,8 @@ import { StyledButton } from "./styledComps";
 
 const PaperHeader = styled.div`
   background-color: #464646;
-  padding: 20px 30px;
-  height: 130px;
+  padding: 20px 30px 20px 30px;
+  max-height: 140px;
   box-sizing: border-box;
 `;
 
@@ -47,12 +47,14 @@ const ItemDetails = styled.div`
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
+  height: 100%;
   opacity: 0.7;
 `;
 
 const Detail = styled(Typography)`
   margin-left: 5px;
   margin-right: 5px;
+  height: 20px;
 `;
 
 type EditableItemType = {
@@ -158,6 +160,10 @@ const EditableHeader: React.FC<EditableHeaderPropsType> = ({
         </div>
       </HeaderFontStyle>
       <ItemDetails>
+        <Detail>owned by: {editableItem.owned_by}</Detail>
+        <Detail>owned by: {editableItem.owned_by}</Detail>
+        <Detail>owned by: {editableItem.owned_by}</Detail>
+        <Detail>owned by: {editableItem.owned_by}</Detail>
         <Detail>owned by: {editableItem.owned_by}</Detail>
       </ItemDetails>
     </PaperHeader>
