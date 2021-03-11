@@ -50,6 +50,7 @@ const ProjectForm: React.FC<ProjectFormPropsType> = ({
     if (name === "name" && typeof value === "string" && value.length < 1) {
       setSubmitError("Project name can't be empty");
     }
+
     setProjectFormData({ ...projectFormData, [name]: value });
   };
 

@@ -30,12 +30,13 @@ module.exports = {
     );
 
     return userTickets.sort((currentTicket, previousTicket) => {
-      const currentProjectName = currentTicket.project.name.toLowerCase();
-      const previousProjectName = previousTicket.project.name.toLowerCase();
+      const currentTicketName = currentTicket.name.toLowerCase();
+      const previousTicketName = previousTicket.name.toLowerCase();
 
-      if (currentProjectName < previousProjectName) return -1;
-      if (currentProjectName > previousProjectName) return 1;
-      return 0;
+      return currentTicketName.localeCompare(previousTicketName, undefined, {
+        numeric: true,
+        ignorePunctuation: true,
+      });
     });
   },
   async getTicketByProjectId(projectId) {
@@ -50,13 +51,8 @@ module.exports = {
     }
   },
   async createTicket(ticket) {
-    try {
-      await knex(table).insert(ticket);
-      return { success: true };
-    } catch (err) {
-      console.error(err);
-      return { success: false, msg: err.message };
-    }
+    await knex(table).insert(ticket);
+    return { success: true };
   },
   async updateTicket(newTicket) {
     try {

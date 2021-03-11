@@ -1,3 +1,4 @@
+// User Authencation Collection
 export const addAuthHeaders = () => {
   const auth_user = localStorage.getItem("auth_user");
   const token = auth_user ? JSON.parse(auth_user).token : "";
@@ -10,10 +11,54 @@ export const addAuthHeaders = () => {
   };
 };
 
+// Object Equality:
 type ObjectIndexingType = {
   [index: string]: any;
 };
 
+export const objectsAreEqual = (
+  firstObj: ObjectIndexingType | undefined,
+  secondObj: ObjectIndexingType | undefined
+) => {
+  if (!firstObj || !secondObj) return false;
+
+  const firstListProps = Object.getOwnPropertyNames(firstObj);
+  const secondListProps = Object.getOwnPropertyNames(secondObj);
+
+  if (firstListProps.length !== secondListProps.length) return false;
+
+  for (let index = 0; index < firstListProps.length; index++) {
+    const firstPropName = firstListProps[index];
+    const secondPropName = secondListProps[index];
+
+    if (firstPropName !== secondPropName) return false;
+
+    const firstObjectProp = firstObj[firstPropName];
+    const secondObjectProp = secondObj[secondPropName];
+
+    if (
+      typeof firstObjectProp === "object" &&
+      Array.isArray(firstObjectProp) &&
+      typeof secondObjectProp === "object" &&
+      Array.isArray(secondObjectProp)
+    ) {
+      arrayOfObjectsAreEqual(firstObjectProp, secondObjectProp);
+    }
+
+    if (
+      (typeof firstObjectProp === "number" &&
+        typeof secondObjectProp === "number") ||
+      (typeof firstObjectProp === "string" &&
+        typeof secondObjectProp === "string")
+    ) {
+      if (firstObjectProp !== secondObjectProp) return false;
+    }
+
+    return true;
+  }
+};
+
+// Array Of Objects Equality:
 export const arrayOfObjectsAreEqual = (
   firstArray: ObjectIndexingType[],
   secondArray: ObjectIndexingType[]
@@ -29,40 +74,8 @@ export const arrayOfObjectsAreEqual = (
     ) {
       const firstObject = firstArray[i];
       const secondObject = secondArray[i];
-      const firstListProps = Object.getOwnPropertyNames(firstObject);
-      const secondListProps = Object.getOwnPropertyNames(secondObject);
 
-      if (firstListProps.length !== secondListProps.length) return false;
-
-      for (let index = 0; index < firstListProps.length; index++) {
-        const firstPropName = firstListProps[index];
-        const secondPropName = secondListProps[index];
-
-        if (firstPropName !== secondPropName) return false;
-
-        const firstObjectProp = firstObject[firstPropName];
-        const secondObjectProp = secondObject[secondPropName];
-
-        if (
-          typeof firstObjectProp === "object" &&
-          Array.isArray(firstObjectProp) &&
-          typeof secondObjectProp === "object" &&
-          Array.isArray(secondObjectProp)
-        ) {
-          arrayOfObjectsAreEqual(firstObjectProp, secondObjectProp);
-        }
-
-        if (
-          (typeof firstObjectProp === "number" &&
-            typeof secondObjectProp === "number") ||
-          (typeof firstObjectProp === "string" &&
-            typeof secondObjectProp === "string")
-        ) {
-          if (firstObjectProp !== secondObjectProp) return false;
-        }
-
-        return true;
-      }
+      return objectsAreEqual(firstObject, secondObject);
     }
   }
 };

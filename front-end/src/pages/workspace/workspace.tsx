@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { addAuthHeaders } from "../../utils";
+import { addAuthHeaders, objectsAreEqual } from "../../utils";
 
 import {
   Redirect,
@@ -20,6 +20,7 @@ import {
   Pannel,
   PannelContainer,
   ErrorMessageDiv,
+  ItemDiv,
 } from "../../comps/styledComps";
 
 type WorkspaceProjectType = {
@@ -42,6 +43,7 @@ interface WorkspacePropsType extends RouteComponentProps {
 const Workspace: React.FC<WorkspacePropsType> = ({
   reloadWorkspaces,
   history,
+  match,
 }) => {
   const [workspace, setWorkspace] = useState<WorkspaceType>();
   const [isDeleteFormOpen, setIsDeleteFormOpen] = useState(false);
@@ -97,13 +99,14 @@ const Workspace: React.FC<WorkspacePropsType> = ({
         const result = await response.json();
 
         if (result) {
-          const { success, msg, user_workspace } = result;
+          const { success, msg, userWorkspace } = result;
           if (
             success &&
-            user_workspace &&
-            JSON.stringify(user_workspace) !== JSON.stringify(workspace)
+            userWorkspace &&
+            !objectsAreEqual(userWorkspace, workspace)
           ) {
-            setWorkspace(user_workspace);
+            setWorkspace(userWorkspace);
+            console.log("userWorkspace->", userWorkspace);
           }
           if (!success && msg) {
             setOnError(msg);
@@ -146,7 +149,7 @@ const Workspace: React.FC<WorkspacePropsType> = ({
               {workspace.projects.length > 0 &&
                 workspace.projects.map(
                   (project: WorkspaceProjectType, index: number) => (
-                    <div
+                    <ItemDiv
                       key={`${project.id}-${index}-${project.name}`}
                       onClick={() =>
                         history.push(`/dashboard/projects/${project.id}`)
@@ -164,7 +167,7 @@ const Workspace: React.FC<WorkspacePropsType> = ({
                           },
                         ]}
                       />
-                    </div>
+                    </ItemDiv>
                   )
                 )}
             </PannelContainer>

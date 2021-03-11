@@ -59,12 +59,13 @@ module.exports = {
     );
 
     return userProjects.sort((currentProject, previousProject) => {
-      const currentWorkspaceName = currentProject.name.toLowerCase();
-      const previousWorkspaceName = previousProject.name.toLowerCase();
+      const currentProjectName = currentProject.name.toLowerCase();
+      const previousProjectName = previousProject.name.toLowerCase();
 
-      if (currentWorkspaceName < previousWorkspaceName) return -1;
-      if (currentWorkspaceName > previousWorkspaceName) return 1;
-      return 0;
+      return currentProjectName.localeCompare(previousProjectName, undefined, {
+        numeric: true,
+        ignorePunctuation: true,
+      });
     });
   },
   async getProjectsByWorkspaceId(workspaceId) {

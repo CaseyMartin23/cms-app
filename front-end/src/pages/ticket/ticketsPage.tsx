@@ -73,9 +73,10 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
           const currentProjectName = currentProject.name.toLowerCase();
           const prevProjectName = prevProject.name.toLowerCase();
 
-          if (currentProjectName < prevProjectName) return -1;
-          if (currentProjectName > prevProjectName) return 1;
-          return 0;
+          return currentProjectName.localeCompare(prevProjectName, undefined, {
+            numeric: true,
+            ignorePunctuation: true,
+          });
         })
       );
     };
@@ -111,7 +112,7 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
       }
     };
     getAllTickets();
-  }, [tickets]);
+  }, [tickets, isFormOpen]);
 
   return (
     <Switch>
@@ -148,6 +149,9 @@ const TicketsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
                             ticket.project.name === project.name && (
                               <ItemDiv
                                 key={`${ticket.id}-${index}-${ticket.name}`}
+                                onClick={() => {
+                                  history.push(`${match.url}/${ticket.id}`);
+                                }}
                               >
                                 <TicketDisplay ticket={ticket} />
                               </ItemDiv>

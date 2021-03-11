@@ -23,6 +23,7 @@ import {
   Pannel,
   PannelContainer,
   ErrorMessageDiv,
+  ItemDiv,
 } from "../../comps/styledComps";
 
 type WorkspaceType = {
@@ -79,8 +80,9 @@ const WorkspacesPage: React.FC<RouteComponentProps> = ({ match, history }) => {
     setWorkspaces([]);
   };
 
-  const goToRoute = (id: string | number) => {
-    history.push(`${match.url}/${id}`);
+  const goToProject = (id: string | number) => {
+    console.log("goToRoute-id->", id);
+    history.push(`/dashboard/projects/${id}`);
   };
 
   useEffect(() => {
@@ -152,17 +154,17 @@ const WorkspacesPage: React.FC<RouteComponentProps> = ({ match, history }) => {
               {workspaces &&
                 workspaces.length > 0 &&
                 workspaces.map((workspace: WorkspaceType, index: number) => (
-                  <div
+                  <ItemDiv
                     key={`${workspace.id}-${index}-${workspace.name}`}
                     onClick={() => {
-                      goToRoute(workspace.id);
+                      history.push(`${match.url}/${workspace.id}`);
                     }}
                   >
                     <ItemDisplay
                       type="Workspace"
                       itemHeader={workspace.name}
                       subItemsList={workspace.projects}
-                      goToSubItem={goToRoute}
+                      goToSubItem={goToProject}
                       options={[
                         {
                           optionTitle: "Delete Workspace",
@@ -172,7 +174,7 @@ const WorkspacesPage: React.FC<RouteComponentProps> = ({ match, history }) => {
                         },
                       ]}
                     />
-                  </div>
+                  </ItemDiv>
                 ))}
             </PannelContainer>
           </Pannel>

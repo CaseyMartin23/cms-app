@@ -83,16 +83,18 @@ const ItemDisplay: React.FC<ItemDisplayPropsType> = ({
                 const currentSubName = currentSub.name.toLocaleLowerCase();
                 const prevSubName = prevSub.name.toLocaleLowerCase();
 
-                if (currentSubName < prevSubName) return -1;
-                if (currentSubName > prevSubName) return 1;
-                return 0;
+                return currentSubName.localeCompare(prevSubName, undefined, {
+                  numeric: true,
+                  ignorePunctuation: true,
+                });
               })
               .map((subItem, index) => (
                 <ListItem
                   key={`${index}-${subItem.id}-${subItem.name}`}
                   button
-                  onClick={() => {
+                  onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                     goToSubItem(subItem.id);
+                    event.stopPropagation();
                   }}
                 >
                   <ListItemIcon>

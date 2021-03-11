@@ -56,7 +56,7 @@ router.get("/workspace/:workspaceId", async (req, res) => {
       req.params.workspaceId
     );
 
-    res.status(200).json({ success: true, user_workspace: workspace });
+    res.status(200).json({ success: true, userWorkspace: workspace });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, msg: err.message });

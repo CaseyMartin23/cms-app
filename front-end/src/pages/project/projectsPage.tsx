@@ -55,8 +55,8 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
     setIsProjectFormOpen(!isProjectFormOpen);
   };
 
-  const goToRoute = (id: string | number) => {
-    history.push(`${match.url}/${id}`);
+  const goToTicket = (id: string | number) => {
+    history.push(`/dashboard/tickets/${id}`);
   };
 
   const reloadProjects = () => {
@@ -105,9 +105,10 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
           const currWorkspaceName = currWorkspace.name.toLowerCase();
           const prevWorkspaceName = prevWorkspace.name.toLowerCase();
 
-          if (currWorkspaceName < prevWorkspaceName) return -1;
-          if (currWorkspaceName > prevWorkspaceName) return 1;
-          return 0;
+          return currWorkspaceName.localeCompare(prevWorkspaceName, undefined, {
+            numeric: true,
+            ignorePunctuation: true,
+          });
         })
       );
     };
@@ -198,14 +199,14 @@ const ProjectsPage: React.FC<RouteComponentProps> = ({ match, history }) => {
                                 <ItemDiv
                                   key={`${project.id}-${index}-${project.name}`}
                                   onClick={() => {
-                                    goToRoute(project.id);
+                                    history.push(`${match.url}/${project.id}`);
                                   }}
                                 >
                                   <ItemDisplay
                                     type="Project"
                                     itemHeader={project.name}
                                     subItemsList={project.tickets}
-                                    goToSubItem={goToRoute}
+                                    goToSubItem={goToTicket}
                                     options={[
                                       {
                                         optionTitle: "Delete Project",

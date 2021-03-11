@@ -10,11 +10,21 @@ module.exports = {
       .select("id", "name", "owned_by")
       .where("id", id);
 
-    const [workspaceAndProject] = await Promise.all(
+    const [workspaceAndProjects] = await Promise.all(
       workspace.map(async (workspace) => {
         const workspaceProjects = await queryProjects.getProjectsByWorkspaceId(
           workspace.id
         );
+
+        workspaceProjects.map(async (project) => {
+          const projectTickets = await knex
+            .from("tickets")
+            .select("id", "name")
+            .where("project", project.id);
+
+          project["tickets"] = projectTickets;
+        });
+
         const workspaceOwner = await queryUsers.getEmailById(
           workspace.owned_by
         );
@@ -27,7 +37,7 @@ module.exports = {
       })
     );
 
-    return workspaceAndProject;
+    return workspaceAndProjects;
   },
   async getWorkspaceNamesAndIdByUserId(userId) {
     const workspaces = await knex
@@ -39,9 +49,14 @@ module.exports = {
       const currentWorkspaceName = currentWorkspace.name.toLowerCase();
       const previousWorkspaceName = previousWorkspace.name.toLowerCase();
 
-      if (currentWorkspaceName < previousWorkspaceName) return -1;
-      if (currentWorkspaceName > previousWorkspaceName) return 1;
-      return 0;
+      return currentWorkspaceName.localeCompare(
+        previousWorkspaceName,
+        undefined,
+        {
+          numeric: true,
+          ignorePunctuation: true,
+        }
+      );
     });
   },
   async getWorkspacesByUserId(userId) {
@@ -63,9 +78,14 @@ module.exports = {
       const currentWorkspaceName = currentWorkspace.name.toLowerCase();
       const previousWorkspaceName = previousWorkspace.name.toLowerCase();
 
-      if (currentWorkspaceName < previousWorkspaceName) return -1;
-      if (currentWorkspaceName > previousWorkspaceName) return 1;
-      return 0;
+      return currentWorkspaceName.localeCompare(
+        previousWorkspaceName,
+        undefined,
+        {
+          numeric: true,
+          ignorePunctuation: true,
+        }
+      );
     });
   },
   async createWorkspace(workspace) {

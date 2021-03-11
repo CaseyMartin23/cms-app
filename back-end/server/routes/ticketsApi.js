@@ -4,12 +4,11 @@ const router = express.Router();
 
 router.post("/create-ticket", async (req, res) => {
   try {
-    console.log(req.body);
-    // const createdTicket = await queryTicket.createTicket({
-    //   ...req.body,
-    //   owned_by: req.user.id,
-    // });
-    // res.status(200).json(createdTicket);
+    const createdTicket = await queryTicket.createTicket({
+      ...req.body,
+      owned_by: req.user.id,
+    });
+    res.status(200).json(createdTicket);
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, msg: err.message });

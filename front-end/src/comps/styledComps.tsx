@@ -22,9 +22,9 @@ export const StyledLink = styled(Link)`
 `;
 
 export const FormDiv = styled.div`
-  background-color: #6b6b6b;
+  background-color: #2e3138;
   padding: 20px;
-  border: 1px solid #6b6b6b;
+  border: 0px solid;
   border-radius: 5px;
 `;
 
@@ -81,11 +81,10 @@ export const ItemParentDiv = styled.div`
 export const ItemDiv = styled.div`
   display: block;
   float: left;
+  cursor: pointer;
 `;
 
 export const StyledForm = styled.form`
   width: 396px;
   color: #fff;
-
-  /* & > .M */
 `;
